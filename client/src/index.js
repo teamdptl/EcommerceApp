@@ -3,7 +3,6 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "flowbite";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -13,7 +12,10 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import User from "./pages/User";
 import Admin from "./pages/Admin";
+import ForgotPassword from "./pages/ForgotPassword";
 import NoPage from "./pages/NoPage";
+import ConfirmPassword from './pages/ConfirmPassword';
+import Contact from './pages/Contact';
 
 const router = createBrowserRouter([
 	{
@@ -33,11 +35,22 @@ const router = createBrowserRouter([
 		element: <Shop />,
 	},
 	{
+		path: "forget-password",
+		element: <ForgotPassword />,
+	},
+	{
+		path: "confirm-password",
+		element: <ConfirmPassword />,
+	},
+	{
+		path: "contact",
+		element: <Contact />,
+	},
+	{
 		path: "*",
 		element: <NoPage />,
 	},
 ]);
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>

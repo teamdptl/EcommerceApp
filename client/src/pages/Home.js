@@ -1,11 +1,15 @@
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
+import FeaturedProducts from '../components/home/FeaturedProducts';
+import ProductCarousel from '../components/home/ProductCarousel';
+import "flowbite";
 
 const Home = () => {
     return (
         <>
             <Header></Header>
-            <p>My content ......</p>
+            <ProductCarousel/>
+            <FeaturedProducts/>
             <Footer></Footer>
         </>
     );

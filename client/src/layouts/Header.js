@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // import { useContext, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import CartDropDown from "../components/shop/CartDropdown"
+import "flowbite";
 
 export default function Header() {
     // const [user, setUser] = useContext({});
@@ -20,15 +21,18 @@ export default function Header() {
 						<div class="flex md:order-2">
 							<div class="flex gap-4 max-[640px]:mr-3">
 								<div class="flex items-center">
-									<button class="rounded-full p-2 border hover:bg-gray-100 focus:outline-none" data-dropdown-toggle="cart-dropdown">
+									{/* <button class="rounded-full p-2 border hover:bg-gray-100 focus:outline-none" data-dropdown-toggle="cart-dropdown">
 										<AiOutlineShoppingCart size={20} />
-									</button>
+									</button> */}
+									<CartDropDown></CartDropDown>
 								</div>
-								<button
-									type="button"
-									class="text-white mr-2 bg-blue-700 hidden sm:block hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center md:mr-0">
-									Đăng nhập
-								</button>
+								<Link to="/login">
+									<button
+										type="button"
+										class="text-white mr-2 bg-blue-700 hidden sm:block hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center md:mr-0">
+										Đăng nhập
+									</button>
+								</Link>
 							</div>
 
 							<button
@@ -107,7 +111,7 @@ export default function Header() {
 								</li>
 							</ul>
 						</div>
-						<div id="cart-dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-96 px-6 py-3">
+						{/* <div id="cart-dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-96 px-6 py-3">
 							<p class="text-base font-semibold">Giỏ hàng của bạn</p>
 							<ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
 								<li class="py-3 sm:py-4">
@@ -123,7 +127,7 @@ export default function Header() {
 									</div>
 								</li>
 							</ul>
-						</div>
+						</div> */}
 					</div>
 				</nav>
 			</header>
