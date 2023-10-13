@@ -1,3 +1,9 @@
+/* Cài Tailwind CSS IntelliSense để code tailwind trong VsCode */
+/* Kệ 3 dòng ở dưới đi */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
