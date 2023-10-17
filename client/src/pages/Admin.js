@@ -1,7 +1,9 @@
+import NavHeader from "../components/admin/NavHeader";
+
 const Admin = () => {
     return (
         <>
-            Admin  page
+            <NavHeader></NavHeader>
         </>
     )
 }

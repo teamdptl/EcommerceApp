@@ -76,13 +76,13 @@ const Signup = () => {
 
 										<label for="agree" class="ml-3 text-sm font-medium text-gray-500">
 											Tôi đồng ý chính với{" "}
-											<a href="#" title="" class="text-blue-600 hover:text-blue-700 hover:underline">
+											<Link to="/chinh-sach" title="" class="text-blue-600 hover:text-blue-700 hover:underline">
 												Chính sách
-											</a>{" "}
+											</Link>{" "}
 											và{" "}
-											<a href="#" title="" class="text-blue-600 hover:text-blue-700 hover:underline">
+											<Link to="dieu-khoan" title="" class="text-blue-600 hover:text-blue-700 hover:underline">
 												Điều khoản
-											</a>
+											</Link>
 										</label>
 									</div>
 
