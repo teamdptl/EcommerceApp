@@ -1,5 +1,6 @@
 package com.learn.ecommerce.Entity;
 
+import com.learn.ecommerce.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
