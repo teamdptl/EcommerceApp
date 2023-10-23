@@ -12,7 +12,7 @@
 	<artifactId>ecommerce</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ecommerce</name>
-	<description>Website API for shop selling air condtioner and related ...</description>
+	<description>Website API for shop selling air conditioner and related ...</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
