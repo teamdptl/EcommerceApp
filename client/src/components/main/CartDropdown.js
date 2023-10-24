@@ -46,7 +46,6 @@ export default function CustomTriggerDropdown() {
 					<ul role="list" class="-my-6 divide-y divide-gray-200" >
 						{cartList.map((item) => (
 							<CartItem key={item.id} item={item} />
-
 						))}
 					</ul>
 				</div>
