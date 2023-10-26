@@ -59,7 +59,7 @@ export default function CustomTriggerDropdown() {
 				<p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
 				<div className="mt-6 flex">
 					<a
-						href="#"
+						href="/Cart"
 						className="flex items-center justify-center rounded-full pl-16 pr-16 border border-md  px-6 py-3  font-medium text-black shadow-sm"
 					>			View cart
 					</a>
