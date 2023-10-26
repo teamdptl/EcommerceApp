@@ -1,11 +1,11 @@
 package com.learn.ecommerce.Service.Implementation;
 import com.learn.ecommerce.Entity.AirConditioner;
-import com.learn.ecommerce.Service.AirConditionerService;
+import com.learn.ecommerce.Service.RootService;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 @Component
-public class AirConditionerImp implements AirConditionerService {
+public class AirConditionerImp implements RootService<AirConditioner> {
     @Override
     public Optional<AirConditioner> FindByID(int id) {
         return Optional.empty();

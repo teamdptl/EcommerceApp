@@ -1,11 +1,11 @@
 package com.learn.ecommerce.Service.Implementation;
 import com.learn.ecommerce.Entity.WashMachine;
-import com.learn.ecommerce.Service.WashMachineService;
+import com.learn.ecommerce.Service.RootService;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 @Component
-public class WashMachineImp implements WashMachineService {
+public class WashMachineImp implements RootService<WashMachine> {
     @Override
     public Optional<WashMachine> FindByID(int id) {
         return Optional.empty();

@@ -1,11 +1,11 @@
 package com.learn.ecommerce.Service.Implementation;
 import com.learn.ecommerce.Entity.Refrigerator;
-import com.learn.ecommerce.Service.RefrigeratorService;
+import com.learn.ecommerce.Service.RootService;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 @Component
-public class RefrigeratorImp implements RefrigeratorService {
+public class RefrigeratorImp implements RootService<Refrigerator> {
     @Override
     public Optional<Refrigerator> FindByID(int id) {
         return Optional.empty();
