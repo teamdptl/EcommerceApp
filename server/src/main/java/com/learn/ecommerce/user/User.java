@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id = ?") // Soft delete
 @Table(name = "_user")
 public class User implements UserDetails {
 
@@ -30,9 +32,10 @@ public class User implements UserDetails {
   private String password;
   private String name;
   private String avatar;
-  private String locate;
+  private String locale;
   private String username;
 
+  private boolean isDeleted = false;
 
   @Enumerated(EnumType.STRING)
   private Role role;
