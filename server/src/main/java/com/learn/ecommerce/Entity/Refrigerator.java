@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class Refrigerator {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int refiID;
+    private int refiId;
     private int loaiTuLanh;
     private int dungTichTuLanh;
     private int soCanhCua;

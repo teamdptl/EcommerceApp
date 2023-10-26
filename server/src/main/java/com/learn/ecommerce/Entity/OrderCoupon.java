@@ -31,6 +31,5 @@ public class OrderCoupon {
         int couponID;
         @Column(name = "order_id")
         int orderID;
-
     }
 }

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class AirConditioner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int acID;
+    private int acId;
     private int loaiMayLanh;
     private float congSuat;
     private boolean isInverter;

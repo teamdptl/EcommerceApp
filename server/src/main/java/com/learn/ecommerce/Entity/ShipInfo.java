@@ -5,16 +5,19 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ShipInfo")
+@SQLDelete(sql = "UPDATE ship_info SET is_deleted = true WHERE ship_id = ?") // Soft delete
 public class ShipInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int shipfoID;
+    private int shipId;
     private int fullname;
     private String addreess;
     private String phone;
@@ -22,4 +25,5 @@ public class ShipInfo {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private boolean isDeleted = false;
 }
