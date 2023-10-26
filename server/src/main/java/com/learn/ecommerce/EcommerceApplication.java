@@ -2,7 +2,6 @@ package com.learn.ecommerce;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learn.ecommerce.Entity.Product;
-import com.learn.ecommerce.Entity.TestDTO;
 import com.learn.ecommerce.Repository.ProductReponsitory;
 import com.learn.ecommerce.auth.AuthenticationService;
 import com.learn.ecommerce.auth.RegisterRequest;
