@@ -1,4 +1,6 @@
 package com.learn.ecommerce.Entity;
+
+import com.learn.ecommerce.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,26 +12,26 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "OrderLine")
-public class OrderLine {
+public class Cart {
     @EmbeddedId
-    private OrderLineKey id;
-    private long price;
+    private CartKey id;
     private int quantity;
     @ManyToOne
     @MapsId("productId")
     @JoinColumn(name = "product_id")
     private Product product;
+
     @ManyToOne
-    @MapsId("orderId")
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Embeddable
     @Data
-    public static class OrderLineKey implements Serializable {
+    public static class CartKey implements Serializable {
         @Column(name = "product_id")
         int productId;
-        @Column(name = "order_id")
-        int orderId;
+        @Column(name = "user_id")
+        int userId;
     }
 }
