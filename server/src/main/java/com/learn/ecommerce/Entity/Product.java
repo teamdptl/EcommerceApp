@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,8 +34,8 @@ public class Product {
     @Column(columnDefinition = "json")
     private String attributes;
     @ManyToOne
-    @JoinColumn(name = "branch_id")
-    private Branch branch;
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
