@@ -29,6 +29,7 @@ public class Product {
     private int warrantyMonths;
     private int quantity;
     private String origin;
+    private String slugUrl;
     private boolean isDeleted = false;
 
     @Column(columnDefinition = "json")
