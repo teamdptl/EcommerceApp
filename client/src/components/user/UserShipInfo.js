@@ -31,7 +31,7 @@ const UserShipInfo = () => {
 					Thay đổi
 				</button>
             </div>
-            {display === true ? <UserShipInfoForm info={info}  /> : <></>}
+            {display === true ? <UserShipInfoForm shipInfo={info}  /> : <></>}
 		</>
 	);
 };
