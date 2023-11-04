@@ -13,7 +13,8 @@
 
  @Service
  public interface ProductService extends RootService<Product, Integer> {
-  public Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, Integer branchId, String origin, Integer rating, ProductSortType type, Pageable pageable);
+
+  Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, ProductSortType type, int page);
 
   public void favoriteProduct(Product product, User user);
 

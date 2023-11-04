@@ -15,10 +15,10 @@ public interface ProductRepository extends JpaRepository<Product,Integer>{
   Page<Product> findFavoriteProducts(@Param("userId") Integer userId, Pageable pageable);
 
   @Query("SELECT p FROM Product p WHERE (:title = '' or (:title != '' and p.name like %:title%)) and p.price >= :priceMin and p.price <= :priceMax " +
-          "and ((:categoryId > 0 and p.category.categoryId = :categoryId) or :categoryId = 0) and (:origin = '' or (:origin != '' and p.origin like %:origin%)) " +
-          "and ( (:branchId > 0 and p.brand.brandId = :branchId) or :branchId = 0 ) and ((:rating >= 0 and (p.rating >= :rating and p.rating < :rating + 1))  or :rating = -1)")
+          "and ((:categoryId > 0 and p.category.categoryId = :categoryId) or :categoryId = 0) and (:origins is null or (:origins is not null and p.origin in :origins)) " +
+          "and ( (:branchIds is not null and p.brand.brandId in :branchIds) or :branchIds is null ) and ((:rating >= 0 and (p.rating >= :rating and p.rating < :rating + 1))  or :rating = -1)")
   Page<Product> searchProducts(@Param("title") String title, @Param("priceMin") Long priceMin,
                                @Param("priceMax") Long priceMax, @Param("categoryId") Integer categoryId,
-                               @Param("branchId") Integer branchId, @Param("origin") String origin,
+                               @Param("branchIds") List<Integer> branchIds, @Param("origins") List<String> origins,
                                @Param("rating") Integer rating, Pageable pageable);
 }

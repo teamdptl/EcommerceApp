@@ -6,7 +6,9 @@ import com.learn.ecommerce.Service.ProductService;
 import com.learn.ecommerce.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,8 +44,8 @@ public class ProductImp implements ProductService {
     }
 
     @Override
-    public Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, Integer branchId, String origin, Integer rating, ProductSortType type, Pageable pageable) {
-        return reponsitory.searchProducts(title, priceMin, priceMax, categoryId, branchId, origin, rating, pageable);
+    public Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, ProductSortType type, int page) {
+        return reponsitory.searchProducts(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, 12));
     }
 
     @Override

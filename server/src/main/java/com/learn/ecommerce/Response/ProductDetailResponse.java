@@ -16,7 +16,6 @@ public class ProductDetailResponse {
     private String slugUrl;
     private double rating = 0.0;
     private String brandName;
-    private String brandImage;
     private String categoryName;
     private boolean isFavorite = false;
 }

@@ -13,6 +13,5 @@ public class ProductListItemResponse {
     private int warrantyMonths;
     private int quantity;
     private String brandName;
-    private String brandImage;
     private String categoryName;
 }

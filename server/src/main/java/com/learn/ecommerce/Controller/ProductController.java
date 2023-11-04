@@ -44,12 +44,16 @@ public class ProductController {
                                                  @RequestParam(defaultValue = "0", required = false) Long priceMin,
                                                  @RequestParam(defaultValue = "1000000000", required = false) Long priceMax,
                                                  @RequestParam(defaultValue = "0", required = false) Integer categoryId,
-                                                 @RequestParam(defaultValue = "0", required = false) Integer branchId,
-                                                 @RequestParam(defaultValue = "", required = false) String origin,
+                                                 @RequestParam(defaultValue = "", required = false) List<Integer> branchIds,
+                                                 @RequestParam(defaultValue = "", required = false) List<String> origins,
                                                  @RequestParam(defaultValue = "-1", required = false) Integer rating,
                                                  @RequestParam(required = false) ProductSortType sortType,
                                                  @RequestParam(defaultValue = "0", required = false) Integer page){
-        Page<Product> products = service.searchProducts(title, priceMin, priceMax, categoryId, branchId, origin, rating, sortType, PageRequest.of(page, 12));
+        if (branchIds.isEmpty())
+            branchIds = null;
+        if (origins.isEmpty())
+            origins = null;
+        Page<Product> products = service.searchProducts(title, priceMin, priceMax, categoryId, branchIds, origins, rating, sortType, page);
         return ModelMapperUtils.mapEntityPageIntoDtoPage(products, ProductListItemResponse.class);
     }
 
