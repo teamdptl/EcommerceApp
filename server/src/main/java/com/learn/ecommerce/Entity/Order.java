@@ -20,6 +20,12 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
+
+    private int orderStatus = 0;
+    private boolean paymentStatus = false;
+    private String paymentMethod;
+    private long totalPrice = 0;
+
     private Date createAt;
     @ManyToOne
     @JoinColumn(name = "user_id")

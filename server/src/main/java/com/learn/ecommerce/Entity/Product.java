@@ -22,13 +22,14 @@ public class Product {
     private int productId;
     private String name;
     private String description;
-    private String thongSoKyThuat;
+    private String thongSoKiThuat;
     private long price;
     private long oldPrice;
     private int warrantyMonths;
     private int quantity;
     private String origin;
     private String slugUrl;
+    private double rating = 0.0;
     private boolean isDeleted = false;
 
     @Column(columnDefinition = "json")
@@ -46,5 +47,4 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> users = new HashSet<>();
-
 }
