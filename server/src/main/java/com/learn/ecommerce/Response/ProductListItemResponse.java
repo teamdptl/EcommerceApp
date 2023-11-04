@@ -14,4 +14,5 @@ public class ProductListItemResponse {
     private int quantity;
     private String brandName;
     private String categoryName;
+    private Long orderCount = 0L;
 }

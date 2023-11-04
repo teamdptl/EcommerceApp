@@ -3,9 +3,10 @@ package com.learn.ecommerce.Controller;
 import com.learn.ecommerce.Entity.Brand;
 import com.learn.ecommerce.Entity.Category;
 import com.learn.ecommerce.Entity.Product;
-import com.learn.ecommerce.Enum.ProductSortType;
+import com.learn.ecommerce.Repository.ProductQueryAdvanced;
 import com.learn.ecommerce.Repository.BrandRepository;
 import com.learn.ecommerce.Repository.CategoryReponsitory;
+import com.learn.ecommerce.Repository.ProductRepository;
 import com.learn.ecommerce.Request.CreateProductRequest;
 import com.learn.ecommerce.Request.EditProductRequest;
 import com.learn.ecommerce.Response.ErrorResponse;
@@ -17,7 +18,6 @@ import com.learn.ecommerce.Ultis.ModelMapperUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +29,9 @@ import java.util.Optional;
 @RequestMapping("/api/v1/product")
 public class ProductController {
     private final ProductImp service;
+
+    @Autowired
+    private ProductRepository repo;
     private final BrandRepository brandRepository;
 
     private final CategoryReponsitory categoryReponsitory;
@@ -47,14 +50,19 @@ public class ProductController {
                                                  @RequestParam(defaultValue = "", required = false) List<Integer> branchIds,
                                                  @RequestParam(defaultValue = "", required = false) List<String> origins,
                                                  @RequestParam(defaultValue = "-1", required = false) Integer rating,
-                                                 @RequestParam(required = false) ProductSortType sortType,
+                                                 @RequestParam(defaultValue = "0",required = false) int sortType,
                                                  @RequestParam(defaultValue = "0", required = false) Integer page){
         if (branchIds.isEmpty())
             branchIds = null;
         if (origins.isEmpty())
             origins = null;
-        Page<Product> products = service.searchProducts(title, priceMin, priceMax, categoryId, branchIds, origins, rating, sortType, page);
-        return ModelMapperUtils.mapEntityPageIntoDtoPage(products, ProductListItemResponse.class);
+        Page<ProductQueryAdvanced> products = service.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, sortType, page);
+        return products.map((product) -> {
+            ProductListItemResponse item = ModelMapperUtils.map(product.getProduct(), ProductListItemResponse.class);
+            if (product.getOrders() != null)
+                item.setOrderCount(product.getOrders());
+            return item;
+        });
     }
 
     // Hàm này dùng để lấy thông tin sản phẩm

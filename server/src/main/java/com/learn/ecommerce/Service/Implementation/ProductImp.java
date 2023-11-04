@@ -1,6 +1,6 @@
 package com.learn.ecommerce.Service.Implementation;
 import com.learn.ecommerce.Entity.Product;
-import com.learn.ecommerce.Enum.ProductSortType;
+import com.learn.ecommerce.Repository.ProductQueryAdvanced;
 import com.learn.ecommerce.Repository.ProductRepository;
 import com.learn.ecommerce.Service.ProductService;
 import com.learn.ecommerce.user.User;
@@ -44,8 +44,31 @@ public class ProductImp implements ProductService {
     }
 
     @Override
-    public Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, ProductSortType type, int page) {
+    public Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page) {
         return reponsitory.searchProducts(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, 12));
+    }
+
+    @Override
+    public Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page) {
+        final int perPage = 10;
+        switch (type){
+            case 0 -> {
+                return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("orders").descending()));
+            }
+            case 1 -> {
+                return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("rating").descending()));
+            }
+            case 2 -> {
+                return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("price").ascending()));
+            }
+            case 3 -> {
+                return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("price").descending()));
+            }
+            default -> {
+                return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("orders").descending()));
+            }
+        }
+
     }
 
     @Override

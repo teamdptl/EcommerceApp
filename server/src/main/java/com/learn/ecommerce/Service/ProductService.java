@@ -1,7 +1,7 @@
  package com.learn.ecommerce.Service
 ;
 
- import com.learn.ecommerce.Enum.ProductSortType;
+ import com.learn.ecommerce.Repository.ProductQueryAdvanced;
  import com.learn.ecommerce.user.User;
  import org.springframework.data.domain.Page;
  import org.springframework.data.domain.Pageable;
@@ -14,7 +14,9 @@
  @Service
  public interface ProductService extends RootService<Product, Integer> {
 
-  Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, ProductSortType type, int page);
+  Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page);
+
+  Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page);
 
   public void favoriteProduct(Product product, User user);
 

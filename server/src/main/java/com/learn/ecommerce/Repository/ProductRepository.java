@@ -21,4 +21,13 @@ public interface ProductRepository extends JpaRepository<Product,Integer>{
                                @Param("priceMax") Long priceMax, @Param("categoryId") Integer categoryId,
                                @Param("branchIds") List<Integer> branchIds, @Param("origins") List<String> origins,
                                @Param("rating") Integer rating, Pageable pageable);
+
+  @Query("SELECT p as product, sum(o.quantity) as orders FROM Product p LEFT JOIN OrderLine o ON p.productId = o.product.productId WHERE (:title = '' or (:title != '' and p.name like %:title%)) " +
+          "and p.price >= :priceMin and p.price <= :priceMax and ((:categoryId > 0 and p.category.categoryId = :categoryId) or :categoryId = 0) and (:origins is null or (:origins is not null and p.origin in :origins)) " +
+          "and ( (:branchIds is not null and p.brand.brandId in :branchIds) or :branchIds is null ) and ((:rating >= 0 and (p.rating >= :rating and p.rating < :rating + 1))  or :rating = -1)" +
+          "group by p.productId")
+  Page<ProductQueryAdvanced> searchProductsAdvanced(@Param("title") String title, @Param("priceMin") Long priceMin,
+                                                    @Param("priceMax") Long priceMax, @Param("categoryId") Integer categoryId,
+                                                    @Param("branchIds") List<Integer> branchIds, @Param("origins") List<String> origins,
+                                                    @Param("rating") Integer rating, Pageable pageable);
 }
