@@ -4,11 +4,63 @@ import { NavLink, Link } from "react-router-dom";
 import CartDropDown from "../components/main/CartDropdown"
 import NavMenuDropDown from "../components/main/NavMenuDropDown";
 import "flowbite";
+import {useContext, useEffect, useState} from "react";
 
 export default function Header() {
-    // const [user, setUser] = useContext({});
-	// const [cart, setCart] = useContext({});
 
+	const [user, setUser] = useState("");
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+	useEffect(() => {
+		const token = localStorage.getItem('accessToken');
+		if (token) {
+			setIsLoggedIn(true);
+			getUserByToken(token)
+		} else {
+			setIsLoggedIn(false);
+		}
+	}, []);
+	const handleLogout = () =>{
+		const token = localStorage.getItem('accessToken');
+		console.log("token"+token)
+		fetch(`http://localhost:8080/api/v1/auth/logout`, {
+			method: 'POST',
+			headers: {
+				'Authorization': `Bearer ${token}`
+			}
+		})
+			.then(() => {
+				localStorage.removeItem('accessToken');
+				window.location.reload();
+			})
+			.catch(() => {
+
+			});
+	}
+	const getUserByToken = (token)=>{
+		console.log("getUserByToken")
+		fetch(`http://localhost:8080/api/token/user?token=${token}`, {
+			method: 'GET',
+			headers: {
+				'Authorization': `Bearer ${token}`
+			}
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('Network response was not ok.');
+				}
+				return response.json();
+			})
+
+			.then(data => {
+				setUser(data.fullname)
+				console.log(data.fullname)
+				console.log("data.fullname")
+			})
+			.catch(data => {
+				// setMessage("Tài khoản hoặc mật khẩu không trùng khớp")
+			});
+	}
 	return (
 		<>
 			<header class="bg-white h-[72px]">
@@ -24,13 +76,27 @@ export default function Header() {
 								<div class="flex items-center">
 									<CartDropDown></CartDropDown>
 								</div>
-								<Link to="/login">
-									<button
-										type="button"
-										class="text-white mr-2 bg-blue-700 hidden sm:block hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center md:mr-0">
-										Đăng nhập
-									</button>
-								</Link>
+								{
+									isLoggedIn ?
+										<div class="flex">
+										<label class="text-m font-bold text-gray-900 mx-auto my-auto mr-4">Hi,{user}</label>
+										<button
+											onClick={handleLogout}
+											type="button"
+											class="text-white mr-2 bg-blue-700 hidden sm:block hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center md:mr-0">
+											Đăng xuất
+										</button>
+										</div>
+										:
+										<Link to="/login">
+										<button
+											type="button"
+											class="text-white mr-2 bg-blue-700 hidden sm:block hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center md:mr-0">
+											Dont Login
+										</button>
+										</Link>
+								}
+
 							</div>
 
 							<NavMenuDropDown/>

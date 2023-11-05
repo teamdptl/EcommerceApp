@@ -26,17 +26,15 @@ public class User implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  private String firstname;
-  private String lastname;
+
   private String email;
   private String password;
-  private String name;
+  private String fullname;
   private String avatar;
-  private String locale;
+  private String locate;
   private String username;
 
   private boolean isDeleted = false;
-
   @Enumerated(EnumType.STRING)
   private Role role;
 
@@ -55,7 +53,7 @@ public class User implements UserDetails {
 
   @Override
   public String getUsername() {
-    return username;
+    return email;
   }
 
   @Override

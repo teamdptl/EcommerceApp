@@ -1,8 +1,53 @@
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import { Link } from "react-router-dom";
+import React, {useState} from "react";
 
 const Signup = () => {
+	const [message, setMessage] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [fullname, setFullname] = useState('');
+	const submitForm = (e) => {
+
+		e.preventDefault();
+		const data = {
+			password: password,
+			email: email,
+			fullname: fullname
+		};
+		fetch('http://localhost:8080/api/v1/auth/register', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('Network response was not ok.');
+				}
+				return response.json();
+			})
+			.then(data => {
+				var accessToken = data.access_token;
+				localStorage.setItem('accessToken', accessToken);
+				window.location.href = "/";
+			})
+			.catch( ()=> {
+				setMessage("Tài khoản email đã tồn tại")
+			});
+	};
+	const handleEmailChange = (e) => {
+		setEmail(e.target.value);
+	};
+
+	const handlePasswordChange = (e) => {
+		setPassword(e.target.value);
+	};
+	const handleFullnameChange = (e) => {
+		setFullname(e.target.value);
+	};
 	return (
 		<>
 			<Header></Header>
@@ -21,7 +66,7 @@ const Signup = () => {
 								</Link>
 							</p>
 
-							<form action="#" method="POST" class="mt-8">
+							<form class="mt-8">
 								<div class="space-y-5">
 									<div>
 										<label for="" class="text-base font-medium text-gray-900">
@@ -30,9 +75,10 @@ const Signup = () => {
 										</label>
 										<div class="mt-2.5">
 											<input
+												onChange={handleFullnameChange}
 												type="text"
-												name=""
-												id=""
+												name="fullname"
+												id="fullname"
 												placeholder="Full name"
 												class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
 											/>
@@ -40,15 +86,18 @@ const Signup = () => {
 									</div>
 
 									<div>
+
 										<label for="" class="text-base font-medium text-gray-900">
 											{" "}
 											Email của bạn{" "}
 										</label>
+										<label className="text-red-500 font-medium">{message}</label>
 										<div class="mt-2.5">
 											<input
+												onChange={handleEmailChange}
 												type="email"
-												name=""
-												id=""
+												name="email"
+												id="email"
 												placeholder="Your email"
 												class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
 											/>
@@ -62,9 +111,10 @@ const Signup = () => {
 										</label>
 										<div class="mt-2.5">
 											<input
+												onChange={handlePasswordChange}
 												type="password"
-												name=""
-												id=""
+												name="password"
+												id="password"
 												placeholder="Your password"
 												class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
 											/>
@@ -89,6 +139,7 @@ const Signup = () => {
 									<div>
 										<button
 											type="submit"
+											onClick={submitForm}
 											class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700">
 											Tạo tài khoản mới
 										</button>
