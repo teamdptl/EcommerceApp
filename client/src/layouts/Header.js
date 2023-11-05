@@ -5,6 +5,7 @@ import CartDropDown from "../components/main/CartDropdown"
 import NavMenuDropDown from "../components/main/NavMenuDropDown";
 import "flowbite";
 import {useContext, useEffect, useState} from "react";
+import baseUrl from "../config";
 
 export default function Header() {
 
@@ -23,7 +24,7 @@ export default function Header() {
 	const handleLogout = () =>{
 		const token = localStorage.getItem('accessToken');
 		console.log("token"+token)
-		fetch(`http://localhost:8080/api/v1/auth/logout`, {
+		fetch(`${baseUrl}/api/v1/auth/logout`, {
 			method: 'POST',
 			headers: {
 				'Authorization': `Bearer ${token}`
@@ -39,7 +40,7 @@ export default function Header() {
 	}
 	const getUserByToken = (token)=>{
 		console.log("getUserByToken")
-		fetch(`http://localhost:8080/api/token/user?token=${token}`, {
+		fetch(`${baseUrl}/api/token/user?token=${token}`, {
 			method: 'GET',
 			headers: {
 				'Authorization': `Bearer ${token}`
@@ -54,8 +55,6 @@ export default function Header() {
 
 			.then(data => {
 				setUser(data.fullname)
-				console.log(data.fullname)
-				console.log("data.fullname")
 			})
 			.catch(data => {
 				// setMessage("Tài khoản hoặc mật khẩu không trùng khớp")
@@ -92,7 +91,7 @@ export default function Header() {
 										<button
 											type="button"
 											class="text-white mr-2 bg-blue-700 hidden sm:block hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center md:mr-0">
-											Dont Login
+											Đăng nhập
 										</button>
 										</Link>
 								}

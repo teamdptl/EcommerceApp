@@ -1,21 +1,26 @@
 import Header from "../layouts/Header";
 import Footer from '../layouts/Footer';
 import { Link } from "react-router-dom";
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
+import baseUrl from "../config";
+
 
 const Login = () => {
 		const [message, setMessage] = useState('');
 		const [email, setEmail] = useState('');
 		const [password, setPassword] = useState('');
 
-		const submitForm = (e) => {
+
+
+
+	const submitForm = (e) => {
 			console.log("submitForm")
 			e.preventDefault();
 			const data = {
 			password: password,
 			email: email
 		};
-		fetch('http://localhost:8080/api/v1/auth/authenticate', {
+		fetch(`${baseUrl}/api/v1/auth/authenticate`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
