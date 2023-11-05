@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.sql.Date;
 
@@ -11,10 +13,11 @@ import java.sql.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE review SET is_deleted = true WHERE review_id = ?") // Soft delete
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int reviewID;
+    private int reviewId;
     private String rate;
     private String description;
     private Date createAt;
@@ -25,5 +28,6 @@ public class Review {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private boolean isDeleted = false;
 
 }

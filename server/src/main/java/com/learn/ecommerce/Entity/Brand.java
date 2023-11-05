@@ -4,20 +4,18 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "WashMachine")
-public class WashMachine {
+@Table(name = "Branch")
+@SQLDelete(sql = "UPDATE branch SET is_deleted = true WHERE branch_id = ?") // Soft delete
+public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int wmID;
-    private int loaiMayGiat;
-    private int khoiLuongGiat;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "productID")
-    private Product product;
-
+    private int brandId;
+    private String name;
+    private boolean isDeleted = false;
 }

@@ -39,14 +39,13 @@ export default function CustomTriggerDropdown() {
 				</button>
 			)}>
 			{/* Danh sách các sản phẩm trong giỏ hàng */}
-			<div class="mt-3 px-3 w-76">
+			<div class="mt-3 px-3 w-76 max-h-96 overflow-y-auto">
 			<p className="text-lg font-medium text-gray-900 ml-5 mb-2">Shopping cart</p>
 
 				<div class="flow-root">
 					<ul role="list" class="-my-6 divide-y divide-gray-200" >
 						{cartList.map((item) => (
 							<CartItem key={item.id} item={item} />
-
 						))}
 					</ul>
 				</div>
@@ -60,7 +59,7 @@ export default function CustomTriggerDropdown() {
 				<p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
 				<div className="mt-6 flex">
 					<a
-						href="#"
+						href="/Cart"
 						className="flex items-center justify-center rounded-full pl-16 pr-16 border border-md  px-6 py-3  font-medium text-black shadow-sm"
 					>			View cart
 					</a>

@@ -47,11 +47,14 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(req ->
+
                               req  .requestMatchers("/auth/pageAuth").authenticated().
                                     requestMatchers(WHITE_LIST_URL)
                                       .permitAll()
 
                                 .anyRequest().authenticated()
+
+                        
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
