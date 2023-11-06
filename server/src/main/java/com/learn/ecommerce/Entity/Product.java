@@ -29,7 +29,6 @@ public class Product {
     private int quantity;
     private String origin;
     private String slugUrl;
-    private double rating = 0.0;
     private boolean isDeleted = false;
 
     @Column(columnDefinition = "json")

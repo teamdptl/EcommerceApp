@@ -18,7 +18,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reviewId;
-    private String rate;
+    private int rate;
     private String description;
     private Date createAt;
     @ManyToOne

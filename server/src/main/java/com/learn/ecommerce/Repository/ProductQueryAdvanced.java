@@ -7,4 +7,6 @@ import lombok.Setter;
 public interface ProductQueryAdvanced{
      Product getProduct();
      Long getOrders();
+     Double getRating();
+     Integer getReviewer();
 }

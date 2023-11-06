@@ -61,6 +61,9 @@ public class ProductController {
             ProductListItemResponse item = ModelMapperUtils.map(product.getProduct(), ProductListItemResponse.class);
             if (product.getOrders() != null)
                 item.setOrderCount(product.getOrders());
+            if (product.getRating() != null)
+                item.setRating(product.getRating());
+            item.setReviewCount(product.getReviewer());
             return item;
         });
     }
