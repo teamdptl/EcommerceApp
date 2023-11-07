@@ -13,7 +13,6 @@ import java.sql.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE review SET is_deleted = true WHERE review_id = ?") // Soft delete
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

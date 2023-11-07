@@ -81,6 +81,7 @@ public class ProductController {
         return ResponseEntity.badRequest().body(new ErrorResponse("Không tìm thấy sản phẩm"));
     }
 
+    // Role: Manager
     // Hàm dùng để thêm sản phẩm
     @PostMapping("/add")
     public ResponseEntity<?> addProduct(@ModelAttribute @Valid CreateProductRequest createData, BindingResult result){
@@ -102,6 +103,7 @@ public class ProductController {
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
 
+    // Role: Manager
     @PutMapping("/edit/{id}")
     public ResponseEntity<?> editProduct(@PathVariable("id") int id, @ModelAttribute @Valid EditProductRequest editData, BindingResult result){
         if (result.hasErrors()){
@@ -135,6 +137,7 @@ public class ProductController {
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
 
+    // Role: Manager
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable int id){
         Optional<Product> p = service.findById(id);
@@ -143,5 +146,22 @@ public class ProductController {
             return ResponseEntity.ok(new SuccessResponse("Đã xóa thành công "+p.get().getName()));
         }
         return ResponseEntity.badRequest().body(new ErrorResponse("Không tồn tại sản phẩm có id là "+id));
+    }
+
+    // Role: User
+    @GetMapping("/favorite")
+    public ResponseEntity<?> getUserFavorite(){
+        return null;
+    }
+
+    // Role: User
+    @PostMapping("/add-favorite")
+    public ResponseEntity<?> addUserFavorite(){
+        return null;
+    }
+
+    @DeleteMapping("/delete-favorite")
+    public ResponseEntity<?> deleteFavorite(){
+        return null;
     }
 }

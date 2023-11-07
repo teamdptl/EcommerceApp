@@ -32,6 +32,7 @@ public class EcommerceApplication {
 			AuthenticationService service
 	) {
 		return args -> {
+
 //			var admin = RegisterRequest.builder()
 //					.username("username")
 //					.email("admin@mail.com")
@@ -49,20 +50,20 @@ public class EcommerceApplication {
 //			System.out.println("Manager token: " + service.register(manager).getAccessToken());
 
 			// Tạo product của duy
-//			Product product = new Product();
-//			product.setName("Hello duy");
-//			product.setDescription("ABC");
-//			product.setThongSoKyThuat("ABC");
-//			product.setPrice(12345);
-//			product.setOldPrice(123123);
-//			product.setWarrantyMonths(12);
-//			product.setQuantity(10);
-//			product.setOrigin("NB");
-//			product.setAttributes("{\"Val1\":\"37\", \"Val2\":\"25\"}");
-//			product.setBrand(null);
-//			product.setCategory(null);
+			Product product = new Product();
+			product.setName("Hello duy");
+			product.setDescription("ABC");
+			product.setThongSoKiThuat("ABC");
+			product.setPrice(12345);
+			product.setOldPrice(123123);
+			product.setWarrantyMonths(12);
+			product.setQuantity(10);
+			product.setOrigin("NB");
+			product.setAttributes("{\"Val1\":\"37\", \"Val2\":\"25\"}");
+			product.setBrand(null);
+			product.setCategory(null);
 
-//			productService.save(product);
+			productService.save(product);
 
 //			Optional<Product> product = reponsitory.findById(1);
 //			String json = product.get().getAttributes();
