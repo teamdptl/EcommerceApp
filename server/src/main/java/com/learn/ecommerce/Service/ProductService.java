@@ -24,5 +24,7 @@
 
   public List<Product> featureProducts(Integer page);
 
-  public void saveProductWithMedia(Product product, List<MultipartFile> files);
-}
+  void saveProductWithMedia(Product product, List<MultipartFile> files, Integer primaryImageIndex);
+
+  void removeProductMedia(Product product, Integer[] mediaIds);
+ }

@@ -21,7 +21,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
     private String name;
+    @Lob @Column(length=10000)
     private String description;
+    @Lob @Column(length=10000)
     private String thongSoKiThuat;
     private long price;
     private long oldPrice;
@@ -46,4 +48,7 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> users = new HashSet<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<Media> medias;
 }

@@ -98,7 +98,7 @@ public class ProductController {
                     .body(new ErrorResponse("Category không tồn tại!"));
         product.setBrand(brand.get());
         product.setCategory(category.get());
-        service.saveProductWithMedia(product, List.of(createData.getFiles()));
+        service.saveProductWithMedia(product, List.of(createData.getFiles()), createData.getPrimaryImageIndex());
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
 
@@ -124,8 +124,14 @@ public class ProductController {
                     .body(new ErrorResponse("Category không tồn tại!"));
         product.setBrand(brand.get());
         product.setCategory(category.get());
+
+        if (editData.getRemoveMediaIds().length > 0)
+            service.removeProductMedia(product, editData.getRemoveMediaIds());
+
         if (editData.getFiles().length > 0)
-            service.saveProductWithMedia(product, List.of(editData.getFiles()));
+            service.saveProductWithMedia(product, List.of(editData.getFiles()), editData.getPrimaryImageIndex());
+        service.adjustProductMedia(product);
+
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
 
