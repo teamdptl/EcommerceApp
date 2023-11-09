@@ -18,8 +18,8 @@ public class ShipInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int shipId;
-    private int fullname;
-    private String addreess;
+    private String fullName;
+    private String address;
     private String phone;
     @ManyToOne
     @JoinColumn(name = "user_id")

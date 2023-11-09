@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public interface RootService<T> {
-    public Optional<T> FindByID(int id);
-    public Optional<T> FindByUserName(String userName);
-    public List<T> GetAll();
-    public void Save(T T);
-    public void Create();
-    public void Delete();
+public interface RootService<T, K> {
+    public Optional<T> findById(K id);
+    public List<T> getAll();
+    public void save(T T);
+    public void delete(K id);
 }
 

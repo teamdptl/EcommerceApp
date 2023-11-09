@@ -10,13 +10,12 @@ import org.hibernate.annotations.SQLDelete;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Branch")
+@Table(name = "Brand")
 @SQLDelete(sql = "UPDATE branch SET is_deleted = true WHERE branch_id = ?") // Soft delete
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int brandId;
     private String name;
-    private String image;
     private boolean isDeleted = false;
 }

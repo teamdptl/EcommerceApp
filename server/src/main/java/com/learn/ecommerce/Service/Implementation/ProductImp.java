@@ -1,38 +1,117 @@
 package com.learn.ecommerce.Service.Implementation;
+import com.learn.ecommerce.Entity.Media;
 import com.learn.ecommerce.Entity.Product;
+import com.learn.ecommerce.Repository.ProductQueryAdvanced;
+import com.learn.ecommerce.Repository.ProductRepository;
 import com.learn.ecommerce.Service.ProductService;
+import com.learn.ecommerce.user.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 @Component
 public class ProductImp implements ProductService {
-    @Override
-    public Optional<Product> FindByID(int id) {
-        return Optional.empty();
+    private final ProductRepository reponsitory;
+    private final MediaImp mediaImp;
+    public ProductImp(@Autowired ProductRepository repo, @Autowired MediaImp mediaImp) {
+        this.reponsitory = repo;
+        this.mediaImp = mediaImp;
     }
 
     @Override
-    public Optional<Product> FindByUserName(String userName) {
-        return Optional.empty();
+    public Optional<Product> findById(Integer id) {
+        return reponsitory.findById(id);
     }
 
     @Override
-    public List<Product> GetAll() {
+    public List<Product> getAll() {
+        return reponsitory.findAll();
+    }
+
+    @Override
+    public void save(Product T) {
+        reponsitory.save(T);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        reponsitory.deleteById(id);
+    }
+
+//    @Override
+//    public Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page) {
+//        return reponsitory.searchProducts(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, 12));
+//    }
+
+    @Override
+    public Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page) {
+        final int perPage = 10;
+        switch (type){
+            case 0 -> {
+                return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("orders").descending()));
+            }
+            case 1 -> {
+                return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("rating").descending()));
+            }
+            case 2 -> {
+                return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("price").ascending()));
+            }
+            case 3 -> {
+                return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("price").descending()));
+            }
+            default -> {
+                return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("orders").descending()));
+            }
+        }
+
+    }
+
+    @Override
+    public void favoriteProduct(Product product, User user) {
+        product.getUsers().add(user);
+    }
+
+    @Override
+    public Page<Product> favoriteList(User user, Pageable pageable) {
+        return reponsitory.findFavoriteProducts(user.getId(), pageable);
+    }
+
+    @Override
+    public List<Product> featureProducts(Integer page) {
         return null;
     }
 
     @Override
-    public void Save(Product T) {
-
+    public void saveProductWithMedia(Product product, List<MultipartFile> files, Integer primaryImageIndex) {
+        Product saved = reponsitory.save(product);
+        mediaImp.saveFiles(files, saved, primaryImageIndex);
     }
 
     @Override
-    public void Create() {
-
+    public void removeProductMedia(Product product, Integer[] mediaIds){
+        mediaImp.removeMediaFromProduct(product, mediaIds);
     }
 
-    @Override
-    public void Delete() {
-
+    // Chỉ có 1 ảnh đại diện
+    public void adjustProductMedia(Product product){
+        Set<Media> mediaSet = product.getMedias();
+        int countPrimary = 0;
+        for (Media media : mediaSet){
+            if (media.isPrimary()){
+                if (countPrimary > 1){
+                    media.setPrimary(false);
+                    mediaImp.save(media);
+                }
+                countPrimary ++;
+            }
+        }
     }
 }

@@ -21,8 +21,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
     private String name;
+    @Lob @Column(length=10000)
     private String description;
-    private String thongSoKyThuat;
+    @Lob @Column(length=10000)
+    private String thongSoKiThuat;
     private long price;
     private long oldPrice;
     private int warrantyMonths;
@@ -47,4 +49,6 @@ public class Product {
     )
     private Set<User> users = new HashSet<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<Media> medias;
 }
