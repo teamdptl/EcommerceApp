@@ -11,7 +11,6 @@ const Signup = () => {
 	const [fullname, setFullname] = useState('');
 	const submitForm = (e) => {
 
-		e.preventDefault();
 		const data = {
 			password: password,
 			email: email,

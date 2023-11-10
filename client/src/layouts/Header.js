@@ -6,24 +6,23 @@ import NavMenuDropDown from "../components/main/NavMenuDropDown";
 import "flowbite";
 import {useContext, useEffect, useState} from "react";
 import baseUrl from "../config";
+import {useAuth} from "../context/AuthContext";
 
 export default function Header() {
 
-	const [user, setUser] = useState("");
+	// const [user, setUser] = useState("");
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+	const {user} = useAuth();
 	useEffect(() => {
 		const token = localStorage.getItem('accessToken');
 		if (token) {
 			setIsLoggedIn(true);
-			getUserByToken(token)
 		} else {
 			setIsLoggedIn(false);
 		}
 	}, []);
 	const handleLogout = () =>{
 		const token = localStorage.getItem('accessToken');
-		console.log("token"+token)
 		fetch(`${baseUrl}/api/v1/auth/logout`, {
 			method: 'POST',
 			headers: {
@@ -38,28 +37,28 @@ export default function Header() {
 
 			});
 	}
-	const getUserByToken = (token)=>{
-		console.log("getUserByToken")
-		fetch(`${baseUrl}/api/token/user?token=${token}`, {
-			method: 'GET',
-			headers: {
-				'Authorization': `Bearer ${token}`
-			}
-		})
-			.then(response => {
-				if (!response.ok) {
-					throw new Error('Network response was not ok.');
-				}
-				return response.json();
-			})
-
-			.then(data => {
-				setUser(data.fullname)
-			})
-			.catch(data => {
-				// setMessage("Tài khoản hoặc mật khẩu không trùng khớp")
-			});
-	}
+	// const getUserByToken = (token)=>{
+	// 	console.log("getUserByToken")
+	// 	fetch(`${baseUrl}/api/token/user?token=${token}`, {
+	// 		method: 'GET',
+	// 		headers: {
+	// 			'Authorization': `Bearer ${token}`
+	// 		}
+	// 	})
+	// 		.then(response => {
+	// 			if (!response.ok) {
+	// 				throw new Error('Network response was not ok.');
+	// 			}
+	// 			return response.json();
+	// 		})
+	//
+	// 		.then(data => {
+	// 			setUser(data.fullname)
+	// 		})
+	// 		.catch(data => {
+	// 			// setMessage("Tài khoản hoặc mật khẩu không trùng khớp")
+	// 		});
+	// }
 	return (
 		<>
 			<header class="bg-white h-[72px]">
@@ -78,7 +77,7 @@ export default function Header() {
 								{
 									isLoggedIn ?
 										<div class="flex">
-										<label class="text-m font-bold text-gray-900 mx-auto my-auto mr-4">Hi,{user}</label>
+										<label class="text-m font-bold text-gray-900 mx-auto my-auto mr-4">Hi,{user.fullname + user.username}</label>
 										<button
 											onClick={handleLogout}
 											type="button"

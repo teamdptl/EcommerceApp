@@ -48,8 +48,10 @@ public class SecurityConfiguration {
 
                 .authorizeHttpRequests(req ->
 
-                              req  .requestMatchers("/auth/pageAuth").authenticated().
-                                    requestMatchers(WHITE_LIST_URL)
+                              req
+                                      .requestMatchers("/test").authenticated()
+                                      .requestMatchers("/auth/pageAuth").authenticated()
+                                      .requestMatchers(WHITE_LIST_URL)
                                       .permitAll()
 
                                 .anyRequest().authenticated()

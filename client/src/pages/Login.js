@@ -1,21 +1,24 @@
 import Header from "../layouts/Header";
 import Footer from '../layouts/Footer';
-import { Link } from "react-router-dom";
+import { Link,useNavigate   } from "react-router-dom";
+import axios from 'axios';
+
 import React, {useContext, useState} from 'react';
 import baseUrl from "../config";
+import {useAuth} from "../context/AuthContext";
+import { jwtDecode } from "jwt-decode";
+import setAuthToken from "../context/Axios";
 
 
 const Login = () => {
+		const navigate = useNavigate();
 		const [message, setMessage] = useState('');
 		const [email, setEmail] = useState('');
 		const [password, setPassword] = useState('');
-
-
+		const {user,setUser} = useAuth();
 
 
 	const submitForm = (e) => {
-			console.log("submitForm")
-			e.preventDefault();
 			const data = {
 			password: password,
 			email: email
@@ -29,14 +32,19 @@ const Login = () => {
 		})
 			.then(response => {
 				if (!response.ok) {
-					throw new Error('Network response was not ok.');
+
 				}
 				return response.json();
 			})
 			.then(data => {
-				var accessToken = data.access_token;
+				var accessToken = data.access_token
 				localStorage.setItem('accessToken', accessToken);
-				window.location.href = "/";
+				localStorage.setItem('refresh_token', data.refresh_token);
+				const decoded = jwtDecode(accessToken);
+				setUser({username:decoded.username,
+						fullname:decoded.fullname,
+						role:decoded.role})
+				navigate('/', { replace: true });
 			})
 			.catch(data => {
 				setMessage("Tài khoản hoặc mật khẩu không trùng khớp")
@@ -121,7 +129,7 @@ const Login = () => {
 									<div>
 										<button
 											onClick={submitForm}
-											type="submit"
+											type="button"
 											class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700">
 											Đăng nhập
 										</button>
