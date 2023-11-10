@@ -14,7 +14,7 @@
  @Service
  public interface ProductService extends RootService<Product, Integer> {
 
-  Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page);
+//  Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page);
 
   Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page);
 
@@ -24,5 +24,7 @@
 
   public List<Product> featureProducts(Integer page);
 
-  public void saveProductWithMedia(Product product, List<MultipartFile> files);
-}
+  void saveProductWithMedia(Product product, List<MultipartFile> files, Integer primaryImageIndex);
+
+  void removeProductMedia(Product product, Integer[] mediaIds);
+ }
