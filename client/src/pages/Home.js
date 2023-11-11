@@ -3,6 +3,7 @@ import Footer from '../layouts/Footer';
 import FeaturedProducts from '../components/home/FeaturedProducts';
 import ProductCarousel from '../components/home/ProductCarousel';
 import "flowbite";
+import {useAuth} from "../context/AuthContext";
 
 const Home = () => {
     return (

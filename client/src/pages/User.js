@@ -3,6 +3,7 @@ import Footer from '../layouts/Footer'
 import { Tabs } from "flowbite-react";
 import { HiAdjustments, HiClipboardList, HiUserCircle, HiShoppingCart } from "react-icons/hi";
 import UserInfo from '../components/user/UserInfo';
+import UserOrder from '../components/user/UserOrder';
 
 const User = () => {
 	return (
@@ -16,9 +17,7 @@ const User = () => {
 						<UserInfo></UserInfo>
 					</Tabs.Item>
 					<Tabs.Item icon={HiShoppingCart} title="Đơn hàng">
-						<p>
-							Đơn hàng
-						</p>
+						<UserOrder></UserOrder>
 					</Tabs.Item>
 					<Tabs.Item icon={HiClipboardList} title="Yêu thích">
 						<p>

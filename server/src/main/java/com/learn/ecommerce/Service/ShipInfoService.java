@@ -1,6 +1,7 @@
- package com.learn.ecommerce.Service
-;import org.springframework.stereotype.Service; 
+ package com.learn.ecommerce.Service;
+import org.springframework.stereotype.Service;
  import com.learn.ecommerce.Entity.ShipInfo
-;    @Service 
- public interface ShipInfoService extends RootService<ShipInfo> {
+;
+ @Service
+ public interface ShipInfoService {
 }

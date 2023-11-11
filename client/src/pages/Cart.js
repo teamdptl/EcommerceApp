@@ -101,7 +101,7 @@ const Cart = () => {
 							Trang chủ
 						</p>
 					</Breadcrumb.Item>
-					<Breadcrumb.Item href="/product">
+					<Breadcrumb.Item href="/shop">
 						Sản phẩm
 					</Breadcrumb.Item>
 					<Breadcrumb.Item>

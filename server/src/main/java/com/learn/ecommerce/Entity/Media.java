@@ -13,8 +13,10 @@ import lombok.NoArgsConstructor;
 public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int imageID;
+    private int imageId;
     private String imageUrl;
+    private boolean isPrimary;
+    private boolean isExternalImage = false;
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
