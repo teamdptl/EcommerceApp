@@ -15,8 +15,7 @@ import java.util.Date;
 public class EmailService {
     @Value("86400")
     private int expTime;
-    @Value("${host}")
-    private String host ;
+    private String host = "smtp.gmail.com";
     @Autowired
     private JavaMailSender emailSender;
 
