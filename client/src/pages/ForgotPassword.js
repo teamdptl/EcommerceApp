@@ -28,7 +28,7 @@ const ForgotPassword = () => {
 			  setMessage(error.response.data.message);
 		  })
 		  .finally(() => {
-			  setIsLoading(false); // Khi hoàn thành yêu cầu, đặt isLoading thành false
+			  setIsLoading(false);
 		  });
 	}
 	const handleChangeEmail = (e) => {

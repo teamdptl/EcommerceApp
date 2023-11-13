@@ -1,6 +1,10 @@
-package com.learn.ecommerce.auth;
+package com.learn.ecommerce.Controller;
 
-import com.learn.ecommerce.config.LogoutService;
+import com.learn.ecommerce.Request.RegisterRequest;
+import com.learn.ecommerce.Service.LogoutService;
+import com.learn.ecommerce.Request.AuthenticationRequest;
+import com.learn.ecommerce.Response.AuthenticationResponse;
+import com.learn.ecommerce.Response.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,6 @@
-package com.learn.ecommerce.user;
+package com.learn.ecommerce.Repository;
 
+import com.learn.ecommerce.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
