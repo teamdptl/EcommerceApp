@@ -39,10 +39,10 @@ export default function CustomTriggerDropdown() {
 				</button>
 			)}>
 			{/* Danh sách các sản phẩm trong giỏ hàng */}
-			<div class="mt-3 px-3 w-76 max-h-96 overflow-y-auto">
+			<div class="mt-3 px-8 max-h-96 overflow-y-auto">
 			<p className="text-lg font-medium text-gray-900 ml-5 mb-2">Shopping cart</p>
 
-				<div class="flow-root">
+				<div class="flow-root w-1">
 					<ul role="list" class="-my-6 divide-y divide-gray-200" >
 						{cartList.map((item) => (
 							<CartItem key={item.id} item={item} />

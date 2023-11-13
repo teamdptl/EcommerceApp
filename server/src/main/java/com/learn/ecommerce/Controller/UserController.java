@@ -27,7 +27,6 @@ public class UserController {
 
     @GetMapping("/confirm-password")
     public Boolean checkExpritation(@RequestParam String UUID) {
-
         return changePasswordService.checkExpiration(UUID);
     }
 
@@ -43,11 +42,11 @@ public class UserController {
     @PostMapping("/forget-password")
     public ResponseEntity<Map<String, String>> forgotPassword(
             @RequestBody String email
-    ) throws NoSuchAlgorithmException {
+    ) throws NoSuchAlgorithmException
+     {
         System.out.println(email);
         return service.forgotPassword(email);
-    }
-
+    };
 
     // ROLE: Admin
     @GetMapping("/search")
@@ -67,9 +66,12 @@ public class UserController {
     }
 
     // ROLE: Admin và chính bản thân user
+
     @PutMapping("/update}")
     public ResponseEntity<?> updateUsers(@RequestBody @Valid UpdateUserRequest request, BindingResult result) {
         return null;
 
     }
+
 }
+
