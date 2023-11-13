@@ -1,7 +1,6 @@
 package com.learn.ecommerce.config;
 
-import com.learn.ecommerce.auditing.ApplicationAuditAware;
-import com.learn.ecommerce.user.UserRepository;
+import com.learn.ecommerce.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,11 +32,6 @@ public class ApplicationConfig {
     authProvider.setUserDetailsService(userDetailsService());
     authProvider.setPasswordEncoder(passwordEncoder());
     return authProvider;
-  }
-
-  @Bean
-  public AuditorAware<Integer> auditorAware() {
-    return new ApplicationAuditAware();
   }
 
   @Bean

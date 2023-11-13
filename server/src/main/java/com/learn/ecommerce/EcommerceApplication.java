@@ -1,23 +1,12 @@
 package com.learn.ecommerce;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learn.ecommerce.Entity.Product;
-import com.learn.ecommerce.Repository.ProductRepository;
 import com.learn.ecommerce.Service.Implementation.ProductImp;
-import com.learn.ecommerce.Service.ProductService;
-import com.learn.ecommerce.auth.AuthenticationService;
-import com.learn.ecommerce.auth.RegisterRequest;
+import com.learn.ecommerce.Response.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.util.Optional;
-
-import static com.learn.ecommerce.user.Role.ADMIN;
-import static com.learn.ecommerce.user.Role.MANAGER;
 
 @SpringBootApplication
 public class EcommerceApplication {

@@ -1,4 +1,4 @@
-package com.learn.ecommerce.auth;
+package com.learn.ecommerce.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
+public class RegisterRequest {
 
   private String email;
-  String password;
+  private String password;
+  private String fullname;
+
 }

@@ -1,4 +1,4 @@
-package com.learn.ecommerce.auth;
+package com.learn.ecommerce.Response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

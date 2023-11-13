@@ -2,7 +2,7 @@
 ;
 
  import com.learn.ecommerce.Repository.ProductQueryAdvanced;
- import com.learn.ecommerce.user.User;
+ import com.learn.ecommerce.Entity.User;
  import org.springframework.data.domain.Page;
  import org.springframework.data.domain.Pageable;
  import org.springframework.stereotype.Service;
