@@ -23,7 +23,7 @@ const ConfirmPassword = () => {
 				'Content-Type': 'text/plain'
 			}
 		};
-		axios.get(`${baseUrl}/api/v1/users/confirm-password`,{params},config)
+		axios.get(`${baseUrl}/api/v1/auth/confirm-password`,{params},config)
 			.then(response =>{
 				console.log(response)
 				setIsExpiration(response.data)
@@ -141,7 +141,7 @@ const ConfirmPassword = () => {
 							</div>
 						</div>
 					</section>:
-						<p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-gray-600">Hãy nhập mã OTP mà bạn nhận được vào ô bên dưới</p>
+						<p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-gray-600 text-center">Liên kết đã hết hạn vui lòng gửi yêu cầu mới</p>
 
 				}
 

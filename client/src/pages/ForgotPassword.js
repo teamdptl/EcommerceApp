@@ -20,7 +20,7 @@ const ForgotPassword = () => {
 				'Content-Type': 'text/plain'
 			}
 		};
-	  axios.post(`${baseUrl}/api/v1/users/forget-password`,data,config)
+	  axios.post(`${baseUrl}/api/v1/auth/forget-password`,data,config)
 		  .then((response) =>{
 				setIsSend(true);
 		  })
@@ -102,7 +102,7 @@ const ForgotPassword = () => {
 								</Link>
 							</p>
 						</div>
-					</div>:	<h2 className="text-3xl font-bold leading-tight text-black sm:text-3xl lg:text-4xl">Email đã được gửi</h2>}
+					</div>:	<h2 className="text-3xl font-bold leading-tight text-black sm:text-3xl lg:text-4xl text-center">Email đã được gửi</h2>}
 				</section>
 				<Footer></Footer>
 			</>
