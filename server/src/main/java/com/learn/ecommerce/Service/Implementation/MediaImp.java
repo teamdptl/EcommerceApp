@@ -92,4 +92,8 @@ public class MediaImp implements MediaService {
             }
         }
     }
+
+    public Optional<Media> getProductPrimaryMedia(Integer productId){
+        return repository.findByProductPrimary(productId);
+    }
 }

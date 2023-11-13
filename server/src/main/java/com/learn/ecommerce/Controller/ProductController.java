@@ -2,17 +2,18 @@ package com.learn.ecommerce.Controller;
 
 import com.learn.ecommerce.Entity.Brand;
 import com.learn.ecommerce.Entity.Category;
+import com.learn.ecommerce.Entity.Media;
 import com.learn.ecommerce.Entity.Product;
+import com.learn.ecommerce.Repository.CategoryRepository;
 import com.learn.ecommerce.Repository.ProductQueryAdvanced;
 import com.learn.ecommerce.Repository.BrandRepository;
-import com.learn.ecommerce.Repository.CategoryReponsitory;
-import com.learn.ecommerce.Repository.ProductRepository;
 import com.learn.ecommerce.Request.CreateProductRequest;
 import com.learn.ecommerce.Request.EditProductRequest;
 import com.learn.ecommerce.Response.ErrorResponse;
 import com.learn.ecommerce.Response.ProductDetailResponse;
 import com.learn.ecommerce.Response.ProductListItemResponse;
 import com.learn.ecommerce.Response.SuccessResponse;
+import com.learn.ecommerce.Service.Implementation.MediaImp;
 import com.learn.ecommerce.Service.Implementation.ProductImp;
 import com.learn.ecommerce.Ultis.ModelMapperUtils;
 import jakarta.validation.Valid;
@@ -24,21 +25,24 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/product")
 public class ProductController {
     private final ProductImp service;
 
-    @Autowired
-    private ProductRepository repo;
+    private final MediaImp mediaImp;
+
     private final BrandRepository brandRepository;
 
-    private final CategoryReponsitory categoryReponsitory;
-    public ProductController(@Autowired  ProductImp s, @Autowired BrandRepository brandRepository, @Autowired CategoryReponsitory categoryReponsitory) {
+    private final CategoryRepository categoryRepository;
+
+    public ProductController(@Autowired ProductImp s, @Autowired MediaImp mediaImp, @Autowired BrandRepository brandRepository, @Autowired CategoryRepository categoryRepository) {
         this.service = s;
+        this.mediaImp = mediaImp;
         this.brandRepository = brandRepository;
-        this.categoryReponsitory = categoryReponsitory;
+        this.categoryRepository = categoryRepository;
     }
 
     // Hàm dùng để tìm kiếm product
@@ -64,6 +68,9 @@ public class ProductController {
             if (product.getRating() != null)
                 item.setRating(product.getRating());
             item.setReviewCount(product.getReviewer());
+            Optional<Media> media = mediaImp.getProductPrimaryMedia(product.getProduct().getProductId());
+            item.setImageUrl(Media.DEFAULT_IMAGE);
+            media.ifPresent(value -> item.setImageUrl(value.getImageUrl()));
             return item;
         });
     }
@@ -93,7 +100,7 @@ public class ProductController {
         if (brand.isEmpty())
             return ResponseEntity.badRequest()
                     .body(new ErrorResponse("Branch không tồn tại!"));
-        Optional<Category> category = categoryReponsitory.findById(createData.getCategoryId());
+        Optional<Category> category = categoryRepository.findById(createData.getCategoryId());
         if (category.isEmpty())
             return ResponseEntity.badRequest()
                     .body(new ErrorResponse("Category không tồn tại!"));
@@ -120,7 +127,7 @@ public class ProductController {
         if (brand.isEmpty())
             return ResponseEntity.badRequest()
                     .body(new ErrorResponse("Branch không tồn tại!"));
-        Optional<Category> category = categoryReponsitory.findById(editData.getCategoryId());
+        Optional<Category> category = categoryRepository.findById(editData.getCategoryId());
         if (category.isEmpty())
             return ResponseEntity.badRequest()
                     .body(new ErrorResponse("Category không tồn tại!"));
