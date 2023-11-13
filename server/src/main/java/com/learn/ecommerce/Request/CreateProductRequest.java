@@ -33,4 +33,5 @@ public class CreateProductRequest{
     private int branchId;
     @Min(1)
     private int categoryId;
+    private int primaryImageIndex = 0;
 }

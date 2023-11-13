@@ -1,4 +1,5 @@
 package com.learn.ecommerce.Service.Implementation;
+import com.learn.ecommerce.Entity.Media;
 import com.learn.ecommerce.Entity.Product;
 import com.learn.ecommerce.Repository.ProductQueryAdvanced;
 import com.learn.ecommerce.Repository.ProductRepository;
@@ -14,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 @Component
 public class ProductImp implements ProductService {
     private final ProductRepository reponsitory;
@@ -43,10 +46,10 @@ public class ProductImp implements ProductService {
         reponsitory.deleteById(id);
     }
 
-    @Override
-    public Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page) {
-        return reponsitory.searchProducts(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, 12));
-    }
+//    @Override
+//    public Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page) {
+//        return reponsitory.searchProducts(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, 12));
+//    }
 
     @Override
     public Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page) {
@@ -87,8 +90,28 @@ public class ProductImp implements ProductService {
     }
 
     @Override
-    public void saveProductWithMedia(Product product, List<MultipartFile> files) {
+    public void saveProductWithMedia(Product product, List<MultipartFile> files, Integer primaryImageIndex) {
         Product saved = reponsitory.save(product);
-        mediaImp.saveFiles(files, saved);
+        mediaImp.saveFiles(files, saved, primaryImageIndex);
+    }
+
+    @Override
+    public void removeProductMedia(Product product, Integer[] mediaIds){
+        mediaImp.removeMediaFromProduct(product, mediaIds);
+    }
+
+    // Chỉ có 1 ảnh đại diện
+    public void adjustProductMedia(Product product){
+        Set<Media> mediaSet = product.getMedias();
+        int countPrimary = 0;
+        for (Media media : mediaSet){
+            if (media.isPrimary()){
+                if (countPrimary > 1){
+                    media.setPrimary(false);
+                    mediaImp.save(media);
+                }
+                countPrimary ++;
+            }
+        }
     }
 }

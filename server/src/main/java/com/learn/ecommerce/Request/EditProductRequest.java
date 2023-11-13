@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class EditProductRequest{
     private MultipartFile[] files;
+    private Integer[] removeMediaIds;
     @NotEmpty
     private String name;
     @NotEmpty
@@ -32,4 +33,5 @@ public class EditProductRequest{
     private int branchId;
     @Min(1)
     private int categoryId;
+    private int primaryImageIndex = -1;
 }

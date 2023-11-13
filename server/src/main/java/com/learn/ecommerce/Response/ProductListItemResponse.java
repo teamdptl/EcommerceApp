@@ -9,10 +9,11 @@ public class ProductListItemResponse {
     private long price;
     private long oldPrice;
     private String slugUrl;
-    private double rating;
     private int warrantyMonths;
     private int quantity;
     private String brandName;
     private String categoryName;
     private Long orderCount = 0L;
+    private double rating = 0;
+    private int reviewCount = 0;
 }

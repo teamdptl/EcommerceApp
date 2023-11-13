@@ -61,6 +61,9 @@ public class ProductController {
             ProductListItemResponse item = ModelMapperUtils.map(product.getProduct(), ProductListItemResponse.class);
             if (product.getOrders() != null)
                 item.setOrderCount(product.getOrders());
+            if (product.getRating() != null)
+                item.setRating(product.getRating());
+            item.setReviewCount(product.getReviewer());
             return item;
         });
     }
@@ -78,6 +81,7 @@ public class ProductController {
         return ResponseEntity.badRequest().body(new ErrorResponse("Không tìm thấy sản phẩm"));
     }
 
+    // Role: Manager
     // Hàm dùng để thêm sản phẩm
     @PostMapping("/add")
     public ResponseEntity<?> addProduct(@ModelAttribute @Valid CreateProductRequest createData, BindingResult result){
@@ -95,10 +99,11 @@ public class ProductController {
                     .body(new ErrorResponse("Category không tồn tại!"));
         product.setBrand(brand.get());
         product.setCategory(category.get());
-        service.saveProductWithMedia(product, List.of(createData.getFiles()));
+        service.saveProductWithMedia(product, List.of(createData.getFiles()), createData.getPrimaryImageIndex());
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
 
+    // Role: Manager
     @PutMapping("/edit/{id}")
     public ResponseEntity<?> editProduct(@PathVariable("id") int id, @ModelAttribute @Valid EditProductRequest editData, BindingResult result){
         if (result.hasErrors()){
@@ -121,11 +126,18 @@ public class ProductController {
                     .body(new ErrorResponse("Category không tồn tại!"));
         product.setBrand(brand.get());
         product.setCategory(category.get());
+
+        if (editData.getRemoveMediaIds().length > 0)
+            service.removeProductMedia(product, editData.getRemoveMediaIds());
+
         if (editData.getFiles().length > 0)
-            service.saveProductWithMedia(product, List.of(editData.getFiles()));
+            service.saveProductWithMedia(product, List.of(editData.getFiles()), editData.getPrimaryImageIndex());
+        service.adjustProductMedia(product);
+
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
 
+    // Role: Manager
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable int id){
         Optional<Product> p = service.findById(id);
@@ -134,5 +146,22 @@ public class ProductController {
             return ResponseEntity.ok(new SuccessResponse("Đã xóa thành công "+p.get().getName()));
         }
         return ResponseEntity.badRequest().body(new ErrorResponse("Không tồn tại sản phẩm có id là "+id));
+    }
+
+    // Role: User
+    @GetMapping("/favorite")
+    public ResponseEntity<?> getUserFavorite(){
+        return null;
+    }
+
+    // Role: User
+    @PostMapping("/add-favorite")
+    public ResponseEntity<?> addUserFavorite(){
+        return null;
+    }
+
+    @DeleteMapping("/delete-favorite")
+    public ResponseEntity<?> deleteFavorite(){
+        return null;
     }
 }

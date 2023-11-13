@@ -10,4 +10,8 @@ import java.util.List;
  public interface MediaService extends RootService<Media, Integer> {
   public void saveProductFile(MultipartFile file, Product p);
  public void saveFiles(List<MultipartFile> file, Product p);
+
+    void saveProductFile(MultipartFile file, Product p, boolean isPrimary);
+
+    void saveFiles(List<MultipartFile> files, Product product, Integer primary);
 }
