@@ -1,7 +1,7 @@
 package com.learn.ecommerce.DTO;
 
 
-import com.learn.ecommerce.user.Role;
+import com.learn.ecommerce.Entity.Role;
 import lombok.Data;
 
 @Data

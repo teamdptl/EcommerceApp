@@ -1,32 +1,49 @@
 package com.learn.ecommerce.Service.Implementation;
+
 import com.learn.ecommerce.Entity.Category;
+import com.learn.ecommerce.Repository.CategoryRepository;
 import com.learn.ecommerce.Service.CategoryService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
+
 @Component
 public class CategoryImp implements CategoryService {
-    public Optional<Category> FindByID(int id) {
-        return Optional.empty();
+
+    private final CategoryRepository repository;
+
+    public CategoryImp(@Autowired CategoryRepository rep) {
+        this.repository = rep;
     }
 
-    public Optional<Category> FindByUserName(String userName) {
-        return Optional.empty();
+    @Override
+    public Optional<Category> findById(Integer id) {
+        // TODO Auto-generated method stub
+        return repository.findById(id);
     }
 
-    public List<Category> GetAll() {
-        return null;
+    @Override
+    public List<Category> getAll() {
+        // TODO Auto-generated method stub
+        return repository.findAll();
+        // throw new UnsupportedOperationException("Unimplemented method 'getAll'");
     }
 
-    public void Save(Category T) {
-
+    @Override
+    public void save(Category T) {
+        // TODO Auto-generated method stub
+        repository.save(T);
     }
 
-    public void Create() {
-
+    @Override
+    public void delete(Integer id) {
+        // TODO Auto-generated method stub
+        repository.deleteById(id);
     }
 
-    public void Delete() {
-
+    public boolean existsByName(String name) {
+        return false;
     }
 }

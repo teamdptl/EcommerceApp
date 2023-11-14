@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "Media")
 public class Media {
+    public static final String DEFAULT_IMAGE = "https://www.aaronfaber.com/wp-content/uploads/2017/03/product-placeholder-wp.jpg";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int imageId;

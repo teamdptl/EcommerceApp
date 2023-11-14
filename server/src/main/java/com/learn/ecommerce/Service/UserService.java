@@ -1,18 +1,17 @@
-package com.learn.ecommerce.user;
+package com.learn.ecommerce.Service;
 
-import com.learn.ecommerce.Ultis.EmailService;
+import com.learn.ecommerce.Entity.User;
+import com.learn.ecommerce.Repository.UserRepository;
+import com.learn.ecommerce.Request.ChangePasswordRequest;
+import com.learn.ecommerce.Service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.UnsupportedEncodingException;
-import java.security.Principal;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Service
@@ -47,10 +46,17 @@ public class UserService {
             return ResponseEntity.badRequest().body(response);
         }
     }
-    public ResponseEntity<Map<String,String>> forgotPassword(String email){
-        String link = emailService.generateLinkChangePassword(email);
+    public ResponseEntity<Map<String,String>> forgotPassword(String email) throws NoSuchAlgorithmException {
+
         try{
-            repository.findByEmail(email).orElseThrow();
+            User user = repository.findByEmail(email).orElseThrow();
+            String link = emailService.generateLinkChangePassword(user);
+            Map<String,String> reponse = new HashMap<>();
+            reponse.put("message","Email đã được gửi");
+            var subject = "Thay đổi mật khẩu";
+            var text = "Nhấn vào link sau để được liên kết đến nơi thay đổi password  "+link;
+            emailService.sendSimpleEmail(email,subject,text);
+            return ResponseEntity.ok().body(reponse);
         }
         catch (NoSuchElementException e)
         {
@@ -58,12 +64,9 @@ public class UserService {
             reponse.put("message","Email chưa được đăng ký");
            return ResponseEntity.badRequest().body(reponse);
         }
-        Map<String,String> reponse = new HashMap<>();
-        reponse.put("message","Email đã được gửi");
-        var subject = "Thay đổi mật khẩu";
-        var text = "Nhấn vào link sau để được liên kết đến nơi thay đổi password  "+link;
-        emailService.sendSimpleEmail(email,subject,text);
-        return ResponseEntity.ok().body(reponse);
+
+
 
     }
+
 }

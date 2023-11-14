@@ -1,6 +1,6 @@
-package com.learn.ecommerce.config;
+package com.learn.ecommerce.Service;
 
-import com.learn.ecommerce.token.TokenRepository;
+import com.learn.ecommerce.Repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

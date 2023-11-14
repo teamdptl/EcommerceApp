@@ -8,26 +8,33 @@ import baseUrl from "../config";
 const ConfirmPassword = () => {
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
-	const code = searchParams.get("code");
-	const exp = searchParams.get("exp");
-
+	const UUID = searchParams.get("code");
+	const params = {
+		"UUID":UUID
+	}
 	const [confirmationPassword,setConfirmationPassword] = useState("");
 	const [newPassword,setNewPassword] = useState("");
 	const [message,setMessage] = useState("");
 	const [isExpiration,setIsExpiration] = useState(false);
-	const extractExp = ()=>{
-		const dateString = atob(exp);
-		const expTime = new Date(dateString).getTime();
-		const currentTimestamp = new Date().getTime();
-		if(expTime < currentTimestamp){
-			setIsExpiration(true)
-		}
-		console.log("currentTimestamp"+currentTimestamp)
-		console.log("expTime"+expTime)
+	const isValidExpiration =()=>{
+		console.log(UUID)
+		const config = {
+			headers: {
+				'Content-Type': 'text/plain'
+			}
+		};
+		axios.get(`${baseUrl}/api/v1/auth/confirm-password`,{params},config)
+			.then(response =>{
+				console.log(response)
+				setIsExpiration(response.data)
+			})
+			.catch((error) =>{
+				setMessage(error.response.data.message);
+			})
 	}
 	useEffect(() => {
-		extractExp(exp)
-	}, [exp]);
+		isValidExpiration()
+	}, []);
 	const handleConfirmationPasswordChange = (e)=>{
 		setConfirmationPassword(e.target.value)
 	}
@@ -35,8 +42,8 @@ const ConfirmPassword = () => {
 		setNewPassword(e.target.value)
 	}
 	const submitForm = ()=>{
-		console.log("code = " + code)
-		const data ={"newPassword":newPassword,"confirmationPassword":confirmationPassword,"code":code}
+		console.log("code = " + UUID)
+		const data ={"newPassword":newPassword,"confirmationPassword":confirmationPassword,"code":UUID}
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
@@ -54,7 +61,7 @@ const ConfirmPassword = () => {
 			<>
 				<Header></Header>
 				{
-					!isExpiration ? <section className="py-10 bg-gray-100 sm:py-16 lg:py-24">
+					isExpiration ? <section className="py-10 bg-gray-100 sm:py-16 lg:py-24">
 						<div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
 							<div className="max-w-2xl mx-auto text-center">
 								<h2 className="text-3xl font-bold leading-tight text-black sm:text-3xl lg:text-4xl">Bạn đã quên mật khẩu ?</h2>
@@ -134,7 +141,7 @@ const ConfirmPassword = () => {
 							</div>
 						</div>
 					</section>:
-						<p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-gray-600">Hãy nhập mã OTP mà bạn nhận được vào ô bên dưới</p>
+						<p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-gray-600 text-center">Liên kết đã hết hạn vui lòng gửi yêu cầu mới</p>
 
 				}
 
