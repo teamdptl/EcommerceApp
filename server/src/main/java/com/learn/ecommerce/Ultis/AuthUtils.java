@@ -13,9 +13,9 @@ import java.util.Optional;
 @Service
 public class AuthUtils {
     @Autowired
-    private static UserRepository repository;
-    public static Optional<User> getCurrentUser(){
+    private UserRepository repository;
+    public Optional<User> getCurrentUser(){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return repository.findByUsername(userDetails.getUsername());
+        return repository.findByEmail(userDetails.getUsername());
     }
 }
