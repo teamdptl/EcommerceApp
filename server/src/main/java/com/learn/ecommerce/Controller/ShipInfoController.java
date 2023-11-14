@@ -5,6 +5,7 @@ import com.learn.ecommerce.Request.CreateShipInfoRequest;
 import com.learn.ecommerce.Request.EditShipInfoRequest;
 import com.learn.ecommerce.Response.ShipInfoListResponse;
 import com.learn.ecommerce.Service.Implementation.ShipInfoImp;
+import com.learn.ecommerce.Ultis.AuthUtils;
 import com.learn.ecommerce.Ultis.ModelMapperUtils;
 import com.learn.ecommerce.user.User;
 import com.learn.ecommerce.user.UserRepository;
@@ -35,9 +36,9 @@ public class ShipInfoController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<?> getAllShipInfo(@RequestParam int userId){
+    public ResponseEntity<?> getAllShipInfo(){
         // Trả về tất cả địa chỉ giao hàng của user
-        Optional<User> optionalUser = userRepository.findById(userId);
+        Optional<User> optionalUser = AuthUtils.getCurrentUser();
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -52,8 +53,8 @@ public class ShipInfoController {
 
     // Role: User
     @PostMapping("/add")
-    public ResponseEntity<?> addShipInfo(@RequestBody CreateShipInfoRequest createShipInfoRequest, @RequestParam int userId){
-        Optional<User> optionalUser = userRepository.findById(userId);
+    public ResponseEntity<?> addShipInfo(@RequestBody CreateShipInfoRequest createShipInfoRequest){
+        Optional<User> optionalUser = AuthUtils.getCurrentUser();
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             ShipInfo shipInfo = ModelMapperUtils.map(createShipInfoRequest, ShipInfo.class);
@@ -71,8 +72,8 @@ public class ShipInfoController {
 
     // Role: User
     @PutMapping("/edit/{shipId}")
-    public ResponseEntity<?> updateShipInfo(@PathVariable int shipId, @RequestBody EditShipInfoRequest editShipInfoRequest, @RequestParam int userId){
-        Optional<User> optionalUser = userRepository.findById(userId);
+    public ResponseEntity<?> updateShipInfo(@PathVariable int shipId, @RequestBody EditShipInfoRequest editShipInfoRequest){
+        Optional<User> optionalUser = AuthUtils.getCurrentUser();
 
         if (optionalUser.isPresent()) {
             Optional<ShipInfo> optionalShipInfo = service.findShipInfoById(shipId);
@@ -105,8 +106,8 @@ public class ShipInfoController {
 
     // Role: User, người sở hữu shipInfo
     @DeleteMapping("/delete/{shipId}")
-    public ResponseEntity<?> deleteShipInfo(@PathVariable int shipId, @RequestParam int userId){
-        Optional<User> optionalUser = userRepository.findById(userId);
+    public ResponseEntity<?> deleteShipInfo(@PathVariable int shipId){
+        Optional<User> optionalUser = AuthUtils.getCurrentUser();
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
