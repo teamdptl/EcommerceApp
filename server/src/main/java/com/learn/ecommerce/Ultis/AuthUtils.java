@@ -1,7 +1,7 @@
 package com.learn.ecommerce.Ultis;
 
-import com.learn.ecommerce.user.User;
-import com.learn.ecommerce.user.UserRepository;
+import com.learn.ecommerce.Entity.User;
+import com.learn.ecommerce.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.context.SecurityContextHolder;

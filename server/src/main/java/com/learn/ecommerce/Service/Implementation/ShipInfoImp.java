@@ -2,7 +2,7 @@ package com.learn.ecommerce.Service.Implementation;
 import com.learn.ecommerce.Entity.ShipInfo;
 import com.learn.ecommerce.Repository.ShipInfoReponsitory;
 import com.learn.ecommerce.Service.ShipInfoService;
-import com.learn.ecommerce.user.UserService;
+import com.learn.ecommerce.Service.UserService;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 import java.util.List;
