@@ -1,14 +1,14 @@
 package com.learn.ecommerce.Controller;
 
 import com.learn.ecommerce.Entity.ShipInfo;
+import com.learn.ecommerce.Entity.User;
+import com.learn.ecommerce.Repository.UserRepository;
 import com.learn.ecommerce.Request.CreateShipInfoRequest;
 import com.learn.ecommerce.Request.EditShipInfoRequest;
 import com.learn.ecommerce.Response.ShipInfoListResponse;
 import com.learn.ecommerce.Service.Implementation.ShipInfoImp;
 import com.learn.ecommerce.Ultis.AuthUtils;
 import com.learn.ecommerce.Ultis.ModelMapperUtils;
-import com.learn.ecommerce.user.User;
-import com.learn.ecommerce.user.UserRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
