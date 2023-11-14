@@ -30,15 +30,18 @@ public class ShipInfoController {
 
     private final UserRepository userRepository;
 
-    public ShipInfoController (@Autowired ShipInfoImp s, @Autowired UserRepository userRepository){
+    private final AuthUtils auth;
+
+    public ShipInfoController (@Autowired ShipInfoImp s, @Autowired UserRepository userRepository, @Autowired AuthUtils auth){
         this.service = s;
         this.userRepository = userRepository;
+        this.auth = auth;
     }
 
     @GetMapping("/get")
     public ResponseEntity<?> getAllShipInfo(){
         // Trả về tất cả địa chỉ giao hàng của user
-        Optional<User> optionalUser = AuthUtils.getCurrentUser();
+        Optional<User> optionalUser = auth.getCurrentUser();
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -54,7 +57,7 @@ public class ShipInfoController {
     // Role: User
     @PostMapping("/add")
     public ResponseEntity<?> addShipInfo(@RequestBody CreateShipInfoRequest createShipInfoRequest){
-        Optional<User> optionalUser = AuthUtils.getCurrentUser();
+        Optional<User> optionalUser = auth.getCurrentUser();
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             ShipInfo shipInfo = ModelMapperUtils.map(createShipInfoRequest, ShipInfo.class);
@@ -73,7 +76,7 @@ public class ShipInfoController {
     // Role: User
     @PutMapping("/edit/{shipId}")
     public ResponseEntity<?> updateShipInfo(@PathVariable int shipId, @RequestBody EditShipInfoRequest editShipInfoRequest){
-        Optional<User> optionalUser = AuthUtils.getCurrentUser();
+        Optional<User> optionalUser = auth.getCurrentUser();
 
         if (optionalUser.isPresent()) {
             Optional<ShipInfo> optionalShipInfo = service.findShipInfoById(shipId);
@@ -107,7 +110,7 @@ public class ShipInfoController {
     // Role: User, người sở hữu shipInfo
     @DeleteMapping("/delete/{shipId}")
     public ResponseEntity<?> deleteShipInfo(@PathVariable int shipId){
-        Optional<User> optionalUser = AuthUtils.getCurrentUser();
+        Optional<User> optionalUser = auth.getCurrentUser();
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();

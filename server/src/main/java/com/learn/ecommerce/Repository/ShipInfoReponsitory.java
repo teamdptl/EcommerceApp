@@ -11,10 +11,4 @@ import java.util.Optional;
  @Repository   public interface ShipInfoReponsitory extends JpaRepository<ShipInfo,Integer>{
   @Query("SELECT s FROM ShipInfo s WHERE s.user.id = :userId")
   List<ShipInfo> findByUserId(@Param("userId") int userId);
-
-  @Query("SELECT s FROM ShipInfo s WHERE s.shipId = :shipId")
-  Optional<ShipInfo> findById(@Param("shipId") int shipId);
-
-
-
  }
