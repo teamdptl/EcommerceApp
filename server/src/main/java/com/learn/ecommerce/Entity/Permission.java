@@ -1,4 +1,4 @@
-package com.learn.ecommerce.user;
+package com.learn.ecommerce.Entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

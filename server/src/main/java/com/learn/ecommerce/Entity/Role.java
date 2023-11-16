@@ -1,5 +1,6 @@
-package com.learn.ecommerce.user;
+package com.learn.ecommerce.Entity;
 
+import com.learn.ecommerce.Entity.Permission;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.learn.ecommerce.user.Permission.*;
+import static com.learn.ecommerce.Entity.Permission.*;
 
 
 @Getter

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html>
+        <head>
+        <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+
+        .login-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <form id="myForm" >
+        <h2>Login</h2>
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="button" onclick="submitForm()">Login</button>
+    </form>
+    <button type="button" onclick="makeRequestWithTokenFromStorage()">link</button>
+</div>
+</body>
+
+<script>
+    function submitForm() {
+        // Lấy giá trị từ các input
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+
+        // Tạo một object chứa dữ liệu từ form
+        var data = {
+            password: password,
+            email: email
+        };
+
+        // Gửi request dưới dạng JSON
+        fetch('/api/v1/auth/authenticate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                var accessToken = data.access_token;
+                // Lưu trữ access token vào Local Storage
+                localStorage.setItem('accessToken', accessToken);
+                console.log(data);
+            })
+            .catch(error => {
+                // Xử lý lỗi nếu có
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    }
+    function makeRequestWithTokenFromStorage() {
+        var tokenFromStorage = localStorage.getItem('accessToken');
+
+        fetch('/auth/pageAuth', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + tokenFromStorage
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                return response.json();
+            })
+            .then(data => {
+               console.log(data)
+            })
+    }
+</script>
+
+
+
+
+

@@ -1,14 +1,16 @@
-package com.learn.ecommerce.auth;
+package com.learn.ecommerce.Response;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learn.ecommerce.config.JwtService;
-import com.learn.ecommerce.token.Token;
-import com.learn.ecommerce.token.TokenRepository;
-import com.learn.ecommerce.token.TokenType;
-import com.learn.ecommerce.user.Role;
-import com.learn.ecommerce.user.User;
-import com.learn.ecommerce.user.UserRepository;
+import com.learn.ecommerce.Request.AuthenticationRequest;
+import com.learn.ecommerce.Request.RegisterRequest;
+import com.learn.ecommerce.Service.JwtService;
+import com.learn.ecommerce.Entity.Token;
+import com.learn.ecommerce.Repository.TokenRepository;
+import com.learn.ecommerce.Entity.TokenType;
+import com.learn.ecommerce.Entity.Role;
+import com.learn.ecommerce.Entity.User;
+import com.learn.ecommerce.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -65,10 +66,8 @@ public class AuthenticationService {
             request.getPassword()
         )
     );
-
-
       var user = repository.findByEmail(request.getEmail())
-              .orElseThrow() ;
+              .orElseThrow();
       var jwtToken = jwtService.generateToken(user);
       var refreshToken = jwtService.generateRefreshToken(user);
       revokeAllUserTokens(user);

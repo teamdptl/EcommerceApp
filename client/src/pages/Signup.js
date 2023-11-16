@@ -2,6 +2,7 @@ import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import { Link } from "react-router-dom";
 import React, {useState} from "react";
+import baseUrl from "../config";
 
 const Signup = () => {
 	const [message, setMessage] = useState('');
@@ -10,13 +11,12 @@ const Signup = () => {
 	const [fullname, setFullname] = useState('');
 	const submitForm = (e) => {
 
-		e.preventDefault();
 		const data = {
 			password: password,
 			email: email,
 			fullname: fullname
 		};
-		fetch('http://localhost:8080/api/v1/auth/register', {
+		fetch(`${baseUrl}/api/v1/auth/register`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

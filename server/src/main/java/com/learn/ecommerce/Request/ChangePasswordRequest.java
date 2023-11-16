@@ -1,4 +1,4 @@
-package com.learn.ecommerce.user;
+package com.learn.ecommerce.Request;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Builder
 public class ChangePasswordRequest {
 
-    private String currentPassword;
+    private String code;
     private String newPassword;
     private String confirmationPassword;
 }

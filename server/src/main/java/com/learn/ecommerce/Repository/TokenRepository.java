@@ -1,5 +1,6 @@
-package com.learn.ecommerce.token;
+package com.learn.ecommerce.Repository;
 
+import com.learn.ecommerce.Entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

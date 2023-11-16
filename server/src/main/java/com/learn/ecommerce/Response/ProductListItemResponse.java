@@ -13,6 +13,7 @@ public class ProductListItemResponse {
     private int quantity;
     private String brandName;
     private String categoryName;
+    private String imageUrl;
     private Long orderCount = 0L;
     private double rating = 0;
     private int reviewCount = 0;
