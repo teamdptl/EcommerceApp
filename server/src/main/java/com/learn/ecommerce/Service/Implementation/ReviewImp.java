@@ -1,32 +1,43 @@
 package com.learn.ecommerce.Service.Implementation;
+import com.learn.ecommerce.Entity.Product;
 import com.learn.ecommerce.Entity.Review;
+import com.learn.ecommerce.Repository.ReviewReponsitory;
 import com.learn.ecommerce.Service.ReviewService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 @Component
 public class ReviewImp implements ReviewService {
-    public Optional<Review> FindByID(int id) {
-        return Optional.empty();
+    private final ReviewReponsitory reponsitory;
+  
+    ReviewImp(@Autowired ReviewReponsitory repo){
+        this.reponsitory=repo;
     }
 
-    public Optional<Review> FindByUserName(String userName) {
-        return Optional.empty();
+    @Override
+    public Optional<Review> findById(Integer id) {
+        return reponsitory.findById(id);
     }
 
-    public List<Review> GetAll() {
-        return null;
+    @Override
+    public List<Review> getAll() {
+        return reponsitory.findAll();
     }
 
-    public void Save(Review T) {
-
+    @Override
+    public void save(Review T) {
+        reponsitory.save(T);
     }
 
-    public void Create() {
-
+    @Override
+    public void delete(Integer id) {
+        reponsitory.deleteById(id);
     }
 
-    public void Delete() {
-
+    @Override
+    public List<Review> getReviewByProduct(Product product) {
+        return reponsitory.findByProduct(product);
     }
 }
