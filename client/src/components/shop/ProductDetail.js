@@ -9,7 +9,7 @@ const product = {favourite: true}
 
 
 
-const ProductDetail = () => {
+const ProductDetail = ({data, rating, numOfReview}) => {
     const [favourite, setFavourite] = useState(product.favourite)
     const [showDisc, setShowDisc] = useState(false)
     const [showWarrantyPolicy, setShowWarrantyPolicy] = useState(false)
@@ -52,10 +52,10 @@ const ProductDetail = () => {
                                 <a href="#reviews" class="flex items-center text-sm font-medium">
                                     <Rating>
                                         <Rating.Star></Rating.Star>
-                                        <p className="ml-1 text-sm font-bold text-gray-900 dark:text-white">4.95</p>
+                                        <p className="ml-1 text-sm font-bold text-gray-900 dark:text-white">{rating}</p>
                                         <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-500 dark:bg-gray-400" />
                                         <span className="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
-                                            73 reviews
+                                            {numOfReview} reviews
                                         </span>
                                     </Rating>
                                 </a>

@@ -1,6 +1,6 @@
-package com.learn.ecommerce.config;
+package com.learn.ecommerce.Service;
 
-import com.learn.ecommerce.user.User;
+import com.learn.ecommerce.Entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,7 +19,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-  @Value("404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970")
+  @Value("${secretkey}")
   private String secretKey;
   @Value("86400000")
   private long jwtExpiration;

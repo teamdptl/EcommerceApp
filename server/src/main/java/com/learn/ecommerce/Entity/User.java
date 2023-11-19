@@ -1,7 +1,6 @@
-package com.learn.ecommerce.user;
+package com.learn.ecommerce.Entity;
 
 
-import com.learn.ecommerce.token.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

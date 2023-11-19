@@ -1,6 +1,7 @@
 package com.learn.ecommerce.config;
 
-import com.learn.ecommerce.token.TokenRepository;
+import com.learn.ecommerce.Repository.TokenRepository;
+import com.learn.ecommerce.Service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

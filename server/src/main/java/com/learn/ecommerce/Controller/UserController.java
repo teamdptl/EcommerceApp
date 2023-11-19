@@ -1,18 +1,19 @@
 package com.learn.ecommerce.Controller;
 
-import com.learn.ecommerce.user.ChangePasswordRequest;
-import com.learn.ecommerce.user.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.web.bind.annotation.*;
+import com.learn.ecommerce.Entity.Role;
+import com.learn.ecommerce.Request.ChangePasswordRequest;
 import com.learn.ecommerce.Request.UpdateUserRequest;
-import com.learn.ecommerce.user.Role;
+import com.learn.ecommerce.Service.ChangePasswordService;
+import com.learn.ecommerce.Service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
 import java.io.UnsupportedEncodingException;
-import java.security.Principal;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 @RestController
@@ -20,22 +21,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService service;
-
-    @PostMapping("/confirm-password")
-    public ResponseEntity<?> changePassword(
-            @RequestBody ChangePasswordRequest request
-    ) throws UnsupportedEncodingException {
-        return service.changePassword(request);
-    }
-
-    @PostMapping("/forget-password")
-    public ResponseEntity<Map<String, String>> forgotPassword(
-            @RequestBody String email
-    ) {
-        System.out.println(email);
-        return service.forgotPassword(email);
-    }
 
     // ROLE: Admin
     @GetMapping("/search")
@@ -55,8 +40,12 @@ public class UserController {
     }
 
     // ROLE: Admin và chính bản thân user
-    @PutMapping("/update")
+
+    @PutMapping("/update}")
     public ResponseEntity<?> updateUsers(@RequestBody @Valid UpdateUserRequest request, BindingResult result) {
         return null;
+
     }
+
 }
+

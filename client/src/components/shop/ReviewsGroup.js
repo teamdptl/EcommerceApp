@@ -1,252 +1,9 @@
 import { useState } from "react"
 import Review from "./Review"
-import { Rating, Button, Modal } from "flowbite-react"
-import { IoMdCloseCircleOutline } from "react-icons/io"
+import { Rating, Button } from "flowbite-react"
+import PopupRating from "./PopupRating"
 
-const reviewsData = [
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 4,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 3,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 4,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 4,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 2,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 1,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 3,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 3,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 4,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 2,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 4,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 2,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 1,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 3,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 3,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 4,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 2,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 5,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-    {
-        userID: 1,
-        username: 'TunTun',
-        rate: 4,
-        desc: 'Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.',
-        create_at: 'August 15, 2022',
-        avatar:''
-    },
-]
-
-const getAverageRating = () => {
+const getAverageRating = (reviewsData) => {
     let average = 0
     reviewsData.forEach((review) => {
         average += review.rate
@@ -255,7 +12,7 @@ const getAverageRating = () => {
     return (average/reviewsData.length).toFixed(2)
 }
 
-const calcPercentStart = () => {
+const calcPercentStart = (reviewsData) => {
     let start1 = 0;
     let start2 = 0;
     let start3 = 0;
@@ -292,11 +49,13 @@ const calcPercentStart = () => {
     return [start1, start2, start3, start4, start5]
 }
 
-const ReviewGroup = () => {
-    const [showReview, setShowReview] = useState(4) 
-    const numberOfReviews = reviewsData.length;
-    const averageRating = getAverageRating();
-    const percentOfStarts = calcPercentStart()
+const ReviewGroup = ({reviewsData, setReviewData}) => {
+    
+    const [showModal, setShowModal] = useState(false)
+    
+    let averageRating = getAverageRating(reviewsData)
+    let percentOfStarts = calcPercentStart(reviewsData)
+    
     return(
         <>
             <div class="mt-10">
@@ -329,18 +88,17 @@ const ReviewGroup = () => {
                 
                 </div>
                 <div class="mt-10">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-28 overflow-auto max-h-96 border-t-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-28 overflow-auto max-h-96 border-t-2 pt-5">
                         {reviewsData.map((review) => {
-                            return <Review review={review}></Review>  
+                            return <Review listReview={reviewsData} review={review} setListReview={setReviewData}></Review>  
                         })
                         }
                            
                     </div>
-                    {/* <Button gradientDuoTone="tealToLime" pill size="xl" className="mt-10" onClick={() => {
-                        (numberOfReviews > (showReview + 30)) ? setShowReview(showReview + 30) : setShowReview(numberOfReviews)
-                    }}>
-                        Show me more reviews
-                    </Button> */}
+                    <Button gradientDuoTone="tealToLime" pill size="xl" className="mt-10" onClick={() => {setShowModal(true)}}>
+                        Đánh giá
+                        <PopupRating open={showModal} setOpen={setShowModal}></PopupRating>
+                    </Button>
                     
                 </div>
             </div>

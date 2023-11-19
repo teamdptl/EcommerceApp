@@ -1,6 +1,5 @@
 package com.learn.ecommerce.Entity;
 
-import com.learn.ecommerce.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +9,7 @@ import org.hibernate.annotations.Where;
 
 @Entity
 @Data
+//@Where(clause = "is_deleted = false")
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ShipInfo")

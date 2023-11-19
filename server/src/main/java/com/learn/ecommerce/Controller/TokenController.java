@@ -1,9 +1,10 @@
-package com.learn.ecommerce.token;
+package com.learn.ecommerce.Controller;
+import com.learn.ecommerce.Entity.Token;
+import com.learn.ecommerce.Repository.TokenRepository;
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.learn.ecommerce.DTO.UserDTO;
-import com.learn.ecommerce.user.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.learn.ecommerce.Entity.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
