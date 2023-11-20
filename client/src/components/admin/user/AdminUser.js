@@ -4,31 +4,22 @@ import {TbFilter} from "react-icons/tb";
 import {BsFillTrash3Fill} from "react-icons/bs";
 import AdminUserModal from "./AdminUserModal";
 import {useState} from "react";
+import ManagerHeader from "../ManagerHeader";
 
 const AdminUser = () => {
     const [adminUserModalShow, setAdminUserModalShow] = useState(false);
     return (
         <>
             <div className="col-span-6 bg-white rounded-md border-2 border-zinc-100">
-                <div className="p-4 flex justify-between items-center">
-                    <div className="flex gap-6 items-center">
-                        <p className="text-xl font-semibold">Quản lý người dùng</p>
-                        <div className="flex gap-2">
-                            <TextInput type="text" icon={HiSearch } placeholder="Tên, email, sdt ..." sizing="md" />
-                            <Button>
-                                Tìm kiếm
-                            </Button>
-                        </div>
-                    </div>
-                    <div className="flex gap-2">
-                        <Button size="sm" gradientMonochrome="success" onClick={() => setAdminUserModalShow(true)}>
-                            <HiOutlinePlus className="mr-2"/> Thêm người dùng
-                        </Button>
-                        <Button size="sm" gradientMonochrome="failure">
-                            <BsFillTrash3Fill className="mr-2"/> Xóa người dùng
-                        </Button>
-                    </div>
-                </div>
+                <ManagerHeader title="Quản lý người dùng"
+                               addTitle="Thêm người dùng"
+                               removeTitle="Xóa người dùng"
+                               placeHolder="Tên, email, sdt, ..."
+                               addCallback={() => setAdminUserModalShow(true)}
+                               removeCallback={() => console.log('delete')}
+                               searchCallBack={() => console.log('search data')}
+                />
+
                 <Table hoverable>
                     <Table.Head>
                         <Table.HeadCell className="p-4">

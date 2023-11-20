@@ -11,6 +11,7 @@ const useProductsFetch = () => {
         fetch(baseUrl + 'api/v1/product/search?' + new URLSearchParams({...filterData}).toString())
             .then(res => res.json())
             .then(json => {
+                console.log(json);
                 setProducts(json.content)
             })
             .catch(setErrorMsg)

@@ -18,9 +18,9 @@ const Admin = () => {
 					<SidebarAdmin isCollapse={isCollapse} setCollapse={setCollapse} setPage={setPage}></SidebarAdmin>
 				</div>
                 <div class="flex-1 bg-zinc-50 grid grid-cols-6 gap-4 p-4">
-					{/*{ page === 'product' && <AdminProduct/>}*/}
-					{/*{ page === 'product' && <AdminUser/>}*/}
-					{ page === 'product' && <AdminOrder/>}
+					{ page === 'product' && <AdminProduct/>}
+					{ page === 'user' && <AdminUser/>}
+					{ page === 'order' && <AdminOrder/>}
 					{ page === 'cateandbrand' && <AdminCategoryBrand/>}
 					{ page === 'statistictop' && <AdminStatisticTop/>}
                 </div>

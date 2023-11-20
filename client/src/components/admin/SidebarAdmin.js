@@ -24,13 +24,13 @@ export const SidebarAdmin = ({isCollapse, setCollapse, setPage}) => {
 						<Sidebar.Item className="select-none cursor-pointer" icon={BsBoxSeam} onClick={() => setPage('product')}>
 							Quản lý sản phẩm
 						</Sidebar.Item>
-						<Sidebar.Item className="select-none cursor-pointer" icon={FaRegUser }>
+						<Sidebar.Item className="select-none cursor-pointer" icon={FaRegUser } onClick={() => setPage('user')}>
 							Quản lý người dùng
 						</Sidebar.Item>
 						<Sidebar.Item className="select-none cursor-pointer" icon={BiCategory} onClick={() => setPage('cateandbrand')}>
 							Quản lý hãng/thể loại
 						</Sidebar.Item>
-						<Sidebar.Item className="select-none cursor-pointer" icon={IoCartOutline }>
+						<Sidebar.Item className="select-none cursor-pointer" icon={IoCartOutline } onClick={() => setPage('order')}>
 							Thông tin hóa đơn
 						</Sidebar.Item>
 					</Sidebar.ItemGroup>

@@ -6,6 +6,7 @@ import AdminCategoryModal from "./AdminCategoryModal";
 import AdminBrandModal from "./AdminBrandModal";
 import AdminConfirmModal from "../AdminConfirmModal";
 import {useState} from "react";
+import ManagerHeader from "../ManagerHeader";
 
 const AdminCategoryBrand = () => {
     const [categoryModalShow, setCategoryModalShow] = useState(false);
@@ -13,21 +14,10 @@ const AdminCategoryBrand = () => {
     const [confirmModalShow, setConfirmModalShow] = useState(false);
     return <>
         <div className="col-span-4 bg-white rounded-md border-2 border-zinc-100">
-            <div className="p-4 flex justify-between items-center">
-                <p className="text-xl font-semibold">Quản lý thể loại</p>
-                <div className="flex gap-2">
-                    <Button size="sm" gradientMonochrome="success" onClick={() => {
-                        setCategoryModalShow(true);
-                    }}>
-                        <HiOutlinePlus/>
-                    </Button>
-                    <Button size="sm" gradientMonochrome="failure" onClick={() => {
-                        setConfirmModalShow(true);
-                    }}>
-                        <BsFillTrash3Fill/>
-                    </Button>
-                </div>
-            </div>
+            <ManagerHeader title="Quản lý thể loại"
+                           addCallback={() => setCategoryModalShow(true)}
+                           removeCallback={() => setConfirmModalShow(true)}
+            />
             <Table hoverable>
                 <Table.Head className="bg-red-500">
                     <Table.HeadCell className="p-4">
@@ -57,21 +47,11 @@ const AdminCategoryBrand = () => {
         </div>
 
         <div className="col-span-2 bg-white rounded-md border-2 border-zinc-100">
-            <div className="p-4 flex justify-between items-center">
-                <p className="text-xl font-semibold">Quản lý hãng</p>
-                <div className="flex gap-2">
-                    <Button size="sm" gradientMonochrome="success" onClick={() => {
-                        setBrandModalShow(true);
-                    }}>
-                        <HiOutlinePlus/>
-                    </Button>
-                    <Button size="sm" gradientMonochrome="failure" onClick={() => {
-                        setConfirmModalShow(true);
-                    }}>
-                        <BsFillTrash3Fill/>
-                    </Button>
-                </div>
-            </div>
+            <ManagerHeader title="Quản lý hãng"
+                           addCallback={() => setBrandModalShow(true)}
+                           removeCallback={() => setConfirmModalShow(true)}
+            />
+
             <Table hoverable>
                 <Table.Head className="bg-red-500">
                     <Table.HeadCell className="p-4">
