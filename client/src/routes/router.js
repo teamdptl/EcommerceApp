@@ -44,9 +44,9 @@ const routes = createBrowserRouter(
             <Route element={<AuthRoute/>}>
                 <Route path="user" element={<User/>} />
             </Route>
-            <Route element={<AdminRoute/>} >
+            {/*<Route element={<AdminRoute/>} >*/}
                 <Route path="admin" element={<Admin/>} />
-            </Route>
+            {/*</Route>*/}
             <Route path="*" element={ <NoPage/> }/>
         </>
     )

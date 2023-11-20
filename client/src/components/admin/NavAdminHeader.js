@@ -1,4 +1,4 @@
-import { Avatar, Dropdown, Navbar } from "flowbite-react";
+import {Avatar, Dropdown, Navbar} from "flowbite-react";
 
 
 const user = {
@@ -10,8 +10,8 @@ const user = {
 const NavAdminHeader = () => {
 	return (
 		<>
-			<div class="w-full h-[55px]">
-				<Navbar fluid rounded className="top-0 left-0 w-full fixed">
+			<div class="w-full h-[62px]">
+				<Navbar fluid rounded className="right-0 top-0 left-0 bg-white w-full fixed border-2 border-zinc-100 z-50">
 					<Navbar.Brand href="/">
 						<span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Trang quản trị</span>
 					</Navbar.Brand>
