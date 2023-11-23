@@ -1,9 +1,10 @@
-package com.learn.ecommerce.Response;
+package com.learn.ecommerce.Service.Implementation;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learn.ecommerce.Request.AuthenticationRequest;
 import com.learn.ecommerce.Request.RegisterRequest;
+import com.learn.ecommerce.Response.AuthenticationResponse;
 import com.learn.ecommerce.Service.JwtService;
 import com.learn.ecommerce.Entity.Token;
 import com.learn.ecommerce.Repository.TokenRepository;
@@ -46,14 +47,14 @@ public class AuthenticationService {
       var refreshToken = jwtService.generateRefreshToken(user);
       saveUserToken(savedUser, jwtToken);
       return ResponseEntity.ok(AuthenticationResponse.builder()
-              .message("Success : Đăng ký thành công")
+              .message("Đăng ký thành công")
               .accessToken(jwtToken)
               .refreshToken(refreshToken)
               .build());
     }
     return ResponseEntity.badRequest().body(
              AuthenticationResponse.builder()
-            .message("Error : Email đã tồn tại")
+            .message("Email đã tồn tại")
             .accessToken(null)
             .refreshToken(null)
             .build());

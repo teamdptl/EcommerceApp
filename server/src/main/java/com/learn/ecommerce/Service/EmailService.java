@@ -22,8 +22,7 @@ public class EmailService {
 
     @Value("864000")
     private int expTime;
-    @Value("${host}")
-    private String host ;
+    private String host = "localhost:8080/api/v1/auth";
     @Autowired
     private JavaMailSender emailSender;
     @Autowired

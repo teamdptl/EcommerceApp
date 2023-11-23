@@ -5,7 +5,7 @@ import React, {useEffect, useState} from "react";
 import UploadedImageItem from "./UploadedImageItem";
 import {BsTrash3} from "react-icons/bs";
 
-const AdminProductSave = ({data, type, closeForm}) => {
+const AdminProductSave = ({ref, show, data, type, closeForm}) => {
     const [uploadImages, setUploadImages] = useState([]);
     const [selectIndex, setSelectIndex] = useState(0);
     const [product, setProduct] = useState({});
@@ -24,7 +24,7 @@ const AdminProductSave = ({data, type, closeForm}) => {
     }, [product]);
 
     return <>
-        <div className="col-span-6 bg-white p-6 rounded-md border-2 border-zinc-100">
+        <div ref={ref} className={`col-span-6 bg-white p-6 rounded-md border-2 border-zinc-100 ${show? '' : 'hidden'}`}>
             <div class="flex justify-between">
                 <p className="text-xl font-semibold mb-2">Thêm sản phẩm</p>
                 <Button color="light" size="sm" onClick={closeForm}>Đóng </Button>

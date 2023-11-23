@@ -6,10 +6,11 @@ import AdminCategoryBrand from "../components/admin/categorybrand/AdminCategoryB
 import AdminStatisticTop from "../components/admin/statistic_top/AdminStatisticTop";
 import AdminUser from "../components/admin/user/AdminUser";
 import AdminOrder from "../components/admin/order/AdminOrder";
+import AdminStatisticMoney from "../components/admin/statistic_money/AdminStatisticMoney";
 
 const Admin = () => {
 	const [isCollapse, setCollapse] = useState(false);
-	const [page, setPage] = useState('product');
+	const [page, setPage] = useState('statisticmoney');
 	return (
 		<>
 			<NavAdminHeader></NavAdminHeader>
@@ -23,6 +24,7 @@ const Admin = () => {
 					{ page === 'order' && <AdminOrder/>}
 					{ page === 'cateandbrand' && <AdminCategoryBrand/>}
 					{ page === 'statistictop' && <AdminStatisticTop/>}
+					{ page === 'statisticmoney' && <AdminStatisticMoney/>}
                 </div>
 			</div>
 		</>

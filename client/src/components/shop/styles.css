@@ -1,8 +1,13 @@
-.range-slider {
-    width: 340px;
-    margin: 24px auto 0;
-}
+/*.range-slider {*/
+/*    width: 340px;*/
+/*    margin: 24px auto 0;*/
+/*}*/
 
-.range-slider.margin-lg {
-    margin: 42px auto 0;
+/*.range-slider.margin-lg {*/
+/*    margin: 42px auto 0;*/
+/*}*/
+
+
+.range-slider > input{
+    display: none;
 }

@@ -3,7 +3,7 @@ import {HiOutlinePlus, HiSearch} from "react-icons/hi";
 import {TbFilter} from "react-icons/tb";
 import {BsFillTrash3Fill} from "react-icons/bs";
 
-const ManagerHeader = ({title, placeHolder, addTitle, removeTitle, filterCallback, addCallback, removeCallback, searchCallBack}) => {
+const ManagerHeader = ({title, placeHolder, addTitle, removeTitle, filterCallback, addCallback, removeCallback, searchCallBack, exportCallback}) => {
     return (
         <>
             <div className="p-4 flex justify-between items-center">
@@ -40,6 +40,13 @@ const ManagerHeader = ({title, placeHolder, addTitle, removeTitle, filterCallbac
                             <BsFillTrash3Fill className={removeTitle ? "mr-2": ""}/> {removeTitle}
                         </Button>
                     }
+
+                    {exportCallback &&
+                        <Button size={"sm"} gradientMonochrome="success" onClick={() => {
+                            exportCallback();
+                        }}>Xuất file Excel</Button>
+                    }
+
                 </div>
             </div>
         </>

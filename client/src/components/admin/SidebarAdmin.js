@@ -38,7 +38,7 @@ export const SidebarAdmin = ({isCollapse, setCollapse, setPage}) => {
 						<Sidebar.Item className="select-none cursor-pointer" icon={HiOutlineDocumentReport} onClick={() => setPage('statistictop')}>
 							Thống kê top
 						</Sidebar.Item>
-						<Sidebar.Item className="select-none cursor-pointer" icon={TbReportMoney }>
+						<Sidebar.Item className="select-none cursor-pointer" icon={TbReportMoney }  onClick={() => setPage('statisticmoney')}>
 							Thống kê doanh thu
 						</Sidebar.Item>
 					</Sidebar.ItemGroup>

@@ -2,7 +2,7 @@ import {Button, Checkbox, Table, TextInput} from "flowbite-react";
 import {BsFillTrash3Fill} from "react-icons/bs";
 import {HiOutlinePlus, HiSearch} from "react-icons/hi";
 import {TbFilter} from "react-icons/tb";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import AdminProductSave from "./AdminProductSave";
 import useProductsFetch from "../../../hooks/useProductsFetch";
 import ManagerHeader from "../ManagerHeader";
@@ -13,11 +13,16 @@ const AdminProduct = () => {
     const { products, errorMsg, loading, callback} = useProductsFetch();
     const [deleteIds, setDeleteIds] = useState([]);
     const [filter, setFilter] = useState({})
+    const form = useRef(null);
 
     useEffect(() => {
         console.log('fetch data');
         callback();
     }, []);
+
+    useEffect(() => {
+     
+    }, [displayForm])
 
     return <>
         <div className="col-span-6 bg-white rounded-md border-2 border-zinc-100">
@@ -36,7 +41,7 @@ const AdminProduct = () => {
         </div>
 
         {/*<AdminProductAddModal product={product} openModal={openModal} setOpenModal={setOpenModal}/>*/}
-        {displayForm && <AdminProductSave closeForm={() => setDisplayForm(false)}/>}
+        <AdminProductSave ref={form} show={displayForm} closeForm={() => setDisplayForm(false)}/>
     </>
 }
 

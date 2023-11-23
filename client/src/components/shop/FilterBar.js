@@ -143,7 +143,7 @@ const FilterBar = () => {
                                         <div class="relative flex flex-col px-5 py-6 space-y-8">
                                             <div class="space-y-5">
                                                 <span class="font-medium">Price range</span>
-                                                <RangeSlider value={value} onInput={setValue}></RangeSlider>
+                                                <RangeSlider className="hidden" value={value} onInput={setValue}></RangeSlider>
                                             </div>
                                             <div class="flex justify-between space-x-5">
                                                 <div>

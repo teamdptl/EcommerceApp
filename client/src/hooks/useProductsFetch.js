@@ -6,9 +6,9 @@ const useProductsFetch = () => {
     const [errorMsg, setErrorMsg] = useState();
     const [loading, setLoading] = useState(false);
 
-    const callback = (filterData) => {
+    const callback = (filterData = {}) => {
         setLoading(true);
-        fetch(baseUrl + 'api/v1/product/search?' + new URLSearchParams({...filterData}).toString())
+        fetch(baseUrl + '/api/v1/product/search?' + new URLSearchParams({...filterData}).toString())
             .then(res => res.json())
             .then(json => {
                 console.log(json);
@@ -17,6 +17,7 @@ const useProductsFetch = () => {
             .catch(setErrorMsg)
             .finally(() => {
                 setLoading(false);
+                console.log(errorMsg);
             })
     }
 

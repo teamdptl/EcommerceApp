@@ -19,6 +19,7 @@ const Login = () => {
 
 
 	const submitForm = (e) => {
+		e.preventDefault();
 			const data = {
 			password: password,
 			email: email
@@ -37,6 +38,7 @@ const Login = () => {
 				return response.json();
 			})
 			.then(data => {
+				console.log(data);
 				var accessToken = data.access_token
 				localStorage.setItem('accessToken', accessToken);
 				localStorage.setItem('refresh_token', data.refresh_token);
@@ -47,6 +49,7 @@ const Login = () => {
 				navigate('/', { replace: true });
 			})
 			.catch(data => {
+				console.log(data)
 				setMessage("Tài khoản hoặc mật khẩu không trùng khớp")
 			});
 	};
