@@ -6,14 +6,16 @@ import com.learn.ecommerce.Service.ChangePasswordService;
 import com.learn.ecommerce.Service.LogoutService;
 import com.learn.ecommerce.Request.AuthenticationRequest;
 import com.learn.ecommerce.Response.AuthenticationResponse;
-import com.learn.ecommerce.Response.AuthenticationService;
+import com.learn.ecommerce.Service.Implementation.AuthenticationService;
 import com.learn.ecommerce.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -35,9 +37,15 @@ public class AuthenticationController {
   private final LogoutService logoutService;
 
   @PostMapping("/register")
-  public ResponseEntity<AuthenticationResponse> register(
-      @RequestBody RegisterRequest request
+  public ResponseEntity<?> register(
+      @Valid @RequestBody RegisterRequest request, BindingResult result
   ) {
+    if (result.hasErrors()){
+      return ResponseEntity.badRequest().body(
+              AuthenticationResponse.builder()
+                      .message("Dữ liệu "+result.getFieldError().getField()+ " không hợp lệ!")
+                      .build());
+    }
     return service.register(request);
   }
   @PostMapping("/authenticate")

@@ -1,7 +1,9 @@
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
-import { Link } from "react-router-dom";
-import React, {useState} from "react";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Button, Modal } from "flowbite-react";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 import baseUrl from "../config";
 
 const Signup = () => {
@@ -9,13 +11,22 @@ const Signup = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [fullname, setFullname] = useState('');
+	const navigate = useNavigate();
+	
 	const submitForm = (e) => {
-
+		e.preventDefault();
+		
+		if (!password || !email || !fullname) {
+			setMessage("Vui lòng không để trống dữ liệu");
+			return;
+		}
+	
 		const data = {
 			password: password,
 			email: email,
 			fullname: fullname
 		};
+
 		fetch(`${baseUrl}/api/v1/auth/register`, {
 			method: 'POST',
 			headers: {
@@ -25,17 +36,21 @@ const Signup = () => {
 		})
 			.then(response => {
 				if (!response.ok) {
-					throw new Error('Network response was not ok.');
+					response.json().then(data => {
+						setMessage(data.message);
+					})
 				}
-				return response.json();
+				return response.json()
 			})
 			.then(data => {
-				var accessToken = data.access_token;
+				let { accessToken, refreshToken, message } = data;
 				localStorage.setItem('accessToken', accessToken);
-				window.location.href = "/";
+				localStorage.setItem("refreshToken", refreshToken);
+				navigate("/", { replace: true });
+				// window.location.href = "/";
 			})
-			.catch( ()=> {
-				setMessage("Tài khoản email đã tồn tại")
+			.catch((error) => {
+				console.log(error);
 			});
 	};
 	const handleEmailChange = (e) => {
@@ -86,12 +101,10 @@ const Signup = () => {
 									</div>
 
 									<div>
-
 										<label for="" class="text-base font-medium text-gray-900">
 											{" "}
 											Email của bạn{" "}
 										</label>
-										<label className="text-red-500 font-medium">{message}</label>
 										<div class="mt-2.5">
 											<input
 												onChange={handleEmailChange}
@@ -188,6 +201,21 @@ const Signup = () => {
 				</div>
 			</section>
 			<Footer></Footer>
+
+			<Modal show={message !== ""} size="md" onClose={() => setMessage("")} popup dismissible>
+				<Modal.Header />
+				<Modal.Body>
+					<div className="text-center">
+						<HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-red-400 dark:text-gray-200" />
+						<h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{message}</h3>
+						<div className="flex justify-center gap-4">
+							<Button color="gray" onClick={() => setMessage("")}>
+								Tôi đã hiểu
+							</Button>
+						</div>
+					</div>
+				</Modal.Body>
+			</Modal>
 		</>
 	);
 };

@@ -41,7 +41,7 @@ public class UserController {
 
     // ROLE: Admin và chính bản thân user
 
-    @PutMapping("/update}")
+    @PutMapping("/update")
     public ResponseEntity<?> updateUsers(@RequestBody @Valid UpdateUserRequest request, BindingResult result) {
         return null;
 

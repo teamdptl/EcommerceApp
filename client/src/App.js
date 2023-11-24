@@ -1,13 +1,16 @@
 import React from "react";
-import {AuthProvider} from "./context/AuthContext";
-import {RouterProvider} from "react-router-dom";
-import routes from "./routes/router";
+import { AuthProvider } from "./context/AuthContext";
+import Router from "./routes/router";
+import AdminCollapseProvider from "./components/admin/AdminCollapseProvider";
+
 
 function App() {
   return (
-      <AuthProvider>
-          <RouterProvider router={routes}/>
-      </AuthProvider>
+    <AuthProvider>
+        <AdminCollapseProvider>
+            <Router></Router>
+        </AdminCollapseProvider>
+    </AuthProvider>
   );
 }
 

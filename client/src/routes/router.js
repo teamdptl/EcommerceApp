@@ -1,4 +1,8 @@
-import {createBrowserRouter, createRoutesFromElements, Outlet, Route, useNavigate} from "react-router-dom";
+import {
+    BrowserRouter,
+    Route, Routes,
+    useNavigate
+} from "react-router-dom";
 import User from "../pages/User";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
@@ -11,44 +15,106 @@ import Shop from "../pages/Shop";
 import Product from "../pages/Product";
 import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
-import Admin from "../pages/Admin";
 import NoPage from "../pages/NoPage";
 import {useAuth} from "../context/AuthContext";
+import {useEffect} from "react";
+import AdminProduct from "../pages/admin/AdminProduct";
+import AdminUser from "../pages/admin/AdminUser";
+import AdminCategoryBrand from "../pages/admin/AdminCategoryBrand";
+import AdminOrder from "../pages/admin/AdminOrder";
+import AdminStatisticTop from "../pages/admin/AdminStatisticTop";
+import AdminStatisticMoney from "../pages/admin/AdminStatisticMoney";
 
-function AuthRoute() {
+const isAdmin = (user) => user !== null && user.role === 'admin';
+const isUser = (user) => user !== null;
+
+function AuthRoute({children, condition, navigatePage}) {
     const { user } = useAuth();
     const navigate = useNavigate();
-    return user ? <Outlet/> : navigate('login')
+
+    useEffect(() => {
+        if (!condition(user) && false)
+            navigate(navigatePage)
+    }, [user]);
+
+    return true ? children : <NoPage/>
+    // return condition(user) ? children : <NoPage/>
 }
 
-function AdminRoute(){
-    const { user } = useAuth();
-    const navigate = useNavigate();
-    return user && user.role === 'admin' ? <Outlet/> : navigate('home')
-}
+const adminPath = [
+    {
+        path: 'product',
+        element: <AdminProduct/>
+    },
+    {
+        path: 'user',
+        element: <AdminUser/>
+    },
+    {
+        path: 'catebrand',
+        element: <AdminCategoryBrand/>
+    },
+    {
+        path: 'order',
+        element: <AdminOrder/>
+    },
+    {
+        path: 'top',
+        element: <AdminStatisticTop/>
+    },
+    {
+        path: 'money',
+        element: <AdminStatisticMoney/>
+    },
+]
 
-const routes = createBrowserRouter(
-    createRoutesFromElements(
-        <>
-            <Route exact path="/" element={<Home/>} />
-            <Route path="contact" element={<Contact/>} />
-            <Route path="service" element={<Service/>} />
-            <Route path="login" element={<Login/>} />
-            <Route path="signup" element={<Signup/>} />
-            <Route path="forget-password" element={<ForgotPassword />} />
-            <Route path="confirm-password" element={<ConfirmPassword/>} />
-            <Route path="shop" element={<Shop/>} />
-            <Route path="product/:productId" element={<Product/>} />
-            <Route path="cart" element={<Cart/>} />
-            <Route path="checkout" element={<Checkout/>} />
-            <Route element={<AuthRoute/>}>
-                <Route path="user" element={<User/>} />
-            </Route>
-            <Route element={<AdminRoute/>} >
-                <Route path="admin" element={<Admin/>} />
-            </Route>
-            <Route path="*" element={ <NoPage/> }/>
-        </>
+const Router = ()  =>  {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route exact path="/" element={<Home/>} />
+                <Route path="contact" element={<Contact/>} />
+                <Route path="service" element={<Service/>} />
+                <Route path="login" element={<Login/>} />
+                <Route path="signup" element={<Signup/>} />
+                <Route path="forget-password" element={<ForgotPassword />} />
+                <Route path="confirm-password" element={<ConfirmPassword/>} />
+                <Route path="shop" element={<Shop/>} />
+                <Route path="product/:productId" element={<Product/>} />
+                <Route path="cart" element={<Cart/>} />
+                <Route path="checkout" element={<Checkout/>} />
+                <Route path="user" element={
+                    <AuthRoute
+                        condition={isUser}
+                        navigatePage="/login">
+                            <User/>
+                    </AuthRoute>
+                }/>
+
+                {/*<Route path={"admin/product"} element={*/}
+                {/*    <AuthRoute*/}
+                {/*        condition={isAdmin}*/}
+                {/*        navigatePage={"/"}>*/}
+                {/*        <AdminProduct/>*/}
+                {/*    </AuthRoute>*/}
+                {/*}/>*/}
+
+                { adminPath.map(item => (
+                        <Route path={`admin/${item.path}`} element={
+                            <AuthRoute
+                                condition={isAdmin}
+                                navigatePage={"/"}>
+                                {item.element}
+                            </AuthRoute>
+                        }/>
+                ))}
+
+
+                <Route path="*" element={ <NoPage/> }/>
+            </Routes>
+        </BrowserRouter>
     )
-);
-export default routes;
+}
+
+// export default routes;
+export default Router;

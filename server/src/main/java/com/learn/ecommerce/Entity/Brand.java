@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.annotations.SQLDelete;
 
 @Entity
@@ -11,11 +14,14 @@ import org.hibernate.annotations.SQLDelete;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Brand")
-@SQLDelete(sql = "UPDATE branch SET is_deleted = true WHERE branch_id = ?") // Soft delete
+@SQLDelete(sql = "UPDATE brand SET is_deleted = true WHERE brand_id = ?") // Soft delete
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int brandId;
     private String name;
     private boolean isDeleted = false;
+
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
+    private List<Product> products = new ArrayList<>();
 }

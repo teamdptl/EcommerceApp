@@ -1,29 +1,69 @@
 import { useState } from "react";
 import { FaAngleDown } from "react-icons/fa";
 import { FaAccusoft } from "react-icons/fa";
+import RangeSlider from "react-range-slider-input";
+import "react-range-slider-input/dist/style.css";
+import "./styles.css";
+
+
 
 const FilterBar = () => {
     const [isActive, setIsActive] = useState(false);
     const [isColor, setIsColor] = useState(false);
+    const [activeButton, setActiveButton] = useState(null);
+    const handleButtonClick = (buttonName) => {
+        setActiveButton(buttonName);
+    };
+    const [value, setValue] = useState([0, 60]);
     return (
         <div class="flex flex-col mx-auto relative mb-12 w-screen max-w-screen-xl">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between space-y-6 lg:space-y-0 lg:space-x-2 ">
                 <nav class=" relative flex w-full overflow-x-auto text-sm md:text-base hiddenScrollbar" >
                     <ul class="flex sm:space-x-2" >
                         <li class=" relative" >
-                            <button class="block !leading-none font-medium whitespace-nowrap px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full text-slate-500 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-800 hover:bg-slate-100/75 dark:hover:bg-slate-800 focus:outline-none">All Item</button>
+                            <button
+                                onClick={() => handleButtonClick('All Items')}
+                                className={`block !leading-none font-medium whitespace-nowrap px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full 
+          ${activeButton === 'All Items' ? 'text-slate-100 bg-slate-800' : 'text-slate-500 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-800 hover:bg-slate-100/75 dark:hover:bg-slate-800'} focus:outline-none`}
+                            >
+                                All Items
+                            </button>
                         </li>
                         <li class=" relative" >
-                            <button class="block !leading-none font-medium whitespace-nowrap px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full text-slate-500 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-800 hover:bg-slate-100/75 dark:hover:bg-slate-800 focus:outline-none">Women</button>
+                            <button
+                                onClick={() => handleButtonClick('Women')}
+                                className={`block !leading-none font-medium whitespace-nowrap px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full 
+          ${activeButton === 'Women' ? 'text-slate-100 bg-slate-800' : 'text-slate-500 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-800 hover:bg-slate-100/75 dark:hover:bg-slate-800'} focus:outline-none`}
+                            >
+                                Women
+                            </button>
                         </li>
                         <li class=" relative" >
-                            <button class="block !leading-none font-medium whitespace-nowrap px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full text-slate-500 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-800 hover:bg-slate-100/75 dark:hover:bg-slate-800 focus:outline-none">Men</button>
+                            <button
+                                onClick={() => handleButtonClick('Man')}
+                                className={`block !leading-none font-medium whitespace-nowrap px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full 
+          ${activeButton === 'Man' ? 'text-slate-100 bg-slate-800' : 'text-slate-500 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-800 hover:bg-slate-100/75 dark:hover:bg-slate-800'} focus:outline-none`}
+                            >
+                                Man
+                            </button>
                         </li>
                         <li class=" relative" >
-                            <button class="block !leading-none font-medium whitespace-nowrap px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full text-slate-500 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-800 hover:bg-slate-100/75 dark:hover:bg-slate-800 focus:outline-none">Jewels</button>
+                            <button
+                                onClick={() => handleButtonClick('Jewels')}
+                                className={`block !leading-none font-medium whitespace-nowrap px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full 
+          ${activeButton === 'Jewels' ? 'text-slate-100 bg-slate-800' : 'text-slate-500 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-800 hover:bg-slate-100/75 dark:hover:bg-slate-800'} focus:outline-none`}
+                            >
+                                Jewels
+                            </button>
                         </li>
                         <li class=" relative" >
-                            <button class="block !leading-none font-medium whitespace-nowrap px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full text-slate-500 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-800 hover:bg-slate-100/75 dark:hover:bg-slate-800 focus:outline-none">Kids</button>
+                            <button
+                                onClick={() => handleButtonClick('Kids')}
+                                className={`block !leading-none font-medium whitespace-nowrap px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full 
+          ${activeButton === 'Kids' ? 'text-slate-100 bg-slate-800' : 'text-slate-500 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-800 hover:bg-slate-100/75 dark:hover:bg-slate-800'} focus:outline-none`}
+                            >
+                                Kids
+                            </button>
                         </li>
                     </ul>
                 </nav>
@@ -81,6 +121,55 @@ const FilterBar = () => {
                                         </div>
                                     </div>
                                 )}
+                            </div>
+                            <div class="relative">
+                                <button class="flex items-center justify-center px-4 py-2 text-sm rounded-full border border-primary-500 bg-primary-50 text-primary-900 focus:outline-none ">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.67188 14.3298C8.67188 15.6198 9.66188 16.6598 10.8919 16.6598H13.4019C14.4719 16.6598 15.3419 15.7498 15.3419 14.6298C15.3419 13.4098 14.8119 12.9798 14.0219 12.6998L9.99187 11.2998C9.20187 11.0198 8.67188 10.5898 8.67188 9.36984C8.67188 8.24984 9.54187 7.33984 10.6119 7.33984H13.1219C14.3519 7.33984 15.3419 8.37984 15.3419 9.66984" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" c></path>
+                                        <path d="M12 6V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                    <span class="ml-2 min-w-[90px]">1$ - 500$</span>
+                                    {/* <span>
+                                        <span class="flex-shrink-0 w-4 h-4 rounded-full bg-primary-500 text-white flex items-center justify-center ml-3 cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </span>
+                                    </span> */}
+                                </button>
+                                <div class="absolute z-40 w-screen max-w-sm px-4 mt-3 left-0 sm:px-0 opacity-100 translate-y-0" tabindex="-1">
+                                    <div class="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
+                                        <div class="relative flex flex-col px-5 py-6 space-y-8">
+                                            <div class="space-y-5">
+                                                <span class="font-medium">Price range</span>
+                                                <RangeSlider className="hidden" value={value} onInput={setValue}></RangeSlider>
+                                            </div>
+                                            <div class="flex justify-between space-x-5">
+                                                <div>
+                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Min price</label>
+                                                    <div class="mt-1 relative rounded-md">
+                                                        <span class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-neutral-500 sm:text-sm">$</span>
+                                                        <input type="text" class="block w-32 pr-10 pl-4 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent" value={value[0]}>
+                                                        </input>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Max price</label>
+                                                    <div class="mt-1 relative rounded-md">
+                                                        <span class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-neutral-500 sm:text-sm">$</span>
+                                                        <input type="text" class="block w-32 pr-10 pl-4 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent" value={value[1]}>
+                                                        </input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-5 bg-slate-50 dark:bg-slate-900 dark:border-t dark:border-slate-800 flex items-center justify-between">
+                                            <button class="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-2 sm:px-5  ttnc-ButtonThird text-neutral-700 border border-neutral-200 dark:text-neutral-200 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">Clear</button>
+                                            <button class="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-2 sm:px-5  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">Apply</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
