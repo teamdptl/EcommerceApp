@@ -1,9 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { AuthProvider } from "./context/AuthContext";
+import Router from "./routes/router";
+import AdminCollapseProvider from "./components/admin/AdminCollapseProvider";
+
 
 function App() {
   return (
-    <p></p>
+    <AuthProvider>
+        <AdminCollapseProvider>
+            <Router></Router>
+        </AdminCollapseProvider>
+    </AuthProvider>
   );
 }
 

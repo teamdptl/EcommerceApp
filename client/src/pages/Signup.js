@@ -1,8 +1,68 @@
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Button, Modal } from "flowbite-react";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
+import baseUrl from "../config";
 
 const Signup = () => {
+	const [message, setMessage] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [fullname, setFullname] = useState('');
+	const navigate = useNavigate();
+	
+	const submitForm = (e) => {
+		e.preventDefault();
+		
+		if (!password || !email || !fullname) {
+			setMessage("Vui lòng không để trống dữ liệu");
+			return;
+		}
+	
+		const data = {
+			password: password,
+			email: email,
+			fullname: fullname
+		};
+
+		fetch(`${baseUrl}/api/v1/auth/register`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+			.then(response => {
+				if (!response.ok) {
+					response.json().then(data => {
+						setMessage(data.message);
+					})
+				}
+				return response.json()
+			})
+			.then(data => {
+				let { accessToken, refreshToken, message } = data;
+				localStorage.setItem('accessToken', accessToken);
+				localStorage.setItem("refreshToken", refreshToken);
+				navigate("/", { replace: true });
+				// window.location.href = "/";
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+	const handleEmailChange = (e) => {
+		setEmail(e.target.value);
+	};
+
+	const handlePasswordChange = (e) => {
+		setPassword(e.target.value);
+	};
+	const handleFullnameChange = (e) => {
+		setFullname(e.target.value);
+	};
 	return (
 		<>
 			<Header></Header>
@@ -21,7 +81,7 @@ const Signup = () => {
 								</Link>
 							</p>
 
-							<form action="#" method="POST" class="mt-8">
+							<form class="mt-8">
 								<div class="space-y-5">
 									<div>
 										<label for="" class="text-base font-medium text-gray-900">
@@ -30,9 +90,10 @@ const Signup = () => {
 										</label>
 										<div class="mt-2.5">
 											<input
+												onChange={handleFullnameChange}
 												type="text"
-												name=""
-												id=""
+												name="fullname"
+												id="fullname"
 												placeholder="Full name"
 												class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
 											/>
@@ -46,9 +107,10 @@ const Signup = () => {
 										</label>
 										<div class="mt-2.5">
 											<input
+												onChange={handleEmailChange}
 												type="email"
-												name=""
-												id=""
+												name="email"
+												id="email"
 												placeholder="Your email"
 												class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
 											/>
@@ -62,9 +124,10 @@ const Signup = () => {
 										</label>
 										<div class="mt-2.5">
 											<input
+												onChange={handlePasswordChange}
 												type="password"
-												name=""
-												id=""
+												name="password"
+												id="password"
 												placeholder="Your password"
 												class="block w-full p-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
 											/>
@@ -76,19 +139,20 @@ const Signup = () => {
 
 										<label for="agree" class="ml-3 text-sm font-medium text-gray-500">
 											Tôi đồng ý chính với{" "}
-											<a href="#" title="" class="text-blue-600 hover:text-blue-700 hover:underline">
+											<Link to="/chinh-sach" title="" class="text-blue-600 hover:text-blue-700 hover:underline">
 												Chính sách
-											</a>{" "}
+											</Link>{" "}
 											và{" "}
-											<a href="#" title="" class="text-blue-600 hover:text-blue-700 hover:underline">
+											<Link to="dieu-khoan" title="" class="text-blue-600 hover:text-blue-700 hover:underline">
 												Điều khoản
-											</a>
+											</Link>
 										</label>
 									</div>
 
 									<div>
 										<button
 											type="submit"
+											onClick={submitForm}
 											class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700">
 											Tạo tài khoản mới
 										</button>
@@ -137,6 +201,21 @@ const Signup = () => {
 				</div>
 			</section>
 			<Footer></Footer>
+
+			<Modal show={message !== ""} size="md" onClose={() => setMessage("")} popup dismissible>
+				<Modal.Header />
+				<Modal.Body>
+					<div className="text-center">
+						<HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-red-400 dark:text-gray-200" />
+						<h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{message}</h3>
+						<div className="flex justify-center gap-4">
+							<Button color="gray" onClick={() => setMessage("")}>
+								Tôi đã hiểu
+							</Button>
+						</div>
+					</div>
+				</Modal.Body>
+			</Modal>
 		</>
 	);
 };

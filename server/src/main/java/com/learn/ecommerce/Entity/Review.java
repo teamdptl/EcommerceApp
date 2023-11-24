@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Data
@@ -13,8 +13,8 @@ import java.sql.Date;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int reviewID;
-    private String rate;
+    private int reviewId;
+    private int rate;
     private String description;
     private Date createAt;
     @ManyToOne
@@ -24,5 +24,6 @@ public class Review {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private boolean isDeleted = false;
 
 }

@@ -1,33 +1,77 @@
 package com.learn.ecommerce.Entity;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+import java.util.List;
 
-@Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "User")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userID;
-    private String name;
-    private String email;
-    private String avatar;
-    private String locate;
-    private String username;
-    private String password;
-    private boolean isEmailVerified;
-    @ManyToMany(mappedBy = "users")
-    private Set<Product> products = new HashSet<>();
-    @ManyToMany(mappedBy = "users")
-    private Set<Role> roles = new HashSet<>();
+@Entity
+@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id = ?") // Soft delete
+@Table(name = "_user")
+public class User implements UserDetails {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+  @Column(unique=true)
+  private String email;
+  private String password;
+  private String fullname;
+  private String avatar;
+  private String locate;
+  private String username;
 
+  private boolean isDeleted = false;
+  @Enumerated(EnumType.STRING)
+  private Role role;
+
+  @OneToMany(mappedBy = "user")
+  private List<Token> tokens;
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return role.getAuthorities();
+  }
+
+  @Override
+  public String getPassword() {
+    return password;
+  }
+
+  @Override
+  public String getUsername() {
+    return email;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }

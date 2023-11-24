@@ -1,0 +1,6 @@
+*node_modules/*
+/package.json
+/package-lock.json
+*.idea
+**/application.properties
+server/src/main/resources/application.properties

@@ -1,28 +1,50 @@
 package com.learn.ecommerce.Entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.learn.ecommerce.Entity.Permission;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "Role")
-public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roleID;
-    private String description;
-    @ManyToMany
-    @JoinTable(
-            name = "UserRole",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns  =@JoinColumn(name = "role_id")
-    )
-    private Set<User> users = new HashSet<>();
+import static com.learn.ecommerce.Entity.Permission.*;
+
+
+@Getter
+@RequiredArgsConstructor
+public enum Role {
+
+  USER(Collections.emptySet()),
+  ADMIN(
+          Set.of(
+                  ADMIN_READ,
+                  ADMIN_UPDATE,
+                  ADMIN_DELETE,
+                  ADMIN_CREATE
+          )
+  ),
+  MANAGER(
+          Set.of(
+                  MANAGER_READ,
+                  MANAGER_UPDATE,
+                  MANAGER_DELETE,
+                  MANAGER_CREATE
+          )
+  )
+
+  ;
+
+  private final Set<Permission> permissions;
+
+  public List<SimpleGrantedAuthority> getAuthorities() {
+    var authorities = getPermissions()
+            .stream()
+            .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+            .collect(Collectors.toList());
+    authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+    return authorities;
+  }
 }
