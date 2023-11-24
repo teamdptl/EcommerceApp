@@ -30,24 +30,23 @@ const getAverageRating = (reviewsData) => {
 
 const Product = () => {
 	const [reviewsData, setReviewsData] = useState([]);
-	    useEffect(() => {
+	useEffect(() => {
         getReviewData().then(res => setReviewsData(res))
     },[])
 
 	let averageRating = 0;
 	let numberOfReviews = 0;
 	console.log((reviewsData !== undefined) && (reviewsData.error === undefined) && (reviewsData.length > 0))
-	if((reviewsData !== undefined) && (reviewsData.error === undefined)){
+	if((reviewsData !== undefined) && (reviewsData.error === undefined) ){
 		averageRating = getAverageRating(reviewsData);
 		numberOfReviews = reviewsData.length;
 	}
-
 	return (
 		<>
 			<Header />
 			<div class="">
 				<main class="container mt-5 lg:mt-11 mx-auto">
-					<ProductDetail rating={averageRating} numOfReview={numberOfReviews} ></ProductDetail>
+					<ProductDetail listReview={(reviewsData !== undefined) && (reviewsData.error === undefined) ? reviewsData : []}></ProductDetail>
 					<SupportService></SupportService>
 					<hr class="border-slate-200 dark:border-slate-700 mt-20"></hr>
 					{(reviewsData === undefined || reviewsData.error !== undefined) ? (<div>Lỗi! Không thể tải đánh giá cho sản phẩm này</div>) : ((reviewsData.length <= 0) ? <div>Chưa có đánh giá cho sản phẩm</div> : <ReviewGroup reviewsData={reviewsData} setReviewData={setReviewsData}></ReviewGroup>)}

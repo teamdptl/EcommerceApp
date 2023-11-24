@@ -2,34 +2,24 @@ import { Rating, Avatar, Button, Dropdown } from "flowbite-react"
 import { useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { redirect, useNavigate } from "react-router-dom";
+import PopupRating from "./PopupRating";
 
 const Review = ({listReview, setListReview, review}) => {
+
+    const [showModal, setShowModal] = useState(false)
+    const [content, setContent] = useState(review.description)
+    const [start, setStart] =  useState(review.rate)
     let navigate = useNavigate()
-    
-    // const updateReview = () => {
-
-    //     let url = 'http://localhost:8080/api/v1/review/update/' + review.reviewId
-    //     useState(() => {
-    //         fetch(url, {
-    //             method: 'POST',
-    //             data:{
-    //                 "description": "Update đánh giá cho nè!",
-    //                 "rate": 5
-    //             }
-    //         })
-    //     },[])
-
-        
-
-    //     console.log(listReview)
-    // }
 
     const deleteReview = async () => {
         let url = 'http://localhost:8080/api/v1/review/delete/' + review.reviewId
         let accessToken = JSON.stringify(localStorage.getItem('accessToken'))
-        console.log(accessToken)
-        let authStr = "Bearer " + accessToken.split("\"")[1]
-        console.log(authStr)
+        let authStr = ""
+        // console.log(accessToken === 'null')
+        if(accessToken === 'null')
+            authStr = ""
+        else authStr = "Bearer " + accessToken.split("\"")[1]
+        // console.log(authStr)
         return await fetch(url, {
                                 method: "GET",
                                 headers: {
@@ -42,20 +32,20 @@ const Review = ({listReview, setListReview, review}) => {
                             }})
                     .then((res) => res.json())
                     .then((json) => {
-                        console.log(json)
+                        // console.log(json)
                         alert(json.message)
                         if(json.message === "Vui lòng đăng nhập để xóa đánh giá của bạn!")
                             navigate("/login", {replace: true})
-                        
-                        if(json.error == 0){
+                        let tempList = []
+                        if(json.error === 0){
                             for(let i = 0; i < listReview.length; i++){
-                                if(listReview[i].reviewId == review.reviewId){
-                                    listReview.splice(i, 1);
+                                if(listReview[i].reviewId !== review.reviewId){
+                                    tempList.push(listReview[i])
                                 }
                             }
-                            setListReview(listReview)
-                            console.log("Xóa state list review")
-                            console.log(listReview)
+                            setListReview(tempList)
+                            // console.log("Xóa state list review")
+                            // console.log(tempList)
                         }
                         return json})
                     .catch(err => console.error('Error:', err));
@@ -71,7 +61,7 @@ const Review = ({listReview, setListReview, review}) => {
                     <div class="flex-1 flex justify-between">
                         <div class="text-sm sm:text-base">
                             <span class="block font-semibold">{review.userFullname}</span>
-                            <span class="block mt-0.5 text-slate-500 dark:text-slate-400 text-sm">{review.create_at}</span>
+                            <span class="block mt-0.5 text-slate-500 dark:text-slate-400 text-sm">{review.createAt}</span>
                         </div>
                         <div class="mt-0.5 flex text-yellow-500" id="start-rating">
                             <Rating>
@@ -84,14 +74,15 @@ const Review = ({listReview, setListReview, review}) => {
                                 }
                             </Rating>
                             <Dropdown label dismissOnClick={false} renderTrigger={() => <span  className="self-center ml-5" ><CiMenuKebab color="black" fontSize="bold"></CiMenuKebab></span>}>
-                                <Dropdown.Item >Chỉnh sửa</Dropdown.Item>
+                                <Dropdown.Item onClick={() => setShowModal(true)}>Chỉnh sửa</Dropdown.Item>
                                 <Dropdown.Item onClick={() => {deleteReview()}}>Xóa</Dropdown.Item>
                             </Dropdown>
+                            <PopupRating showModal={showModal} setOpen={setShowModal} content={content} setContent={setContent} start={start} setStart={setStart} listReview={listReview} setListReview={setListReview} reviewId={review.reviewId} add={false}></PopupRating>
                         </div>
                     </div>
                 </div>
                 <div class="mt-4 prose prose-sm sm:prose dark:prose-invert sm:max-w-2xl">
-                    <p class="text-slate-600 dark:text-slate-300">{review.description}</p>
+                    <p class="text-slate-600 dark:text-slate-300">{content}</p>
                 </div>
             </div>
         </>

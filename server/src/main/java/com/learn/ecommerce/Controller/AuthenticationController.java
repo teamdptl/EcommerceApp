@@ -27,6 +27,7 @@ import java.util.Map;
 public class AuthenticationController {
   @Autowired
   ChangePasswordService changePasswordService;
+  
   private final UserService userService;
 
   private final AuthenticationService service;

@@ -22,8 +22,8 @@ public class EmailService {
 
     @Value("864000")
     private int expTime;
-    @Value("${host}")
-    private String host ;
+    // @Value("${host}")
+    private String host = "smtp.gmail.com";
     @Autowired
     private JavaMailSender emailSender;
     @Autowired
