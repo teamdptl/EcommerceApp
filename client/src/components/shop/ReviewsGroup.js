@@ -1,9 +1,11 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Review from "./Review"
 import { Rating, Button } from "flowbite-react"
 import PopupRating from "./PopupRating"
 
 const getAverageRating = (reviewsData) => {
+    if(reviewsData.length <= 0)
+        return 0;
     let average = 0
     reviewsData.forEach((review) => {
         average += review.rate
@@ -13,6 +15,8 @@ const getAverageRating = (reviewsData) => {
 }
 
 const calcPercentStart = (reviewsData) => {
+    if(reviewsData.length <= 0)
+        return [0,0,0,0,0]
     let start1 = 0;
     let start2 = 0;
     let start3 = 0;
@@ -52,12 +56,13 @@ const calcPercentStart = (reviewsData) => {
 const ReviewGroup = ({reviewsData, setReviewData}) => {
     
     const [showModal, setShowModal] = useState(false)
-    
+
     let averageRating = getAverageRating(reviewsData)
     let percentOfStarts = calcPercentStart(reviewsData)
-    
+
+
     return(
-        <>
+        
             <div class="mt-10">
                 <h2 class="text-2xl font-semibold flex items-center">
                     <Rating size="lg">
@@ -97,12 +102,13 @@ const ReviewGroup = ({reviewsData, setReviewData}) => {
                     </div>
                     <Button gradientDuoTone="tealToLime" pill size="xl" className="mt-10" onClick={() => {setShowModal(true)}}>
                         Đánh giá
-                        <PopupRating open={showModal} setOpen={setShowModal}></PopupRating>
+                        
                     </Button>
+                    <PopupRating showModal={showModal} setOpen={setShowModal} content="" start={5} listReview={reviewsData} setListReview={setReviewData} add={true}></PopupRating>
                     
                 </div>
             </div>
-        </>
+        
     )
 
 }

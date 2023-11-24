@@ -41,6 +41,8 @@ public class ReviewController {
     @PostMapping("/add/{productId}")
     public ResponseEntity<?> addReview(@PathVariable Integer productId,
                                        @RequestBody CreateReviewRequest data){
+        
+        System.out.println("Add review");
         Review review = new Review();
         
         review.setCreateAt(new Date());
@@ -50,17 +52,19 @@ public class ReviewController {
         
         Optional<Product> optionalProduct = productImp.findById(productId);
         if(optionalProduct.isEmpty()){
-            return ResponseEntity.badRequest().body("Sản phẩm không tồn tại!");
+            return ResponseEntity.ok(new ErrorResponse("Sản phẩm này không còn tồn tại!"));
         }
 
         review.setProduct(optionalProduct.get());
 
         Optional<User> optionalUser = authUtils.getCurrentUser();
-        if(optionalUser.isEmpty())
-            return ResponseEntity.badRequest().body("Đăng nhập để đánh giá sản phẩm!");
+        if(optionalUser.isEmpty()){
+            return ResponseEntity.ok(new ErrorResponse("Đăng nhập để đánh giá sản phẩm!"));
+        }
         review.setUser(optionalUser.get());
         reviewImp.save(review);
-        return ResponseEntity.ok("Ok");
+        ReviewListResponse reviewResponse = ModelMapperUtils.map(review, ReviewListResponse.class);
+        return ResponseEntity.ok(reviewResponse);
     }
 
     @GetMapping("/all/{productId}")
@@ -115,24 +119,39 @@ public class ReviewController {
 
     @PostMapping("/update/{reviewId}")
     public ResponseEntity<?> updateReview(@PathVariable Integer reviewId, @RequestBody CreateReviewRequest data){
-
+        System.out.println("Trong update nè!");
         Optional<User> user = authUtils.getCurrentUser();
         if(user.isEmpty()){
-            return ResponseEntity.badRequest().body("Vui lòng đăng nhập để xóa đánh giá của bạn!");
+            System.out.println("Vui lòng đăng nhập để xóa đánh giá của bạn!");
+            return ResponseEntity.ok(new ErrorResponse("Vui lòng đăng nhập để cập nhật đánh giá của bạn!"));
         }
         
         int userID = user.get().getId();
 
         Optional<Review> optionalReview = reviewImp.findById(reviewId);
         if(optionalReview.isEmpty())
-            return ResponseEntity.badRequest().body("Không tìm thấy đánh giá hợp lệ!");
-        Review review = optionalReview.get();
+            return ResponseEntity.ok(new ErrorResponse("Không tìm thấy đánh giá hợp lệ!"));
+    
+        Review review = new Review();
         review.setDescription(data.getDescription());
         review.setRate(data.getRate());
+        review.setCreateAt(new Date());
+        review.setDeleted(false);
+        review.setProduct(optionalReview.get().getProduct());
+        review.setUser(optionalReview.get().getUser());
+        review.setReviewId(reviewId);
+
+        // System.out.println(userID == review.getUser().getId());
+        System.out.println(optionalReview.get().getReviewId());
+        System.out.println(optionalReview.get().getCreateAt());
+        System.out.println(optionalReview.get().getProduct());
+        // System.out.println(review.getUser());
+        // System.out.println(review.getClass());
         if(userID == review.getUser().getId()){
             reviewImp.save(review);
-            return ResponseEntity.ok("Cập nhật thành công!");
+            ReviewListResponse response = ModelMapperUtils.map(review, ReviewListResponse.class);
+            return ResponseEntity.ok(response);
         }
-        return ResponseEntity.badRequest().body("Không có quyền để cập nhật");
+        return ResponseEntity.ok(new ErrorResponse("Không có quyền để cập nhật"));
     }   
 }
