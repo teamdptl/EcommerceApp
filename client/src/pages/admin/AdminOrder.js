@@ -1,12 +1,13 @@
-import ManagerHeader from "../ManagerHeader";
-import AdminOrderItem from "./AdminOrderItem";
-import AdminOrderTitle from "./AdminOrderTitle";
-import AdminOrderStatusModal from "./AdminOrderStatusModal";
+import ManagerHeader from "../../components/admin/ManagerHeader";
+import AdminOrderItem from "../../components/admin/order/AdminOrderItem";
+import AdminOrderTitle from "../../components/admin/order/AdminOrderTitle";
+import AdminOrderStatusModal from "../../components/admin/order/AdminOrderStatusModal";
 import React, {useState} from "react";
-import AdminOrderInfo from "./AdminOrderInfo";
-import AdminOrderConfirmCash from "./AdminOrderConfirmCash";
-import DatePickerFromTo from "../statistic_top/DatePickerFromTo";
+import AdminOrderInfo from "../../components/admin/order/AdminOrderInfo";
+import AdminOrderConfirmCash from "../../components/admin/order/AdminOrderConfirmCash";
+import DatePickerFromTo from "../../components/admin/statistic_top/DatePickerFromTo";
 import {Datepicker, Label, Select} from "flowbite-react";
+import AdminPage from "../../layouts/AdminPage";
 
 const AdminOrder = () => {
     // Trạng thái đơn hàng
@@ -40,7 +41,7 @@ const AdminOrder = () => {
 
 
     return (
-        <>
+        <AdminPage>
             <div className="col-span-6 bg-white rounded-md border-2 border-zinc-100">
                 <ManagerHeader title="Thông tin đơn hàng"
                                searchCallBack={() => console.log("tim kiem")}
@@ -74,7 +75,7 @@ const AdminOrder = () => {
             <AdminOrderStatusModal showModal={showOrderStatus} closeModal={() => setShowOrderStatus(false)}/>
             <AdminOrderInfo showModal={showOrderInfo} closeModal={() => setShowOrderInfo(false)}/>
             <AdminOrderConfirmCash showModal={showConfirm} closeModal={() => setShowConfirm(false)}/>
-        </>
+        </AdminPage>
     )
 }
 

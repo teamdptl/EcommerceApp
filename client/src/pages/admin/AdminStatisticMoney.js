@@ -1,11 +1,12 @@
-import ManagerHeader from "../ManagerHeader";
+import ManagerHeader from "../../components/admin/ManagerHeader";
 import {Button, Datepicker, Label} from "flowbite-react";
 import React from "react";
-import AdminStatisticChart from "./AdminStatisticChart";
-import AdminStatisticWeekChart from "./AdminStatisticWeekChart";
+import AdminStatisticChart from "../../components/admin/statistic_money/AdminStatisticChart";
+import AdminStatisticWeekChart from "../../components/admin/statistic_money/AdminStatisticWeekChart";
+import AdminPage from "../../layouts/AdminPage";
 
 const AdminStatisticMoney = () => {
-    return <>
+    return <AdminPage>
         <div className="col-span-6 bg-white rounded-md border-2 border-zinc-100">
             <ManagerHeader title={"Thống kê doanh thu"}/>
             <div className={`flex mb-4 gap-4 mx-4 items-center justify-center`}>
@@ -28,7 +29,7 @@ const AdminStatisticMoney = () => {
             <AdminStatisticChart/>
             <AdminStatisticWeekChart/>
         </div>
-    </>
+    </AdminPage>
 }
 
 export default AdminStatisticMoney;

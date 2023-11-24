@@ -1,8 +1,9 @@
 import {Table} from "flowbite-react";
-import DatePickerFromTo from "./DatePickerFromTo";
+import DatePickerFromTo from "../../components/admin/statistic_top/DatePickerFromTo";
+import AdminPage from "../../layouts/AdminPage";
 
 const AdminStatisticTop = () => {
-    return <>
+    return <AdminPage>
         <div className="col-span-2 bg-white rounded-md border-2 border-zinc-100">
             <p class="text-base p-4 rounded-t-md font-semibold text-white bg-blue-500">Thống kê top 10 sản phẩm</p>
             <DatePickerFromTo/>
@@ -84,7 +85,7 @@ const AdminStatisticTop = () => {
                 </li>
             </ul>
         </div>
-    </>
+    </AdminPage>
 }
 
 export default AdminStatisticTop;

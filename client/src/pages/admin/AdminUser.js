@@ -2,14 +2,15 @@ import {Button, Checkbox, Table, TextInput} from "flowbite-react";
 import {HiOutlinePlus, HiSearch} from "react-icons/hi";
 import {TbFilter} from "react-icons/tb";
 import {BsFillTrash3Fill} from "react-icons/bs";
-import AdminUserModal from "./AdminUserModal";
+import AdminUserModal from "../../components/admin/user/AdminUserModal";
 import {useState} from "react";
-import ManagerHeader from "../ManagerHeader";
+import ManagerHeader from "../../components/admin/ManagerHeader";
+import AdminPage from "../../layouts/AdminPage";
 
 const AdminUser = () => {
     const [adminUserModalShow, setAdminUserModalShow] = useState(false);
     return (
-        <>
+        <AdminPage>
             <div className="col-span-6 bg-white rounded-md border-2 border-zinc-100">
                 <ManagerHeader title="Quản lý người dùng"
                                addTitle="Thêm người dùng"
@@ -56,7 +57,7 @@ const AdminUser = () => {
                 </Table>
             </div>
             <AdminUserModal isShow={adminUserModalShow} closeModal={() => setAdminUserModalShow(false)}/>
-        </>
+        </AdminPage>
     )
 }
 

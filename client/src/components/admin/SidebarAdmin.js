@@ -8,8 +8,11 @@ import {FaRegUser} from "react-icons/fa";
 import {IoCartOutline} from "react-icons/io5";
 import {TbReportMoney} from "react-icons/tb";
 import {RiFileUserLine} from "react-icons/ri";
+import {Link} from "react-router-dom";
+import {useAdminCollapse} from "./AdminCollapseProvider";
 
-export const SidebarAdmin = ({isCollapse, setCollapse, setPage}) => {
+export const SidebarAdmin = () => {
+	const { isCollapse, setCollapse } = useAdminCollapse();
 	const toggleCollapse = () => {
 		setCollapse(!isCollapse);
 	}
@@ -21,26 +24,38 @@ export const SidebarAdmin = ({isCollapse, setCollapse, setPage}) => {
 				</div>
 				<Sidebar.Items>
 					<Sidebar.ItemGroup>
-						<Sidebar.Item className="select-none cursor-pointer" icon={BsBoxSeam} onClick={() => setPage('product')}>
-							Quản lý sản phẩm
-						</Sidebar.Item>
-						<Sidebar.Item className="select-none cursor-pointer" icon={FaRegUser } onClick={() => setPage('user')}>
-							Quản lý người dùng
-						</Sidebar.Item>
-						<Sidebar.Item className="select-none cursor-pointer" icon={BiCategory} onClick={() => setPage('cateandbrand')}>
-							Quản lý hãng/thể loại
-						</Sidebar.Item>
-						<Sidebar.Item className="select-none cursor-pointer" icon={IoCartOutline } onClick={() => setPage('order')}>
-							Thông tin hóa đơn
-						</Sidebar.Item>
+						<Link to="/admin/product">
+							<Sidebar.Item className="select-none cursor-pointer" icon={BsBoxSeam}>
+								Quản lý sản phẩm
+							</Sidebar.Item>
+						</Link>
+						<Link to="/admin/user">
+							<Sidebar.Item className="select-none cursor-pointer" icon={FaRegUser }>
+								Quản lý người dùng
+							</Sidebar.Item>
+						</Link>
+						<Link to="/admin/catebrand">
+							<Sidebar.Item className="select-none cursor-pointer" icon={BiCategory}>
+								Quản lý hãng/thể loại
+							</Sidebar.Item>
+						</Link>
+						<Link to="/admin/order">
+							<Sidebar.Item className="select-none cursor-pointer" icon={IoCartOutline }>
+								Thông tin hóa đơn
+							</Sidebar.Item>
+						</Link>
 					</Sidebar.ItemGroup>
 					<Sidebar.ItemGroup>
-						<Sidebar.Item className="select-none cursor-pointer" icon={HiOutlineDocumentReport} onClick={() => setPage('statistictop')}>
-							Thống kê top
-						</Sidebar.Item>
-						<Sidebar.Item className="select-none cursor-pointer" icon={TbReportMoney }  onClick={() => setPage('statisticmoney')}>
-							Thống kê doanh thu
-						</Sidebar.Item>
+						<Link to="/admin/top">
+							<Sidebar.Item className="select-none cursor-pointer" icon={HiOutlineDocumentReport}>
+								Thống kê top
+							</Sidebar.Item>
+						</Link>
+						<Link to="/admin/money">
+							<Sidebar.Item className="select-none cursor-pointer" icon={TbReportMoney } >
+								Thống kê doanh thu
+							</Sidebar.Item>
+						</Link>
 					</Sidebar.ItemGroup>
 					<Sidebar.ItemGroup>
 						<div className="pt-8 flex justify-center">
