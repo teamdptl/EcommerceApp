@@ -9,7 +9,7 @@ import {FiTrash2} from "react-icons/fi";
 import NumberInput from "./NumberInput";
 import {useEffect, useState} from "react";
 
-const CartItem = ({ item }) => {
+const CartItem = ({ item, isOrder = false }) => {
 	const [quantity, setQuantity] = useState(1);
 	return (
 		<>
@@ -30,20 +30,37 @@ const CartItem = ({ item }) => {
 							</h3>
 							<p className=" h-8 ml-4 flex items-center border-2 rounded-md text-green-400 border-green-400 p-2" >{formatMoney(item.price)} </p>
 						</div>
-						<p className="mt-1 text-sm text-gray-500">{item.color}</p>
+						<p className="mt-1 text-sm text-gray-500 mb-2">{formatMoney(item.price)}</p>
 					</div>
 					<div className="flex flex-1 items-end justify-between text-sm">
-
-						<NumberInput value={quantity} onChange={(val) => setQuantity(val)}/>
-
-						<div className="flex">
-							<button
-								type="button"
-								className="font-medium text-red-500 hover:text-red-600"
-							>
-								<FiTrash2 size={18} />
-							</button>
-						</div>
+						{
+							!isOrder &&
+							<>
+								<NumberInput value={quantity} onChange={(val) => setQuantity(val)}/>
+								<div className="flex">
+									<button
+										type="button"
+										className="font-medium text-red-500 hover:text-red-600"
+									>
+										<FiTrash2 size={18} />
+									</button>
+								</div>
+							</>
+						}
+						{
+							isOrder &&
+							<>
+								<p className="text-gray-500">Số lượng {item.quantity}</p>
+								<div className="flex">
+									<button
+										type="button"
+										className="font-medium text-indigo-600 hover:text-indigo-500"
+									>
+										Đánh giá sản phẩm
+									</button>
+								</div>
+							</>
+						}
 					</div>
 				</div>
 			</li>
