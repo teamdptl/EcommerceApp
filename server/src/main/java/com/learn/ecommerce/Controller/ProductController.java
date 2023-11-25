@@ -96,7 +96,7 @@ public class ProductController {
             return ResponseEntity.badRequest().body(new ErrorResponse("Dữ liệu " +result.getFieldError().getField()+" không hợp lệ !"));
         }
         Product product = ModelMapperUtils.map(createData, Product.class);
-        Optional<Brand> brand = brandRepository.findById(createData.getBranchId());
+        Optional<Brand> brand = brandRepository.findById(createData.getBrandId());
         if (brand.isEmpty())
             return ResponseEntity.badRequest()
                     .body(new ErrorResponse("Branch không tồn tại!"));
@@ -123,7 +123,7 @@ public class ProductController {
 
         Product product = ModelMapperUtils.map(editData, Product.class);
         product.setProductId(id);
-        Optional<Brand> brand = brandRepository.findById(editData.getBranchId());
+        Optional<Brand> brand = brandRepository.findById(editData.getBrandId());
         if (brand.isEmpty())
             return ResponseEntity.badRequest()
                     .body(new ErrorResponse("Branch không tồn tại!"));

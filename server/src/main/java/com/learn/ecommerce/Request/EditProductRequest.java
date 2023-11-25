@@ -30,7 +30,7 @@ public class EditProductRequest{
     @NotEmpty
     private String attributes;
     @Min(1)
-    private int branchId;
+    private int brandId;
     @Min(1)
     private int categoryId;
     private int primaryImageIndex = -1;
