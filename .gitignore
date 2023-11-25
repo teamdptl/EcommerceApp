@@ -5,3 +5,4 @@
 **/application.properties
 server/src/main/resources/application.properties
 upload/product/*
+*.properties
