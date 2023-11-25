@@ -7,10 +7,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.learn.ecommerce.Entity.Category;
 import com.learn.ecommerce.Request.CreateCategoryRequest;
+import com.learn.ecommerce.Response.ErrorResponse;
 import com.learn.ecommerce.Service.Implementation.CategoryImp;
 
 import ch.qos.logback.core.joran.util.beans.BeanUtil;
@@ -18,6 +20,7 @@ import io.micrometer.common.lang.Nullable;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.persistence.PersistenceUnit;
 import jakarta.persistence.PersistenceUnits;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/category")
@@ -41,27 +44,16 @@ public class CategoryController {
     @PostMapping("/add")
     public ResponseEntity<?> addCategory(@RequestBody CreateCategoryRequest data) {
 
-        // Kiểm tra dữ liệu đầu vào
-        if (data == null || data.getName() == null || data.getName().isEmpty()) {
-            return ResponseEntity.badRequest().body("Name is required");
-        }
-
-        // Kiểm tra sự tồn tại của danh mục trước khi thêm mới
-        if (categoryImp.existsByName(data.getName())) {
-            return ResponseEntity.badRequest().body("Category with this name already exists");
-        }
-
         Category category = new Category();
 
         category.setName(data.getName());
         category.setDescription(data.getDescription());
 
-        try {
-            categoryImp.save(category);
-            return ResponseEntity.ok("ok");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving category");
-        }
+        System.out.println("name:" + data.getName());
+        System.out.println( "mota: "+ data.getDescription());
+
+        // categoryImp.save(category);
+        return ResponseEntity.ok(data);
     }
 
     // ROLE: ManagercategoryId
