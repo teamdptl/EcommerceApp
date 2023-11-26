@@ -2,9 +2,12 @@
 import { TextInput, Label, Select } from "flowbite-react";
 import { useEffect, useState } from "react";
 
-const UserShipInfoForm = ({shipInfo}) => {
+const UserShipInfoForm = ({shipInfo, saveCallback, onChange}) => {
 	const baseURL = "https://provinces.open-api.vn/api";
 
+	const [fullName, setFullName] = useState('');
+	const [phone, setPhone] = useState('')
+	const [street, setStreet] = useState('');
 	const [listProvince, setListProvince] = useState([]);
 	const [province, setProvince] = useState(null);
 	const [listDistrict, setListDistrict] = useState([]);
@@ -77,6 +80,16 @@ const UserShipInfoForm = ({shipInfo}) => {
 		};
 		getWards();
 	}, [district]);
+
+	useEffect(() => {
+		const shipData = {
+			fullName: fullName,
+			phone: phone,
+			address: `${street}, ${ward?.name}, ${district?.name}, ${province?.name}`,
+			isValid: province !== null && district !== null && ward !== null
+		}
+		console.log(shipData)
+	}, [province, district, ward, fullName, phone, street])
 
 	const onChangeProvinces = (value) => {
 		const code = parseInt(value);
@@ -202,9 +215,14 @@ const UserShipInfoForm = ({shipInfo}) => {
 					</div>
 				</div>
 			</div>
-			<div class="flex justify-center mt-3">
-				<button class="text-white rounded-md cursor bg-green-500 mx-auto py-2 px-4">Lưu thông tin</button>
-			</div>
+			{saveCallback &&
+				<div className="flex justify-center mt-3">
+					<button className="text-white rounded-md cursor bg-green-500 mx-auto py-2 px-4"
+						onClick={() => saveCallback()}
+					>Lưu thông tin</button>
+				</div>
+			}
+
 		</>
 	);
 };

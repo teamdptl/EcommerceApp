@@ -9,12 +9,14 @@ import com.learn.ecommerce.Response.ShipInfoListResponse;
 import com.learn.ecommerce.Service.Implementation.ShipInfoImp;
 import com.learn.ecommerce.Ultis.AuthUtils;
 import com.learn.ecommerce.Ultis.ModelMapperUtils;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,21 +58,25 @@ public class ShipInfoController {
 
     // Role: User
     @PostMapping("/add")
-    public ResponseEntity<?> addShipInfo(@RequestBody CreateShipInfoRequest createShipInfoRequest){
+    public ResponseEntity<?> addShipInfo(@Valid @RequestBody CreateShipInfoRequest createShipInfoRequest, BindingResult result){
         Optional<User> optionalUser = auth.getCurrentUser();
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            ShipInfo shipInfo = ModelMapperUtils.map(createShipInfoRequest, ShipInfo.class);
-            shipInfo.setUser(user);
+//        if (optionalUser.isPresent()) {
+//
+//        } else {
+//            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+//        }
 
-            ShipInfo savedShipInfo = service.addShipInfo(shipInfo);
-            ShipInfoListResponse response = ModelMapperUtils.map(savedShipInfo, ShipInfoListResponse.class);
+        if (result.hasErrors())
+            return new ResponseEntity<>("Dữ liệu "+result.getFieldError().getField()+" không hợp lệ", HttpStatus.NOT_FOUND);
 
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-        }
 
+        ShipInfo shipInfo = ModelMapperUtils.map(createShipInfoRequest, ShipInfo.class);
+        shipInfo.setUser(optionalUser.orElse(null));
+
+        ShipInfo savedShipInfo = service.addShipInfo(shipInfo);
+        ShipInfoListResponse response = ModelMapperUtils.map(savedShipInfo, ShipInfoListResponse.class);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // Role: User

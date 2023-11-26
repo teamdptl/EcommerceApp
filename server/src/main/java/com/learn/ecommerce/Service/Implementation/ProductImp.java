@@ -55,18 +55,23 @@ public class ProductImp implements ProductService {
     public Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page) {
         final int perPage = 10;
         switch (type){
+            // Phổ biến (đặt nhiều)
             case 0 -> {
                 return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("orders").descending()));
             }
+            // Đánh giá cao
             case 1 -> {
                 return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("rating").descending()));
             }
+            // Giá thấp trước
             case 2 -> {
                 return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("price").ascending()));
             }
+            // Giá cao trước
             case 3 -> {
                 return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("price").descending()));
             }
+            //
             default -> {
                 return reponsitory.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, PageRequest.of(page, perPage, Sort.by("orders").descending()));
             }

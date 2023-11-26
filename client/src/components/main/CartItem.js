@@ -1,7 +1,16 @@
 // Tham khảo: https://tailwindui.com/components/ecommerce/components/shopping-carts , keyword: tailwind cart component
 // Xây dựng CartItem
 
-const CartItem = ({ item }) => {
+import formatMoney from "../../utils/currency";
+import {RiAddFill, RiSubtractFill} from "react-icons/ri";
+import {IoAddSharp} from "react-icons/io5";
+import {CiTrash} from "react-icons/ci";
+import {FiTrash2} from "react-icons/fi";
+import NumberInput from "./NumberInput";
+import {useEffect, useState} from "react";
+
+const CartItem = ({ item, isOrder = false }) => {
+	const [quantity, setQuantity] = useState(1);
 	return (
 		<>
 			<li className="flex m-5 pt-5">
@@ -16,24 +25,42 @@ const CartItem = ({ item }) => {
 				<div className="ml-4 flex flex-1 flex-col">
 					<div>
 						<div className="flex justify-between text-base font-medium text-gray-1000">
-							<h3 classname="w-auto">
-								<a class="text-sm" href={item.href}>{item.name}</a>
+							<h3 className="w-auto">
+								<a className="text-sm" href={item.href}>{item.name}</a>
 							</h3>
-							<p className=" h-8 ml-4 flex items-center border-2 rounded-md text-green-400 border-green-400 p-2" >${item.price} </p>
+							<p className=" h-8 ml-4 flex items-center border-2 rounded-md text-green-400 border-green-400 p-2" >{formatMoney(item.price)} </p>
 						</div>
-						<p className="mt-1 text-sm text-gray-500">{item.color}</p>
+						<p className="mt-1 text-sm text-gray-500 mb-2">{formatMoney(item.price)}</p>
 					</div>
 					<div className="flex flex-1 items-end justify-between text-sm">
-						<p className="text-gray-500">Qty {item.quantity}</p>
-
-						<div className="flex">
-							<button
-								type="button"
-								className="font-medium text-indigo-600 hover:text-indigo-500"
-							>
-								Remove
-							</button>
-						</div>
+						{
+							!isOrder &&
+							<>
+								<NumberInput value={quantity} onChange={(val) => setQuantity(val)}/>
+								<div className="flex">
+									<button
+										type="button"
+										className="font-medium text-red-500 hover:text-red-600"
+									>
+										<FiTrash2 size={18} />
+									</button>
+								</div>
+							</>
+						}
+						{
+							isOrder &&
+							<>
+								<p className="text-gray-500">Số lượng {item.quantity}</p>
+								<div className="flex">
+									<button
+										type="button"
+										className="font-medium text-indigo-600 hover:text-indigo-500"
+									>
+										Đánh giá sản phẩm
+									</button>
+								</div>
+							</>
+						}
 					</div>
 				</div>
 			</li>

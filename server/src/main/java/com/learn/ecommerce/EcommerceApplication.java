@@ -16,10 +16,10 @@ public class EcommerceApplication {
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner(
-			AuthenticationService service
-	) {
+    @Bean
+    CommandLineRunner commandLineRunner(
+             AuthenticationService service
+             ) {
 		return args -> {
 
 //			var admin = RegisterRequest.builder()

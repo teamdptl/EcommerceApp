@@ -1,6 +1,6 @@
 import NavAdminHeader from "../components/admin/NavAdminHeader";
 import {SidebarAdmin} from "../components/admin/SidebarAdmin";
-import {useAdminCollapse} from "../components/admin/AdminCollapseProvider";
+import {useAdminCollapse} from "../context/AdminCollapseContext";
 
 const AdminPage = ({children}) => {
     const { isCollapse } = useAdminCollapse();
