@@ -28,7 +28,7 @@ const AdminCategoryList = () => {
     setId(id);
   };
 
-  const handleDelete = async () => {
+  const handleDeleteCategory = async () => {
     // Sử dụng itemId trong URL hoặc body của yêu cầu DELETE
     if (isId !== null) {
       fetch(baseUrl + `/api/v1/category/delete/${isId}`, {
@@ -49,7 +49,6 @@ const AdminCategoryList = () => {
       <Table hoverable>
         <Table.Head className="bg-red-500">
           <Table.HeadCell className="p-4">
-            <Checkbox />
           </Table.HeadCell>
           <Table.HeadCell>ID</Table.HeadCell>
           <Table.HeadCell>Tên thể loại</Table.HeadCell>
@@ -77,7 +76,7 @@ const AdminCategoryList = () => {
                     <Button
                       gradientMonochrome="failure"
                       size="sm"
-                      onClick={handleDelete}
+                      onClick={handleDeleteCategory}
                     >
                       <HiOutlineTrash />
                     </Button>

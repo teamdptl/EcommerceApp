@@ -14,10 +14,11 @@ const AdminCategoryModal = ({ isShow, closeModal }) => {
     };
     console.log(newData);
     // Gửi request đến API
-    fetch(baseUrl + `/api/v1/category/add`, {
+    fetch(baseUrl + '/api/v1/category/add', {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        Accept: "application/json",
+        'Content-Type': "application/json",
       },
       body: JSON.stringify(newData), // Chuyển đối tượng thành chuỗi JSON
     })
