@@ -24,13 +24,13 @@ public class TokenController {
     @GetMapping("/user")
     public ResponseEntity<UserDTO> getUserByToken(@RequestParam String token) throws InvocationTargetException, IllegalAccessException {
 //        String jwt = token.substring(7);
-       Optional<Token> tokenAccess = tokenRepository.findByToken(token);
+        Optional<Token> tokenAccess = tokenRepository.findByToken(token);
         Boolean isTokenValid = false;
-     if(!tokenAccess.isEmpty()){
-          isTokenValid = tokenAccess
-                 .map(t -> !t.isExpired() && !t.isRevoked())
-                 .orElse(false);
-     }
+        if(!tokenAccess.isEmpty()){
+            isTokenValid = tokenAccess
+                    .map(t -> !t.isExpired() && !t.isRevoked())
+                    .orElse(false);
+        }
         if(isTokenValid){
             User user = tokenAccess.get().getUser();
             UserDTO userDTO =  new UserDTO();

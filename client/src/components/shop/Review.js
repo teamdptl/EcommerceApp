@@ -19,7 +19,7 @@ const Review = ({listReview, setListReview, review}) => {
         if(accessToken === 'null')
             authStr = ""
         else authStr = "Bearer " + accessToken.split("\"")[1]
-        // console.log(authStr)
+        console.log(authStr)
         return await fetch(url, {
                                 method: "GET",
                                 headers: {

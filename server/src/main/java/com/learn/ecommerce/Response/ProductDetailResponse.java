@@ -1,5 +1,5 @@
 package com.learn.ecommerce.Response;
-
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -18,4 +18,5 @@ public class ProductDetailResponse {
     private String brandName;
     private String categoryName;
     private boolean isFavorite = false;
+    private List<MediaResponse> medias;
 }
