@@ -117,7 +117,7 @@ public class CategoryController {
             return ResponseEntity.notFound().build();
         }
 
-        // categoryImp.delete(categoryId);
+        categoryImp.delete(categoryId);
 
         return ResponseEntity.ok("ok");
     }
