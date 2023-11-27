@@ -1,11 +1,14 @@
 import { Rating } from "flowbite-react";
+import {Link} from "react-router-dom";
+import {FaCartPlus} from "react-icons/fa";
+import {IoCartOutline, IoHeart} from "react-icons/io5";
 const ProductItem = ({ product }) => {
     const ratingArr = Array(parseInt(product.rating, 10)).fill("");
     return (
 			<>
-				<div key={product.id} className="group relative border p-5 rounded-md">
-					<div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md flex justify-center items-center group-hover:opacity-75">
-						<div class="h-52 w-52">
+				<a href={product.href} key={product.id} className="select-none cursor-pointer relative border p-5 rounded-md">
+					<div className="relative aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md flex justify-center items-center">
+						<div class="h-52 w-52 hover:opacity-75">
 							<img
 								src={product.imageSrc}
 								alt={product.imageAlt}
@@ -15,15 +18,12 @@ const ProductItem = ({ product }) => {
 					</div>
 					<div className="mt-4">
 						<h3 className="text-sm text-gray-700">
-							<a href={product.href}>
-								<span aria-hidden="true" className="absolute inset-0" />
-								{product.name}
-							</a>
+							{product.name}
 						</h3>
 						<p className="text-base mt-2 mb-2 font-medium text-red-700">{product.price}</p>
-						{product.rating > 0 ? (
+						{product.rating >= 0 ? (
 							<Rating>
-								{ratingArr.map((value, index) => (index <= product.rating ? <Rating.Star /> : <Rating.Star filled={false} />))}
+								{Array(5).fill('').map((value, index) => (index + 1 <= product.rating ? <Rating.Star /> : <Rating.Star filled={false} />))}
 								<p className="ml-2 text-sm font-medium text-gray-900">{product.rating}</p>
 								<p className="ml-2 text-xs font-medium text-gray-900">({product.numRate})</p>
 							</Rating>
@@ -31,7 +31,25 @@ const ProductItem = ({ product }) => {
 							<Rating></Rating>
 						)}
 					</div>
-				</div>
+					<div className={"bottom-0 left-0 right-0 grid grid-cols-2 gap-2 mt-3"}>
+						<button className="flex justify-center items-center bg-blue-600 text-white text-xs py-2 font-semibold rounded-xl"
+								onClick={(e)=> {
+									e.stopPropagation();
+									e.preventDefault();
+								}}
+						>
+							Thêm giỏ hàng
+						</button>
+						<button className={"flex justify-center items-center border border-red-500 text-red-500 text-xs py-2 font-semibold rounded-xl"}
+								onClick={(e)=> {
+									e.stopPropagation();
+									e.preventDefault();
+								}}
+						>
+							Yêu thích
+						</button>
+					</div>
+				</a>
 			</>
 		);
 }

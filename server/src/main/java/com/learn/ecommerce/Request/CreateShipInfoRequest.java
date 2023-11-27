@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class CreateShipInfoRequest {
-    private int shipId = 0;
     @NotEmpty
     private String fullName;
     @NotEmpty

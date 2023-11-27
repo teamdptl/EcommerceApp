@@ -15,7 +15,6 @@ public class CreateProductRequest{
     private String name;
     @NotEmpty
     private String description;
-    @NotEmpty
     private String thongSoKiThuat;
     @Min(0)
     private long price;
@@ -27,10 +26,9 @@ public class CreateProductRequest{
     private int quantity;
     @NotEmpty
     private String origin;
-    @NotEmpty
     private String attributes;
     @Min(1)
-    private int branchId;
+    private int brandId;
     @Min(1)
     private int categoryId;
     private int primaryImageIndex = 0;

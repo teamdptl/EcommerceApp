@@ -5,23 +5,27 @@ const useProductsFetch = () => {
     const [products, setProducts] = useState([]);
     const [errorMsg, setErrorMsg] = useState();
     const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [maxPage, setMaxPage] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
 
     const callback = (filterData = {}) => {
         setLoading(true);
         fetch(baseUrl + '/api/v1/product/search?' + new URLSearchParams({...filterData}).toString())
             .then(res => res.json())
             .then(json => {
-                console.log(json);
                 setProducts(json.content)
+                setMaxPage(json.totalPages)
+                setCurrentPage(json.number)
+                setTotalElements(json.totalElements)
             })
             .catch(setErrorMsg)
             .finally(() => {
                 setLoading(false);
-                console.log(errorMsg);
             })
     }
 
-    return { products, errorMsg, loading, callback }
+    return { products, errorMsg, loading, callback, currentPage, maxPage, totalElements }
 }
 
 export default useProductsFetch;
