@@ -1,9 +1,11 @@
 import { Carousel, Button, Rating } from "flowbite-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { RiSubtractFill } from "react-icons/ri"
 import { AiFillHeart, AiOutlineHeart, AiOutlinePlus } from "react-icons/ai";
-
-const product = {favourite: true}
+import { FaMinus, FaPlus } from "react-icons/fa";
+import { AuthContext } from "../../context/AuthContext";
+import baseUrl from "../../config"
+const product = {favourite: null}
 
 const getAverageRating = (reviewsData) => {
     if(reviewsData.length <= 0)
@@ -17,46 +19,117 @@ const getAverageRating = (reviewsData) => {
 }
 
 
-
 const ProductDetail = ({data, listReview}) => {
-    const [favourite, setFavourite] = useState(product.favourite)
+    
+    const [favourite, setFavourite] = useState(data.favorite)
+    const [quantity, setQuantity] = useState(1)
     const [showDisc, setShowDisc] = useState(false)
     const [showWarrantyPolicy, setShowWarrantyPolicy] = useState(false)
+    const {user, setUser, setAutoLogin} = useContext(AuthContext)
+    let medias = data.medias;
+    console.log("Product data: ", favourite)
     
+    const formatter = new Intl.NumberFormat('VN', {
+        style: 'currency',
+        currency: 'VND'
+      });
+      
+    const favouriteClick = () => {
+        if(user){
+            let token = localStorage.getItem('accessToken')
+            token = token ? token : ""
+            if(favourite){
+                const url = baseUrl + '/api/v1/product/delete-favorite/' + data.productId
+                
+                fetch(url, {
+                    method: 'GET',
+                    headers:{
+                        Authorization: `Bearer ${token}`
+                    },
+                })
+                .then(data => {
+                    if(data.status === 200){
+                        setFavourite(!favourite);
+                    }else{
+                        alert("Vui lòng tải lại trang!")
+                    }
+                })
+                .catch(err => console.error(err))
+            }else{
+                const url = baseUrl + '/api/v1/product/add-favorite/' + data.productId
+                fetch(url, {
+                    method: 'GET',
+                    headers:{
+                        Authorization: `Bearer ${token}`
+                    },
+                })
+                .then(data => {
+                    if(data.status === 200){
+                        setFavourite(!favourite);
+                    }else{
+                        alert("Vui lòng tải lại trang!")
+                    }
+                })
+                .catch(err => console.error(err))
+            }
+            
+        }else{
+            alert('You need to login first!');
+        }
+        
+    }
+
+    const addQuantity = () => {
+        setQuantity(quantity+1)
+    }
+
+    const subtractQuantity = () => {
+        if(quantity > 1)
+            setQuantity(quantity - 1)
+    }
     
     return (
         <>
-            <div class="lg:flex">
+            {data === undefined || data === null ? <div class="font-extrabold self-center">Opps! Không thể tải sản phẩm</div> :
+            (<div class="lg:flex">
                 <section class="w-full lg:w-[55%]">
                     <picture class="relative">
-                        <Carousel slide={false}>
-                                <img className="w-full rounded-2xl object-cover" src="https://img.geonames.org/flags/x/ad.gif" alt=""></img>                    
-                                <img className="w-full rounded-2xl object-cover" src="https://img.geonames.org/flags/x/bd.gif" alt=""></img>                    
-                                <img className="w-full rounded-2xl object-cover" src="https://img.geonames.org/flags/x/cf.gif" alt=""></img>                    
-                                <img className="w-full rounded-2xl object-cover" src="https://img.geonames.org/flags/x/mf.gif" alt=""></img>                    
-                                <img className="w-full rounded-2xl object-cover" src="https://img.geonames.org/flags/x/vn.gif" alt=""></img>                   
-                        </Carousel>
+                    { (medias === undefined || medias.length <= 0) ? <img className="w-full rounded-2xl object-cover" src="https://flowbite.com/docs/images/carousel/carousel-1.svg" alt=""></img>:
+                            <Carousel slide={false}>
+                                {
+                                    medias.map((item) => {
+                                        return (<img className="w-full rounded-2xl object-cover" src={item.imageUrl} alt=""></img>)
+                                    })
+                                }           
+                            </Carousel>
+                    }
+                        
                     </picture>
                     
                 </section>
                 <section class="w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10">
                     <div>
                         <h2 class="flex justify-between text-2xl sm:text-3xl font-semibold">
-                            <span>Heavy Weight Shoes fuck Duy</span>
-                            <Button color="light" className="rounded-full w-9 h-9 self-center ml-5" onClick={() =>{
-                                product.favourite = !favourite;
-                                setFavourite(!favourite);   
-                            }
-                            }>
+                            <span>{data.name}</span>
+                            <Button color="light" className="rounded-full w-9 h-9 self-center ml-5" onClick={() =>{favouriteClick()}}>
                                 { (favourite) ? (<AiFillHeart color="red" size="20"/>) : (<AiOutlineHeart size='20' />) }
                             </Button>
                         </h2>
                         <div class="flex items-center mt-5 space-x-4 sm:space-x-5">
                             <div class="">
                                 <div class="flex items-center border-2 border-green-500 rounded-lg py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold">
-                                    <span class="text-green-500 !leading-none">$112.00</span>
+                                    <span class="text-green-500 !leading-none">{formatter.format(data.price)}</span>
                                 </div>
                             </div>
+                            {
+                                data.oldPrice === 0 ? (<div></div>) : 
+                                (<div class="">
+                                    <div class="flex items-center border-2 border-grey-500 rounded-lg py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold">
+                                        <strike class="text-gray-500 !leading-none">{formatter.format(data.oldPrice)}</strike>
+                                    </div>
+                                </div>)
+                            }
+                            
                             <div class="h-7 border-l border-slate-300 dark:border-slate-700"></div>
                             <div class="flex items-center">
                                 <a href="#reviews" class="flex items-center text-sm font-medium">
@@ -100,23 +173,19 @@ const ProductDetail = ({data, listReview}) => {
                     </div>
 
                     <div class="flex space-x-3.5 mt-10">
-                        <div class="flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full">
+                        <Button.Group className="flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full">
                             <div class="nc-NcInputNumber flex items-center justify-between space-x-5 w-full">
                                 <div class="nc-NcInputNumber__content flex items-center justify-between w-[104px] sm:w-28">
-                                    <button class="w-8 h-8 rounded-full flex items-center justify-center border border-neutral-400 dark:border-neutral-500 bg-white dark:bg-neutral-900 focus:outline-none hover:border-neutral-700 dark:hover:border-neutral-400 disabled:hover:border-neutral-400 dark:disabled:hover:border-neutral-500 disabled:opacity-50 disabled:cursor-default" type="button" disabled="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-4 h-4">
-                                            <path fill-rule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h15a.75.75 0 010 1.5h-15a.75.75 0 01-.75-.75z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    </button>
-                                    <span class="select-none block flex-1 text-center leading-none">1</span>
-                                    <button class="w-8 h-8 rounded-full flex items-center justify-center border border-neutral-400 dark:border-neutral-500 bg-white dark:bg-neutral-900 focus:outline-none hover:border-neutral-700 dark:hover:border-neutral-400 disabled:hover:border-neutral-400 dark:disabled:hover:border-neutral-500 disabled:opacity-50 disabled:cursor-default" type="button">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-4 h-4">
-                                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    </button>
+                                    <Button onClick={() => subtractQuantity()} color="grey" className="w-8 h-8 rounded-full flex items-center justify-center border border-neutral-400 dark:border-neutral-500 bg-white dark:bg-neutral-900 focus:outline-none hover:border-neutral-700 dark:hover:border-neutral-400 disabled:hover:border-neutral-400 dark:disabled:hover:border-neutral-500 disabled:opacity-50 disabled:cursor-default">
+                                        <FaMinus/>
+                                    </Button>
+                                    <span class="select-none block flex-1 text-center leading-none text-xl">{quantity}</span>
+                                    <Button onClick={() => addQuantity()} color="grey" className="w-8 h-8 rounded-full flex items-center justify-center border border-neutral-400 dark:border-neutral-500 bg-white dark:bg-neutral-900 focus:outline-none hover:border-neutral-700 dark:hover:border-neutral-400 disabled:hover:border-neutral-400 dark:disabled:hover:border-neutral-500 disabled:opacity-50 disabled:cursor-default">
+                                        <FaPlus />
+                                    </Button>
                                 </div>
                             </div>
-                        </div>
+                        </Button.Group>
                         <button class="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">
                             <svg class="hidden sm:inline-block w-5 h-5 mb-0.5" viewBox="0 0 9 9" fill="none">
                                 <path d="M2.99997 4.125C3.20708 4.125 3.37497 4.29289 3.37497 4.5C3.37497 5.12132 3.87865 5.625 4.49997 5.625C5.12129 5.625 5.62497 5.12132 5.62497 4.5C5.62497 4.29289 5.79286 4.125 5.99997 4.125C6.20708 4.125 6.37497 4.29289 6.37497 4.5C6.37497 5.53553 5.5355 6.375 4.49997 6.375C3.46444 6.375 2.62497 5.53553 2.62497 4.5C2.62497 4.29289 2.79286 4.125 2.99997 4.125Z" fill="currentColor"></path>
@@ -133,7 +202,7 @@ const ProductDetail = ({data, listReview}) => {
                             <span>Mô tả</span>
                             { showDisc ? <RiSubtractFill/> : <AiOutlinePlus/>}
                         </Button>
-                        {showDisc ? (<div class="p-4 pt-3 last:pb-0 text-slate-600 text-sm dark:text-slate-300 leading-6" id="headlessui-disclosure-panel-:ra:">Fashion is a form of self-expression and autonomy at a particular period and place and in a specific context, of clothing, footwear, lifestyle, accessories, makeup, hairstyle, and body posture.</div>) : (<div className="hidden"></div>)}
+                        {showDisc ? (<div class="p-4 pt-3 last:pb-0 text-slate-600 text-sm dark:text-slate-300 leading-6" id="headlessui-disclosure-panel-:ra:">{data.description}</div>) : (<div className="hidden"></div>)}
                         <Button color="gray" className="w-full flex justify-between focus:ring-0" theme={buttonTheme} onClick={() => {setShowWarrantyPolicy(!showWarrantyPolicy)}}>
                             <span>Chính sách bảo hành</span>
                             { showWarrantyPolicy ? <RiSubtractFill/> : <AiOutlinePlus/>}
@@ -141,8 +210,10 @@ const ProductDetail = ({data, listReview}) => {
                         {showWarrantyPolicy ? (<div class="p-4 pt-3 last:pb-0 text-slate-600 text-sm dark:text-slate-300 leading-6" id="headlessui-disclosure-panel-:ra:">Fashion is a form of self-expression and autonomy at a particular period and place and in a specific context, of clothing, footwear, lifestyle, accessories, makeup, hairstyle, and body posture.</div>) : (<div className="hidden"></div>)}
                     </div>
                 </section>
-            </div>
+            </div>)
+            }
         </>
+
     );
 };
 
