@@ -1,14 +1,15 @@
 import React from "react";
 import Router from "./routes/router";
-import AdminCollapseProvider from "./components/admin/AdminCollapseProvider";
+import AdminCollapseContext from "./context/AdminCollapseContext";
 
 
 function App() {
   return (
-    
-        <AdminCollapseProvider>
+    <AuthProvider>
+        <AdminCollapseContext>
             <Router></Router>
-        </AdminCollapseProvider>
+        </AdminCollapseContext>
+    </AuthProvider>
   );
 }
 

@@ -9,7 +9,7 @@ import {IoCartOutline} from "react-icons/io5";
 import {TbReportMoney} from "react-icons/tb";
 import {RiFileUserLine} from "react-icons/ri";
 import {Link} from "react-router-dom";
-import {useAdminCollapse} from "./AdminCollapseProvider";
+import {useAdminCollapse} from "../../context/AdminCollapseContext";
 
 export const SidebarAdmin = () => {
 	const { isCollapse, setCollapse } = useAdminCollapse();

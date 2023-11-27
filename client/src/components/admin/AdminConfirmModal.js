@@ -2,7 +2,7 @@ import {Button, Modal} from "flowbite-react";
 import {HiOutlineExclamationCircle} from "react-icons/hi";
 import {useState} from "react";
 
-const AdminConfirmModal = ({isShow, closeModal, content}) => {
+const AdminConfirmModal = ({isShow, closeModal, content, confirmCallback}) => {
     return <>
         <Modal show={isShow} size="md" onClose={closeModal} popup>
             <Modal.Header />
@@ -13,11 +13,14 @@ const AdminConfirmModal = ({isShow, closeModal, content}) => {
                         {content}
                     </h3>
                     <div className="flex justify-center gap-4">
-                        <Button color="failure" onClick={() => closeModal()}>
-                            {"Yes, I'm sure"}
+                        <Button color="failure" onClick={() => {
+                            closeModal();
+                            confirmCallback();
+                        }}>
+                            Xác nhận
                         </Button>
                         <Button color="gray" onClick={closeModal}>
-                            No, cancel
+                            Không
                         </Button>
                     </div>
                 </div>

@@ -28,7 +28,7 @@ public interface ProductRepository extends JpaRepository<Product,Integer>{
 //                               @Param("branchIds") List<Integer> branchIds, @Param("origins") List<String> origins,
 //                               @Param("rating") Integer rating, Pageable pageable);
 
-  @Query("SELECT p as product, sum(o.quantity) as orders, avg(r.rate) as rating, count(r.reviewId) as reviewer FROM Product p LEFT JOIN Review r ON r.product.productId = p.productId LEFT JOIN OrderLine o ON p.productId = o.product.productId WHERE (:title = '' or (:title != '' and p.name like %:title%)) " +
+  @Query("SELECT p as product, sum(o.quantity) as orders, avg(r.rate) as rating, count(r.reviewId) as reviewer FROM Product p LEFT JOIN Review r ON r.product.productId = p.productId LEFT JOIN OrderLine o ON p.productId = o.product.productId WHERE p.isDeleted = false and (:title = '' or (:title != '' and p.name like %:title%)) " +
           "and p.price >= :priceMin and p.price <= :priceMax and ((:categoryId > 0 and p.category.categoryId = :categoryId) or :categoryId = 0) and (:origins is null or (:origins is not null and p.origin in :origins)) " +
           "and ( (:branchIds is not null and p.brand.brandId in :branchIds) or :branchIds is null )" +
           "group by p.productId having :rating = -1 or (:rating >= 0 and (avg(r.rate) >= :rating and avg(r.rate) < :rating + 1)) ")
