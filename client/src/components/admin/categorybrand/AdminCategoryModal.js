@@ -14,7 +14,7 @@ const AdminCategoryModal = ({ isShow, closeModal }) => {
     };
     console.log(newData);
     // Gửi request đến API
-    fetch(baseUrl + "/api/v1/category/add", {
+    fetch(baseUrl + `/api/v1/category/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,6 +25,7 @@ const AdminCategoryModal = ({ isShow, closeModal }) => {
       .then((data) => {
         // Xử lý dữ liệu từ server nếu cần
         console.log("Success:", data);
+        window.location.reload();
       })
       .catch((error) => {
         // Xử lý lỗi nếu có
