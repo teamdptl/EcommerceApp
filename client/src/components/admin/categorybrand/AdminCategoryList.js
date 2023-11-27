@@ -33,9 +33,9 @@ const AdminCategoryList = () => {
     if (isId !== null) {
       fetch(baseUrl + `/api/v1/category/delete/${isId}`, {
         method: "DELETE",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
         .then((response) => response.json()) // Chuyển response thành JSON
         .catch((error) => {
