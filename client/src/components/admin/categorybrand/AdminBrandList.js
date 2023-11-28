@@ -3,14 +3,25 @@ import { MdEdit } from "react-icons/md";
 import { HiOutlineTrash } from "react-icons/hi";
 import { useState, useEffect } from "react";
 import baseUrl from "../../../config";
+import AdminConfirmModal from "../AdminConfirmModal";
+import AdminEditBrandModal from "./AdminEditBrandModal";
 
 const AdminBrandList = () => {
   const [brand, setBrand] = useState([]);
-  const [isChecked, setChecked] = useState(false);
   const [isId, setId] = useState(null);
 
+  const [confirmModalShow, setConfirmModalShow] = useState(false);
+  const [brandModalShow, setBrandModalShow] = useState(false);
+
+  const [editBrand, setEditBrand] = useState({});
+
+  const handleShowEditBrand = (isBrand) => {
+    // console.log(isBrand);
+    setEditBrand(isBrand);
+    setBrandModalShow(true);
+  };
+
   const handleCheckboxChange = (id) => {
-    setChecked(!isChecked);
     setId(id);
   };
 
@@ -20,7 +31,10 @@ const AdminBrandList = () => {
       fetch(baseUrl + `/api/v1/brand/delete/${isId}`, {
         method: "DELETE",
       })
-        .then((response) => console.log(response)) // Chuyển response thành JSON
+        .then((response) => {
+          console.log(response);
+          window.location.reload();
+        }) // Chuyển response thành JSON
         .catch((error) => {
           // Xử lý lỗi nếu có
           console.error("Error:", error);
@@ -57,19 +71,27 @@ const AdminBrandList = () => {
           <Table.Body className="divide-y">
             {brand.map((item) => (
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="p-4">
-                  <Checkbox
-                    value={isChecked}
-                    onChange={() => handleCheckboxChange(item.brandId)}
-                  />
-                </Table.Cell>
+                <Table.Cell className="p-4"></Table.Cell>
                 <Table.Cell>{item.brandId}</Table.Cell>
                 <Table.Cell>{item.name}</Table.Cell>
                 <Table.Cell className="flex gap-2">
-                  <Button color="warning" size="sm">
+                  <Button
+                    color="warning"
+                    size="sm"
+                    onClick={() => {
+                      handleShowEditBrand(item);
+                    }}
+                  >
                     <MdEdit />
                   </Button>
-                  <Button gradientMonochrome="failure" size="sm" onClick={handleDeleteBrand}>
+                  <Button
+                    gradientMonochrome="failure"
+                    size="sm"
+                    onClick={() => {
+                      setConfirmModalShow(true);
+                      handleCheckboxChange(item.brandId);
+                    }}
+                  >
                     <HiOutlineTrash />
                   </Button>
                 </Table.Cell>
@@ -80,6 +102,17 @@ const AdminBrandList = () => {
           <p>Loading...</p>
         )}
       </Table>
+      <AdminConfirmModal
+        isShow={confirmModalShow}
+        closeModal={() => setConfirmModalShow(false)}
+        content="Bạn muốn xóa nó chứ"
+        confirmCallback={handleDeleteBrand}
+      />
+      <AdminEditBrandModal
+        isShow={brandModalShow}
+        closeModal={() => setBrandModalShow(false)}
+        editBrand={editBrand}
+      />
     </>
   );
 };

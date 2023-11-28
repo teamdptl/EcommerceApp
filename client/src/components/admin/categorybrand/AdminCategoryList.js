@@ -3,11 +3,16 @@ import { MdEdit } from "react-icons/md";
 import { HiOutlineTrash } from "react-icons/hi";
 import { useState, useEffect } from "react";
 import baseUrl from "../../../config";
+import AdminConfirmModal from "../AdminConfirmModal";
+import AdminCategoryModal from "./AdminCategoryModal";
 
 const AdminCategoryList = () => {
   const [data, setData] = useState([]);
-  const [isChecked, setChecked] = useState(false);
   const [isId, setId] = useState(null);
+  const [editCategory, setEditCategory] = useState({});
+
+  const [confirmModalShow, setConfirmModalShow] = useState(false);
+  const [categoryModalShow, setCategoryModalShow] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -23,8 +28,10 @@ const AdminCategoryList = () => {
     fetchData();
   }, []);
 
+  const handleGetCategory = (isCategory) => {
+    setEditCategory(isCategory);
+  };
   const handleCheckboxChange = (id) => {
-    setChecked(!isChecked);
     setId(id);
   };
 
@@ -48,8 +55,7 @@ const AdminCategoryList = () => {
     <>
       <Table hoverable>
         <Table.Head className="bg-red-500">
-          <Table.HeadCell className="p-4">
-          </Table.HeadCell>
+          <Table.HeadCell className="p-4"></Table.HeadCell>
           <Table.HeadCell>ID</Table.HeadCell>
           <Table.HeadCell>Tên thể loại</Table.HeadCell>
           <Table.HeadCell>Mô tả thể loại</Table.HeadCell>
@@ -60,23 +66,28 @@ const AdminCategoryList = () => {
             {data.map((item) => (
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                 <>
-                  <Table.Cell className="p-4">
-                    <Checkbox
-                      value={isChecked}
-                      onChange={() => handleCheckboxChange(item.categoryId)}
-                    />
-                  </Table.Cell>
+                  <Table.Cell className="p-4"></Table.Cell>
                   <Table.Cell>{item.categoryId}</Table.Cell>
                   <Table.Cell>{item.name}</Table.Cell>
                   <Table.Cell>{item.description}</Table.Cell>
                   <Table.Cell className="flex gap-2">
-                    <Button color="warning" size="sm">
+                    <Button
+                      color="warning"
+                      size="sm"
+                      onClick={() => {
+                        setCategoryModalShow(true);
+                        handleGetCategory(item);
+                      }}
+                    >
                       <MdEdit />
                     </Button>
                     <Button
                       gradientMonochrome="failure"
                       size="sm"
-                      onClick={handleDeleteCategory}
+                      onClick={() => {
+                        setConfirmModalShow(true);
+                        handleCheckboxChange(item.categoryId);
+                      }}
                     >
                       <HiOutlineTrash />
                     </Button>
@@ -89,6 +100,17 @@ const AdminCategoryList = () => {
           <p>Loading...</p>
         )}
       </Table>
+      <AdminConfirmModal
+        isShow={confirmModalShow}
+        closeModal={() => setConfirmModalShow(false)}
+        content="Bạn muốn xóa nó chứ"
+        confirmCallback={handleDeleteCategory}
+      />
+      <AdminCategoryModal
+        isShow={categoryModalShow}
+        closeModal={() => setCategoryModalShow(false)}
+        editCategory={editCategory}
+      />
     </>
   );
 };
