@@ -119,7 +119,7 @@ public class ReviewController {
 
     @PostMapping("/update/{reviewId}")
     public ResponseEntity<?> updateReview(@PathVariable Integer reviewId, @RequestBody CreateReviewRequest data){
-        System.out.println("Trong update nè!");
+        System.out.println(data);
         Optional<User> user = authUtils.getCurrentUser();
         if(user.isEmpty()){
             System.out.println("Vui lòng đăng nhập để xóa đánh giá của bạn!");
@@ -127,7 +127,7 @@ public class ReviewController {
         }
         
         int userID = user.get().getId();
-
+        System.out.println(userID);
         Optional<Review> optionalReview = reviewImp.findById(reviewId);
         if(optionalReview.isEmpty())
             return ResponseEntity.ok(new ErrorResponse("Không tìm thấy đánh giá hợp lệ!"));
@@ -141,12 +141,6 @@ public class ReviewController {
         review.setUser(optionalReview.get().getUser());
         review.setReviewId(reviewId);
 
-        // System.out.println(userID == review.getUser().getId());
-        System.out.println(optionalReview.get().getReviewId());
-        System.out.println(optionalReview.get().getCreateAt());
-        System.out.println(optionalReview.get().getProduct());
-        // System.out.println(review.getUser());
-        // System.out.println(review.getClass());
         if(userID == review.getUser().getId()){
             reviewImp.save(review);
             ReviewListResponse response = ModelMapperUtils.map(review, ReviewListResponse.class);
