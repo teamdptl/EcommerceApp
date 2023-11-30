@@ -2,6 +2,7 @@ import Page from "../layouts/Page";
 import { Breadcrumb } from "flowbite-react";
 import { HiHome } from "react-icons/hi";
 import CartItem from "../components/main/CartItem";
+import {Link} from "react-router-dom";
 
 
 const cartList = [
@@ -68,7 +69,9 @@ export function ConfirmCart({ className }) {
 							<span>Tổng tiền</span><span>0</span>
 						</div>
 					</div>
-					<button class="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">Mua hàng</button>
+					<Link to={"/checkout"} class="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">
+						Mua hàng
+					</Link>
 				</div>
 			</div>
 		</>
