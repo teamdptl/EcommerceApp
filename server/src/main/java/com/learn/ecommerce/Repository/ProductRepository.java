@@ -18,6 +18,9 @@ public interface ProductRepository extends JpaRepository<Product,Integer>{
   @Query("SELECT p FROM Product p JOIN p.users u WHERE u.id = :userId")
   Page<Product> findFavoriteProducts(@Param("userId") Integer userId, Pageable pageable);
 
+  @Query("SELECT p FROM Product p WHERE p.productId in :ids")
+  List<Product> findProductInList(List<Integer> ids);
+
   List<Product> findByUsers(User user);
 
 //  @Query("SELECT p FROM Product p WHERE (:title = '' or (:title != '' and p.name like %:title%)) and p.price >= :priceMin and p.price <= :priceMax " +

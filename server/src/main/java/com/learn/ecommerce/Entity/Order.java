@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Data
@@ -24,7 +25,7 @@ public class Order {
     private String paymentMethod;
     private long totalPrice = 0;
 
-    private Date createAt;
+    private Timestamp createAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

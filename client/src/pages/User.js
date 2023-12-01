@@ -17,7 +17,7 @@ const User = () => {
 						<UserInfo></UserInfo>
 					</Tabs.Item>
 					<Tabs.Item icon={HiShoppingCart} title="Đơn hàng">
-						<UserOrder></UserOrder>
+						{/*<UserOrder></UserOrder>*/}
 					</Tabs.Item>
 					<Tabs.Item icon={HiClipboardList} title="Yêu thích">
 						<p>

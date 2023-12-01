@@ -22,7 +22,7 @@ public class MediaImp implements MediaService {
     @Autowired
     private MediaRepository repository;
 
-    private final String filePath = "upload/product/";
+    private final String filePath = Media.mediaPath;
 
     @Override
     public Optional<Media> findById(Integer id) {
@@ -59,8 +59,8 @@ public class MediaImp implements MediaService {
     @Override
     public void saveProductFile(MultipartFile file, Product p, boolean isPrimary) {
         try {
-            String fileName = filePath + UUID.randomUUID() + file.getOriginalFilename();
-            Path path = Paths.get(fileName);
+            String fileName =  UUID.randomUUID() + file.getOriginalFilename();
+            Path path = Paths.get(filePath + fileName);
             Files.createDirectories(path.getParent());
 
             FileCopyUtils.copy(file.getBytes(), path.toFile());
@@ -99,5 +99,9 @@ public class MediaImp implements MediaService {
 
     public List<Media> getMediasByProduct(Product product){
         return repository.findByProduct(product);
+    }
+
+    public Optional<Media> getMediaByUrl(String url){
+        return repository.findByImageUrl(url);
     }
 }

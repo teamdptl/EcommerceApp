@@ -12,8 +12,10 @@ import java.util.Optional;
  @Repository
 
  public interface MediaRepository extends JpaRepository<Media,Integer>{
-  @Query("SELECT m FROM Media m WHERE m.product.productId = :productId and m.isPrimary = true")
-  public Optional<Media> findByProductPrimary(Integer productId);
+   @Query("SELECT m FROM Media m WHERE m.product.productId = :productId and m.isPrimary = true")
+   public Optional<Media> findByProductPrimary(Integer productId);
 
-  public List<Media> findByProduct(Product product);
+   public List<Media> findByProduct(Product product);
+
+   public Optional<Media> findByImageUrl(String url);
  }
