@@ -19,7 +19,7 @@ const AdminCategoryBrand = () => {
         <div className="col-span-4 bg-white rounded-md border-2 border-zinc-100">
             <ManagerHeader title="Quản lý thể loại"
                            addCallback={() => setCategoryModalShow(true)}
-                           removeCallback={() => setConfirmModalShow(true)}
+                        //    removeCallback={() => setConfirmModalShow(true)}
             />
            <AdminCategoryList/>
         </div>
@@ -27,7 +27,7 @@ const AdminCategoryBrand = () => {
         <div className="col-span-2 bg-white rounded-md border-2 border-zinc-100">
             <ManagerHeader title="Quản lý hãng"
                            addCallback={() => setBrandModalShow(true)}
-                           removeCallback={() => setConfirmModalShow(true)}
+                        //    removeCallback={() => setConfirmModalShow(true)}
             />
             <AdminBrandList/>
         </div>
