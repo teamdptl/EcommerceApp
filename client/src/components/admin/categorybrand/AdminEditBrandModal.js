@@ -1,17 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import baseUrl from "../../../config";
 
-const AdminBrandModal = ({ isShow, closeModal }) => {
+const AdminEditBrandModal = ({ isShow, closeModal, editBrand }) => {
   const [name, setName] = useState("");
 
-  const handleAddBrand = () => {
+  useEffect(() => {
+    if (editBrand) {
+      setName(editBrand.name || ""); // Set initial value based on editBrand
+    }
+  }, [editBrand]);
+
+  const handleEditBrand = () => {
     const newBrand = {
       name: name,
     };
     console.log(newBrand);
-    fetch(baseUrl + "/api/v1/brand/add", {
-      method: "POST",
+    fetch(baseUrl + `/api/v1/brand/update/${editBrand.brandId}`, {
+      method: "PUT",
       headers: {
         Accept: "*/*",
         "Content-Type": "application/json",
@@ -22,11 +28,11 @@ const AdminBrandModal = ({ isShow, closeModal }) => {
         response.json();
         window.location.reload();
       })
+
       .catch((error) => {
         console.error(error);
       });
   };
-
   return (
     <>
       <Modal dismissible show={isShow} onClose={closeModal}>
@@ -52,7 +58,7 @@ const AdminBrandModal = ({ isShow, closeModal }) => {
           <Button
             onClick={() => {
               closeModal();
-              handleAddBrand();
+              handleEditBrand();
             }}
           >
             Lưu
@@ -66,4 +72,4 @@ const AdminBrandModal = ({ isShow, closeModal }) => {
   );
 };
 
-export default AdminBrandModal;
+export default AdminEditBrandModal;
