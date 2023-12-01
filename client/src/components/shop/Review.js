@@ -3,13 +3,16 @@ import { useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { redirect, useNavigate } from "react-router-dom";
 import PopupRating from "./PopupRating";
+import AdminConfirmModal from "../admin/AdminConfirmModal";
 
 const Review = ({listReview, setListReview, review}) => {
-
+    const [showConfirm, setShowConfirm] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [content, setContent] = useState(review.description)
     const [start, setStart] =  useState(review.rate)
     let navigate = useNavigate()
+    let [contentConfirm, setContentConfirm ]= useState("")
+    let [typeConfirm, setTypeConfirm ]= useState("")
 
     const deleteReview = async () => {
         let url = 'http://localhost:8080/api/v1/review/delete/' + review.reviewId
@@ -33,26 +36,37 @@ const Review = ({listReview, setListReview, review}) => {
                     .then((res) => res.json())
                     .then((json) => {
                         // console.log(json)
-                        alert(json.message)
-                        if(json.message === "Vui lòng đăng nhập để xóa đánh giá của bạn!")
-                            navigate("/login", {replace: true})
-                        let tempList = []
-                        if(json.error === 0){
-                            for(let i = 0; i < listReview.length; i++){
-                                if(listReview[i].reviewId !== review.reviewId){
-                                    tempList.push(listReview[i])
+                        // alert(json.message)
+                        if(json.message === "Vui lòng đăng nhập để xóa đánh giá của bạn!"){
+                            setShowConfirm(true)
+                            setContentConfirm(json.message)
+                        }else{
+                            let tempList = []
+                            if(json.error === 0){
+                                setTypeConfirm("success")
+                                setContentConfirm(json.message)
+                                for(let i = 0; i < listReview.length; i++){
+                                    if(listReview[i].reviewId !== review.reviewId){
+                                        tempList.push(listReview[i])
+                                    }
                                 }
+                                setListReview(tempList)
+                                setShowConfirm(true)
+                            }else{
+                                setTypeConfirm("fail")
+                                setContentConfirm(json.message)
+                                setShowConfirm(true)
                             }
-                            setListReview(tempList)
-                            // console.log("Xóa state list review")
-                            // console.log(tempList)
                         }
+                           
+                        
                         return json})
                     .catch(err => console.error('Error:', err));
     }
 
     return (
         <>
+            <AdminConfirmModal isShow={showConfirm} closeModal={()=>setShowConfirm()} content={contentConfirm} confirmCallback={() => {navigate("/login", {replace: true})}} type={typeConfirm} />
             <div class="nc-ReviewItem flex flex-col " data-nc-id="ReviewItem">
                 <div class=" flex space-x-4 ">
                     <div class="flex-shrink-0 pt-0.5">
