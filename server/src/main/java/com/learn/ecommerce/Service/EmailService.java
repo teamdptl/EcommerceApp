@@ -22,7 +22,7 @@ public class EmailService {
 
     @Value("864000")
     private int expTime;
-    private String host = "localhost:8080/api/v1/auth";
+    private String host = "http://localhost:3000";
     @Autowired
     private JavaMailSender emailSender;
     @Autowired
@@ -50,8 +50,6 @@ public class EmailService {
 
         changePassword.setUser(user);
         changePasswordRepository.save(changePassword);
-
-
 
         String link = host + "/confirm-password?code=" + uuid;
         return link;
