@@ -41,7 +41,10 @@ const AdminCategoryList = () => {
       fetch(baseUrl + `/api/v1/category/delete/${isId}`, {
         method: "DELETE",
       })
-        .then((response) => console.log(response)) // Chuyển response thành JSON
+        .then((response) => {
+          console.log(response);
+          window.location.reload();
+        }) // Chuyển response thành JSON
         .catch((error) => {
           // Xử lý lỗi nếu có
           console.error("Error:", error);
