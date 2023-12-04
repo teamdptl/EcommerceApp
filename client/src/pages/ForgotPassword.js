@@ -1,10 +1,12 @@
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import {Link, useNavigate} from "react-router-dom";
-import {useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import baseUrl from "../config";
 import { Hypnosis ,Spin} from "react-cssfx-loading";
+import {Button, Modal} from "flowbite-react";
+import {HiOutlineExclamationCircle} from "react-icons/hi";
 
 const ForgotPassword = () => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -12,9 +14,24 @@ const ForgotPassword = () => {
 	const [message,setMessage]= useState("");
 	const navigate = useNavigate();
 	const [isSend , setIsSend] = useState(false)
+
+	const validateEmail = (email) => {
+		const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return regex.test(email);
+	};
+
 	const submitForm = () => {
+		if(email.length ==0 ){
+			setMessage("Vui lòng nhập email của bạn")
+			return;
+		}
+		if(!validateEmail(email)){
+			setMessage("Email không đúng định dạng")
+			return;
+		}
 		setIsLoading(true);
-		const data =email
+		const data = email
+
 		const config = {
 			headers: {
 				'Content-Type': 'text/plain'
@@ -37,11 +54,11 @@ const ForgotPassword = () => {
     return (
 			<>
 				<Header></Header>
-				<section class="py-10 bg-gray-100 sm:py-16 lg:py-24">
+				<section class="py-10 bg-gray-100 sm:py-16 lg:py-24 flex justify-center">
 					{isLoading && (
 						<div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-center items-center flex-col">
 						<Hypnosis color="#92D8E8" width="50px" height="50px"/>
-							<p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-black">
+							<p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-white">
 								Đang gửi ...
 							</p>
 						</div>
@@ -54,9 +71,9 @@ const ForgotPassword = () => {
 								Đừng lo ! Hãy nhập email và chúng tôi sẽ giúp bạn tạo một mật khẩu mới
 							</p>
 
-							<label class="max-w-xl mx-auto text-base leading-relaxed text-gray-600">
-								{message}
-							</label>
+							{/*<label class="max-w-xl mx-auto text-base leading-relaxed text-gray-600">*/}
+							{/*	{message}*/}
+							{/*</label>*/}
 						</div>
 
 						<form action="#" method="POST" class="max-w-xl mx-auto mt-12">
@@ -102,9 +119,24 @@ const ForgotPassword = () => {
 								</Link>
 							</p>
 						</div>
-					</div>:	<h2 className="text-3xl font-bold leading-tight text-black sm:text-3xl lg:text-4xl text-center">Email đã được gửi</h2>}
+					</div>:	<div className="items-center w-96 "><h2 className="text-3xl font-bold leading-tight text-black sm:text-3xl lg:text-4xl mb-3">Email đã được gửi đi</h2><label>Vui lòng kiểm tra email của bạn và thực hiện theo hướng dẫn để thay đổi mật khẩu cho tài khoản của bạn. Nếu không thấy email, bạn hãy thực hiện gửi lại email một lần nữa hặc liên hệ hotline 123.456.789 để được hỗ trợ.</label> </div>
+								}
 				</section>
 				<Footer></Footer>
+				<Modal show={message !== ""} size="md" onClose={() => setMessage("")} popup dismissible>
+					<Modal.Header />
+					<Modal.Body>
+						<div className="text-center">
+							<HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-red-400 dark:text-gray-200" />
+							<h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{message}</h3>
+							<div className="flex justify-center gap-4">
+								<Button color="gray" onClick={() => setMessage("")}>
+									Xác nhận
+								</Button>
+							</div>
+						</div>
+					</Modal.Body>
+				</Modal>
 			</>
 		);
  

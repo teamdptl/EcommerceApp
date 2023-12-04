@@ -1,6 +1,7 @@
 package com.learn.ecommerce.Service;
 
 import com.learn.ecommerce.Entity.User;
+import com.learn.ecommerce.Repository.ChangePasswordRepository;
 import com.learn.ecommerce.Repository.UserRepository;
 import com.learn.ecommerce.Request.ChangePasswordRequest;
 import com.learn.ecommerce.Service.EmailService;
@@ -21,6 +22,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
     @Autowired
+    private ChangePasswordRepository changePasswordRepository;
+    @Autowired
     private EmailService emailService;
     @Autowired
     private UserRepository userRepository;
@@ -29,14 +32,18 @@ public class UserService {
         if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
             throw new IllegalStateException("Password are not the same");
         }
-        byte[] decode = Base64.getDecoder().decode(request.getCode());
-        String email = new String(decode, "UTF-8");
+//        if(request.getNewPassword().length() < 6){
+//
+//        }
+        String email = changePasswordRepository.findByUUID(request.getCode()).get().getUser().getEmail();
+        System.out.println(email);
+
         try{
             User user = userRepository.findByEmail(email).orElseThrow();
             System.out.println(user.getEmail());
             user.setPassword(passwordEncoder.encode(request.getNewPassword()));
             Map<String,String> response = new HashMap<>();
-            response.put("message","Thay đổi password thành công");
+            response.put("message","Thay đổi password thành công  ");
             repository.save(user);
             return ResponseEntity.ok().body(response);
         }
