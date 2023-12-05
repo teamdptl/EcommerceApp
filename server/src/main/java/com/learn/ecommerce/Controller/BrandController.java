@@ -51,7 +51,7 @@ public class BrandController {
         brand.setName(brandRequest.getName());
 
         brandImp.save(brand);
-        return ResponseEntity.ok("OK");
+        return ResponseEntity.ok(brand);
 
 
     }
@@ -67,7 +67,7 @@ public class BrandController {
 
         brandImp.save(brand1);
 
-        return ResponseEntity.ok("OK");
+        return ResponseEntity.ok(brand);
     }
 
     // ROLE: Manager

@@ -2,8 +2,11 @@ import { Rating } from "flowbite-react";
 import {Link} from "react-router-dom";
 import {FaCartPlus} from "react-icons/fa";
 import {IoCartOutline, IoHeart} from "react-icons/io5";
+import useCart from "../../hooks/useCart";
+import {useCartContext} from "../../context/CartContext";
 const ProductItem = ({ product }) => {
     const ratingArr = Array(parseInt(product.rating, 10)).fill("");
+	const { addItemToCart } = useCartContext();
     return (
 			<>
 				<a href={product.href} key={product.id} className="select-none cursor-pointer relative border p-5 rounded-md">
@@ -36,6 +39,7 @@ const ProductItem = ({ product }) => {
 								onClick={(e)=> {
 									e.stopPropagation();
 									e.preventDefault();
+									addItemToCart(product);
 								}}
 						>
 							Thêm giỏ hàng

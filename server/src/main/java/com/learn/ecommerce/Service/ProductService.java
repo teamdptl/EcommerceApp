@@ -18,7 +18,9 @@
 
   Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page);
 
-  public void favoriteProduct(Product product, User user);
+     List<Product> getProductInList(List<Integer> ids);
+
+     public void favoriteProduct(Product product, User user);
 
   public Page<Product> favoriteList(User user, Pageable pageable);
 

@@ -3,21 +3,23 @@ package com.learn.ecommerce.Controller;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-// import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.learn.ecommerce.Entity.Category;
 import com.learn.ecommerce.Request.CreateCategoryRequest;
+import com.learn.ecommerce.Response.ErrorResponse;
 import com.learn.ecommerce.Service.Implementation.CategoryImp;
+import com.learn.ecommerce.Ultis.ModelMapperUtils;
 
 import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import io.micrometer.common.lang.Nullable;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.persistence.PersistenceUnit;
 import jakarta.persistence.PersistenceUnits;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/category")
@@ -58,7 +60,7 @@ public class CategoryController {
 
         try {
             categoryImp.save(category);
-            return ResponseEntity.ok("ok");
+            return ResponseEntity.ok(category);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving category");
         }
@@ -102,7 +104,7 @@ public class CategoryController {
 
         categoryImp.save(category);
 
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok(category);
     }
 
     // ROLE: Manager
@@ -110,7 +112,7 @@ public class CategoryController {
     public ResponseEntity<?> deleteCategory(@PathVariable("categoryId") int categoryId) {
 
         Optional<Category> category = categoryImp.findById(categoryId);
-
+        System.out.println(category);
         if (!category.isPresent()) {
             return ResponseEntity.notFound().build();
         }

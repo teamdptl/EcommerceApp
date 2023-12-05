@@ -40,6 +40,7 @@ public class ShipInfoController {
         this.auth = auth;
     }
 
+    // Role: User
     @GetMapping("/get")
     public ResponseEntity<?> getAllShipInfo(){
         // Trả về tất cả địa chỉ giao hàng của user
@@ -55,6 +56,8 @@ public class ShipInfoController {
         }
 
     }
+
+    //Role: User
 
     // Role: User
     @PostMapping("/add")
@@ -76,7 +79,7 @@ public class ShipInfoController {
         ShipInfo savedShipInfo = service.addShipInfo(shipInfo);
         ShipInfoListResponse response = ModelMapperUtils.map(savedShipInfo, ShipInfoListResponse.class);
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return ResponseEntity.ok(response);
     }
 
     // Role: User

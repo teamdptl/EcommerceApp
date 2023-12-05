@@ -20,7 +20,6 @@ import com.learn.ecommerce.Service.Implementation.ProductImp;
 import com.learn.ecommerce.Ultis.AuthUtils;
 import com.learn.ecommerce.Ultis.ModelMapperUtils;
 import jakarta.validation.Valid;
-import lombok.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,10 +27,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -79,7 +76,13 @@ public class ProductController {
             item.setReviewCount(product.getReviewer());
             Optional<Media> media = mediaImp.getProductPrimaryMedia(product.getProduct().getProductId());
             item.setImageUrl(Media.DEFAULT_IMAGE);
-            media.ifPresent(value -> item.setImageUrl(value.getImageUrl()));
+            media.ifPresent(value -> {
+                if (value.isExternalImage())
+                    item.setImageUrl(value.getImageUrl());
+                else {
+                    item.setImageUrl(MainController.url+"/"+Media.mediaPath+value.getImageUrl());
+                }
+            });
             return item;
         });
     }
@@ -110,6 +113,25 @@ public class ProductController {
             return ResponseEntity.ok(d);
         }
         return ResponseEntity.badRequest().body(new ErrorResponse("Không tìm thấy sản phẩm"));
+    }
+
+    // Role: User
+    @GetMapping("/getList")
+    public List<ProductListItemResponse> getListProductDetail(@RequestParam(required = true) List<Integer> listId){
+        List<Product> products = service.getProductInList(listId);
+        List<ProductListItemResponse> listItem = ModelMapperUtils.mapAll(products, ProductListItemResponse.class);
+        listItem.forEach(item -> {
+            Optional<Media> media = mediaImp.getProductPrimaryMedia(item.getProductId());
+            item.setImageUrl(Media.DEFAULT_IMAGE);
+            media.ifPresent(value -> {
+                if (value.isExternalImage())
+                    item.setImageUrl(value.getImageUrl());
+                else {
+                    item.setImageUrl(MainController.url+"/"+Media.mediaPath+value.getImageUrl());
+                }
+            });
+        });
+        return listItem;
     }
 
     // Role: Manager

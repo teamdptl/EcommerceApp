@@ -1,6 +1,5 @@
 package com.learn.ecommerce.Request;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
