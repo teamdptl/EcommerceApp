@@ -20,6 +20,7 @@ const AdminBrandModal = ({ isShow, closeModal }) => {
     })
       .then((response) => {
         response.json();
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);

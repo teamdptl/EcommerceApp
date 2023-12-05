@@ -33,6 +33,7 @@ const AdminBrandList = () => {
       })
         .then((response) => {
           console.log(response);
+          window.location.reload();
         }) // Chuyển response thành JSON
         .catch((error) => {
           // Xử lý lỗi nếu có
@@ -55,7 +56,7 @@ const AdminBrandList = () => {
 
   useEffect(() => {
     fetchBrand();
-  }, [brand]);
+  }, []);
 
   return (
     <>
