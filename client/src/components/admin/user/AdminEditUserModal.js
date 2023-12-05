@@ -1,13 +1,15 @@
-import { Button, Label, Modal, TextInput, Spinner, Select  } from "flowbite-react";
+import { Button, Label, Modal, TextInput, Spinner, Select } from "flowbite-react";
 import { useEffect, useState } from "react";
-import useCreateUser from "../../../hooks/useCreateUser";
+import useEditUser from "../../../hooks/useEditUser";
+import useGetUser from "../../../hooks/useGetUser";
 
-const AdminUserModal = ({ isShow, closeModal, refreshTable  }) => {
-    const { data, errorMsgCreateUser, setErrorMsg,loadingCreateUser, call } = useCreateUser();
+
+const AdminEditUserModal = ({ isShow, closeModal, refreshTable, dataUser, userEditId  }) => {
+    const { dataEdit, errorMsgEditUser, setErrorMsg,loadingCreateUser, callEdit } = useEditUser();
+
     const [formData, setFormData] = useState({
         fullname: "",
         email: "",
-        password: "",
         role: "USER",
         isDeleted: "FALSE"
     });
@@ -17,17 +19,9 @@ const AdminUserModal = ({ isShow, closeModal, refreshTable  }) => {
             ...prevUserData,
             [fieldName]: value,
         }));
-        if (fieldName === 'email' && errorMsgCreateUser === 'Email đã được tạo') {
+        if (fieldName === 'email' && errorMsgEditUser === 'Email đã tồn tại trong hệ thống') {
             setErrorMsg(null);
         }
-    };
-
-    const isSaveDisabled = () => {
-        return (
-            !isValidFullname(formData.fullname) ||
-            !isValidEmail(formData.email) ||
-            !isValidPassword(formData.password)
-        );
     };
 
     const isValidFullname = (fullname) => {
@@ -37,19 +31,34 @@ const AdminUserModal = ({ isShow, closeModal, refreshTable  }) => {
     const isValidEmail = (email) => {
         // Simple email validation using regex
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const isEmailError = errorMsgCreateUser === "Email đã được tạo";
+        const isEmailError = errorMsgEditUser === "Email đã tồn tại trong hệ thống";
 
         return emailRegex.test(email) && !isEmailError;
     };
 
-    const isValidPassword = (password) => {
-        return password.length >= 8;
+    const isSaveDisabled = () => {
+        return (
+            !isValidFullname(formData.fullname) ||
+            !isValidEmail(formData.email)
+        );
     };
 
+    useEffect(() => {
+        console.log(dataUser);
+        if (dataUser) {
+            setFormData({
+                fullname: dataUser.fullname || "",
+                email: dataUser.email || "",
+                role: dataUser.role ,
+                isDeleted: dataUser.isDeleted 
+            });
+        }
+
+    },[dataUser])
 
     const handleSubmit = () => {
-        console.log(formData);
-        call(formData);
+        // console.log(formData);
+        callEdit(formData, userEditId);
         // closeModal();
     };
 
@@ -58,19 +67,19 @@ const AdminUserModal = ({ isShow, closeModal, refreshTable  }) => {
     };
 
     useEffect(() => {
-        // console.log("Data:", data);
+        console.log("Data:", dataEdit);
         refreshTable();
         closeModal();
-    }, [data]);
+    }, [dataEdit]);
 
     useEffect(() => {
-        // console.log("Err:", errorMsgCreateUser);
-    }, [errorMsgCreateUser]);
+        console.log("Err:", errorMsgEditUser);
+    }, [errorMsgEditUser]);
 
     return (
         <>
             <Modal dismissible show={isShow} onClose={closeModal}>
-                <Modal.Header>Thông tin người dùng</Modal.Header>
+                <Modal.Header>Thông tin người dùng: {userEditId}</Modal.Header>
                 <Modal.Body>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                         <div>
@@ -100,32 +109,19 @@ const AdminUserModal = ({ isShow, closeModal, refreshTable  }) => {
                                 required
                                 color={isFieldValid(formData.email) ? "success" : null}
                             />
-                            {errorMsgCreateUser === "Email đã được tạo" && (
-                                <label className="text-red-500 text-xs">{errorMsgCreateUser}</label>
+                            {errorMsgEditUser === "Email đã tồn tại trong hệ thống" && (
+                                <label className="text-red-500 text-xs">{errorMsgEditUser}</label>
                             )}
                         </div>
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="categoryDescription" value="Password" />
-                            </div>
-                            <TextInput
-                                id="categoryDescription"
-                                value={formData.password}
-                                placeholder="Ít nhất 8 kí tự"
-                                onChange={(e) => handleInputChange("password", e.target.value)}
-                                type="text"
-                                required
-                                color={isFieldValid(formData.password) ? "success" : null}
-                            />
-                        </div>
+                    
                         <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="categoryDescription" value="Role" />
                             </div>
                             <Select id="role" required value={formData.role}  onChange={(e) => handleInputChange("role", e.target.value)}>
-                                <option>User</option>
-                                <option>Admin</option>
-                                <option>Manager</option>
+                                <option value="USER">User</option>
+                                <option value="ADMIN">Admin</option>
+                                <option value="MANAGER">Manager</option>
                             </Select>
                         </div>
                         <div>
@@ -133,7 +129,7 @@ const AdminUserModal = ({ isShow, closeModal, refreshTable  }) => {
                                 <Label htmlFor="categoryDescription" value="Hoạt động" />
                             </div>
                             <Select id="isDeleted" required value={formData.isDeleted}  onChange={(e) => handleInputChange("isDeleted", e.target.value)}>
-                                <option value="False">Hoạt động</option>
+                            <option value="False">Hoạt động</option>
                                 <option value="True">Không hoạt động</option>
                             </Select>
                         </div>
@@ -147,7 +143,7 @@ const AdminUserModal = ({ isShow, closeModal, refreshTable  }) => {
                         </Button>
                     ) : (
                         <Button onClick={handleSubmit} disabled={isSaveDisabled()}>
-                            Lưu
+                            Edit
                         </Button>
                     )}
                     <Button color="gray" onClick={closeModal}>
@@ -160,4 +156,4 @@ const AdminUserModal = ({ isShow, closeModal, refreshTable  }) => {
     );
 };
 
-export default AdminUserModal;
+export default AdminEditUserModal;

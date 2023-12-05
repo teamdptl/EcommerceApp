@@ -32,7 +32,6 @@ public class User implements UserDetails {
   private String avatar;
   private String locate;
   private String username;
-
   private boolean isDeleted = false;
   @Enumerated(EnumType.STRING)
   private Role role;
