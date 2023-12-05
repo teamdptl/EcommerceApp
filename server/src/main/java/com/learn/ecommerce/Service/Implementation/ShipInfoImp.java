@@ -53,7 +53,7 @@ public class ShipInfoImp implements ShipInfoService {
         return repository.save(shipInfo);
     }
 
-    public Optional<ShipInfo> FindByID(int id) {
+    public Optional<ShipInfo> getShipInfoById(int id) {
         return repository.findById(id);
     }
 
