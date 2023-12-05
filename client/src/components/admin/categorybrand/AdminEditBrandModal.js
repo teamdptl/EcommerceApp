@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import baseUrl from "../../../config";
 
-const AdminEditBrandModal = ({ isShow, closeModal, editBrand }) => {
+const AdminEditBrandModal = ({ isShow, closeModal, editBrand, callModalBrand}) => {
   const [name, setName] = useState("");
 
   useEffect(() => {
@@ -26,7 +26,8 @@ const AdminEditBrandModal = ({ isShow, closeModal, editBrand }) => {
     })
       .then((response) => {
         response.json();
-        window.location.reload();
+        // window.location.reload();
+        callModalBrand();
       })
 
       .catch((error) => {

@@ -43,11 +43,12 @@ const AdminCategoryList = () => {
       })
         .then((response) => {
           console.log(response);
-          window.location.reload();
+          fetchData();
         }) // Chuyển response thành JSON
         .catch((error) => {
           // Xử lý lỗi nếu có
           console.error("Error:", error);
+        
         });
     } else {
       console.warn("Please select an item.");
@@ -113,6 +114,7 @@ const AdminCategoryList = () => {
         isShow={categoryModalShow}
         closeModal={() => setCategoryModalShow(false)}
         editCategory={editCategory}
+        // iscategoryModalShow={setCategoryModalShow(true)}
       />
     </>
   );

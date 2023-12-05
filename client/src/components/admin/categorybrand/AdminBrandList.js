@@ -33,7 +33,8 @@ const AdminBrandList = () => {
       })
         .then((response) => {
           console.log(response);
-          window.location.reload();
+          fetchBrand();
+          // window.location.reload();
         }) // Chuyển response thành JSON
         .catch((error) => {
           // Xử lý lỗi nếu có
@@ -112,7 +113,8 @@ const AdminBrandList = () => {
         isShow={brandModalShow}
         closeModal={() => setBrandModalShow(false)}
         editBrand={editBrand}
-      />
+        callModalBrand = {fetchBrand}
+          />
     </>
   );
 };
