@@ -1,5 +1,7 @@
 package com.learn.ecommerce.Repository;
 import com.learn.ecommerce.Entity.Product;
+import com.learn.ecommerce.Entity.User;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +17,11 @@ public interface ProductRepository extends JpaRepository<Product,Integer>{
 
   @Query("SELECT p FROM Product p JOIN p.users u WHERE u.id = :userId")
   Page<Product> findFavoriteProducts(@Param("userId") Integer userId, Pageable pageable);
+
+  @Query("SELECT p FROM Product p WHERE p.productId in :ids")
+  List<Product> findProductInList(List<Integer> ids);
+
+  List<Product> findByUsers(User user);
 
 //  @Query("SELECT p FROM Product p WHERE (:title = '' or (:title != '' and p.name like %:title%)) and p.price >= :priceMin and p.price <= :priceMax " +
 //          "and ((:categoryId > 0 and p.category.categoryId = :categoryId) or :categoryId = 0) and (:origins is null or (:origins is not null and p.origin in :origins)) " +

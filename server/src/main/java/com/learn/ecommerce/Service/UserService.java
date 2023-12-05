@@ -1,11 +1,16 @@
 package com.learn.ecommerce.Service;
 
+import com.learn.ecommerce.Entity.Role;
 import com.learn.ecommerce.Entity.User;
+import com.learn.ecommerce.Repository.ChangePasswordRepository;
 import com.learn.ecommerce.Repository.UserRepository;
 import com.learn.ecommerce.Request.ChangePasswordRequest;
 import com.learn.ecommerce.Service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,22 +26,28 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
     @Autowired
-    private EmailService emailService;
+    private ChangePasswordRepository changePasswordRepository;
     @Autowired
-    private UserRepository userRepository;
+    private EmailService emailService;
+//    @Autowired
+//    private UserRepository userRepository;
     public ResponseEntity<Map<String,String>> changePassword(ChangePasswordRequest request) throws UnsupportedEncodingException {
 
         if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
             throw new IllegalStateException("Password are not the same");
         }
-        byte[] decode = Base64.getDecoder().decode(request.getCode());
-        String email = new String(decode, "UTF-8");
+//        if(request.getNewPassword().length() < 6){
+//
+//        }
+        String email = changePasswordRepository.findByUUID(request.getCode()).get().getUser().getEmail();
+        System.out.println(email);
+
         try{
-            User user = userRepository.findByEmail(email).orElseThrow();
+            User user = repository.findByEmail(email).orElseThrow();
             System.out.println(user.getEmail());
             user.setPassword(passwordEncoder.encode(request.getNewPassword()));
             Map<String,String> response = new HashMap<>();
-            response.put("message","Thay đổi password thành công");
+            response.put("message","Thay đổi password thành công  ");
             repository.save(user);
             return ResponseEntity.ok().body(response);
         }
@@ -69,4 +80,66 @@ public class UserService {
 
     }
 
+    public Page<User> findByAllUser(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    public User createUser(User user) {
+        return  repository.save(user);
+    }
+
+    public boolean existsByEmail(String email) {
+        return repository.findByEmail(email).isPresent();
+    }
+
+    public Optional<User> findById(Integer id) {
+        return repository.findById(id);
+    }
+
+    public User updateUser(User user) {
+        return repository.save(user);
+    }
+
+    public Page<User> findUsersByCriteria(String keyword, Role userRole, String isDeleted, Pageable pageable) {
+        Specification<User> specification = Specification.where(null);
+        if (userRole != null) {
+            specification = specification.and(userRoleEq(userRole));
+        }
+
+        if ("true".equalsIgnoreCase(isDeleted) || "false".equalsIgnoreCase(isDeleted)) {
+            specification = specification.and(isDeletedEq(Boolean.parseBoolean(isDeleted)));
+        }
+
+
+
+        if (!keyword.isEmpty()) {
+            specification = specification.and(fullnameOrEmailLike(keyword));
+        }
+
+
+
+        return repository.findAll(specification, pageable);
+    }
+
+    private static Specification<User> fullnameOrEmailLike(String keyword) {
+        return (root, query, builder) ->
+                builder.or(
+                        builder.like(root.get("fullname"), "%" + keyword + "%"),
+                        builder.like(root.get("email"), "%" + keyword + "%")
+                );
+    }
+
+    private Specification<User> userRoleEq(Role userRole) {
+        return (root, query, builder) -> {
+            return builder.equal(root.get("role"), userRole);
+        };
+    }
+
+    private Specification<User> isDeletedEq(boolean isDeleted) {
+        return (root, query, builder) -> {
+            return builder.equal(root.get("isDeleted"), isDeleted);
+        };
+    }
 }
+
+

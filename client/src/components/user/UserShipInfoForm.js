@@ -81,13 +81,19 @@ const UserShipInfoForm = ({shipInfo, saveCallback, onChange}) => {
 		getWards();
 	}, [district]);
 
+	const phoneRegex = (phone) => {
+		return (/^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/gm).test(phone)
+	}
+
 	useEffect(() => {
 		const shipData = {
 			fullName: fullName,
 			phone: phone,
 			address: `${street}, ${ward?.name}, ${district?.name}, ${province?.name}`,
-			isValid: province !== null && district !== null && ward !== null
+			isValid: province !== null && district !== null && ward !== null && street !== null && fullName.length > 0 && phoneRegex(phone)
 		}
+		if (onChange)
+			onChange(shipData)
 		console.log(shipData)
 	}, [province, district, ward, fullName, phone, street])
 
@@ -129,20 +135,20 @@ const UserShipInfoForm = ({shipInfo, saveCallback, onChange}) => {
 					<div className="mb-2 block">
 						<Label htmlFor="name" value="Họ và tên người nhận" />
 					</div>
-					<TextInput id="name" sizing="md" type="text" value={info.receiveName} />
+					<TextInput id="name" sizing="md" type="text" value={info.receiveName} onChange={e => setFullName(e.target.value)}/>
 				</div>
 				<div>
 					<div className="mb-2 block">
 						<Label htmlFor="name" value="Số điện thoại" />
 					</div>
-					<TextInput id="name" sizing="md" type="text" value={info.phone} />
+					<TextInput id="name" sizing="md" type="text" value={info.phone} onChange={e => setPhone(e.target.value)}/>
 				</div>
 				<div>
 					<div>
 						<div className="mb-2 block">
 							<Label htmlFor="name" value="Tên đường/Số nhà" />
 						</div>
-						<TextInput id="name" sizing="md" type="text" />
+						<TextInput id="name" sizing="md" type="text" value={street} onChange={e => setStreet(e.target.value)}/>
 					</div>
 				</div>
 				<div>

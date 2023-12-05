@@ -80,6 +80,11 @@ public class ProductImp implements ProductService {
     }
 
     @Override
+    public List<Product> getProductInList(List<Integer> ids){
+        return reponsitory.findProductInList(ids);
+    }
+
+    @Override
     public void favoriteProduct(Product product, User user) {
         product.getUsers().add(user);
     }

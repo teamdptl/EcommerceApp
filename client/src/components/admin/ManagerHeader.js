@@ -1,4 +1,4 @@
-import {Button, TextInput} from "flowbite-react";
+import {Button, TextInput, Dropdown, Label} from "flowbite-react";
 import {HiOutlinePlus, HiSearch} from "react-icons/hi";
 import {TbFilter} from "react-icons/tb";
 import {BsFillTrash3Fill} from "react-icons/bs";
@@ -15,11 +15,15 @@ const ManagerHeader = ({title, placeHolder, addTitle, removeTitle, filterCallbac
                     {searchCallBack &&
                         <div className="flex gap-2">
                             <TextInput onChange={(e) => setSearchText(e.target.value)} type="text" icon={HiSearch } placeholder={placeHolder} sizing="md"/>
-                            {filterCallback && <
-                                Button color="gray" pill onClick={() => filterCallback()}>
-                                <TbFilter />
-                            </Button>
-                            }
+                            <div className="relative">
+                                {filterCallback && <
+                                    Button color="gray" pill onClick={() => filterCallback()}>
+                                    <TbFilter/>
+
+                                </Button>
+                                }
+                            </div>
+
                             <Button onClick={() => searchCallBack(searchText)}>
                                 Tìm kiếm
                             </Button>

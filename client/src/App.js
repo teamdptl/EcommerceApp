@@ -1,15 +1,18 @@
 import React from "react";
-import { AuthProvider } from "./context/AuthContext";
 import Router from "./routes/router";
-import AdminCollapseContext from "./context/AdminCollapseContext";
+import AdminCollapseProvider from "./context/AdminCollapseContext";
+import { AuthProvider } from "./context/AuthContext";
+import CartContextProvider from "./context/CartContext";
 
 
 function App() {
   return (
     <AuthProvider>
-        <AdminCollapseContext>
-            <Router></Router>
-        </AdminCollapseContext>
+        <AdminCollapseProvider>
+            <CartContextProvider>
+                <Router></Router>
+            </CartContextProvider>
+        </AdminCollapseProvider>
     </AuthProvider>
   );
 }

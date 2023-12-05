@@ -27,9 +27,9 @@ public class OrderLine {
     @Embeddable
     @Data
     public static class OrderLineKey implements Serializable {
-        @Column(name = "product_id")
-        int productId;
-        @Column(name = "order_id")
-        int orderId;
+        @Column(name="product_id")
+        private int productId;
+        @Column(name="order_id")
+        private int orderId;
     }
 }

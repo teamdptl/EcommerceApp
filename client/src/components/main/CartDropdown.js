@@ -1,51 +1,30 @@
 import { Dropdown, Select } from "flowbite-react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import CartItem from "./CartItem";
-
-const cartList = [
-	{
-		id: 1,
-		name: "Máy lạnh Daikin Inverter 1 HP FTKY25WMVMV",
-		href: "/product/1",
-		quantity: 1,
-		price: 12690000,
-		imageSrc: "https://dienmaygiakhang.vn/wp-content/uploads/2023/05/gold-2.jpg",
-	},
-	{
-		id: 2,
-		name: "Tủ lạnh Samsung Inverter 208 lít RT20HAR8DBU/SV",
-		href: "/product/2",
-		quantity: 1,
-		price: 5460000,
-		imageSrc: "https://cdn.tgdd.vn/Products/Images/1943/220320/samsung-rt20har8dbu-sv-1-org.jpg",
-	},
-	{
-		id: 3,
-		name: "Máy giặt Samsung AI Inverter 9kg WW90TP44DSB/SV",
-		href: "/product/3",
-		quantity: 1,
-		price: 9690000,
-		imageSrc: "https://cdn.tgdd.vn/Products/Images/1944/236158/samsung-9kg-ww90tp44dsb-sv-1-org.jpg",
-	},
-];
+import {Link} from "react-router-dom";
+import {useCartContext} from "../../context/CartContext";
+import formatMoney from "../../utils/currency";
 
 export default function CustomTriggerDropdown() {
+	const { cart, getTotalMoney, getTotalItem } = useCartContext();
 	return (
 		<Dropdown
 			dismissOnClick={true}
 			renderTrigger={() => (
-				<button class="rounded-full p-2 border hover:bg-gray-100 focus:outline-none">
+				<button before={getTotalItem()} class={`rounded-full relative p-2 border hover:bg-gray-100 focus:outline-none
+				${getTotalItem() > 0 ? "before:content-[attr(before)] before:absolute before:-top-2 before:-right-2 before:bg-red-500 " +
+					"before:w-5 before:h-5 before:rounded-full before:text-white before:text-xs before:flex before:justify-center before:items-center" : ''}`}>
 					<AiOutlineShoppingCart size={20} />
 				</button>
-			)}>
+			)} label={"Giỏ hàng"}>
 			{/* Danh sách các sản phẩm trong giỏ hàng */}
-			<div class="mt-3 px-8 max-h-96 overflow-y-auto">
-			<p className="text-lg font-medium text-gray-900 ml-5 mb-2">Shopping cart</p>
-
-				<div class="flow-root w-1">
-					<ul role="list" class="-my-6 divide-y divide-gray-200" >
-						{cartList.map((item) => (
-							<CartItem key={item.id} item={item} />
+			<p className="text-lg font-medium text-gray-900 mt-3 px-12 pb-3">Giỏ hàng</p>
+			<hr className={"mx-12"}/>
+			<div className="mt-3 px-8 max-h-96 overflow-y-auto pb-4">
+				<div className="flow-root w-1">
+					<ul role="list" className="-my-6 divide-y divide-gray-200" >
+						{cart.map((item) => (
+							<CartItem key={item.product.productId} item={item} isPopup={true}/>
 						))}
 					</ul>
 				</div>
@@ -53,34 +32,20 @@ export default function CustomTriggerDropdown() {
 			{/* Tổng tiền và các nút thanh toán */}
 			<div className="border-t border-gray-200 px-4 py-6 sm:px-6 mt-5">
 				<div className="flex justify-between text-base font-medium text-gray-900">
-					<p>Subtotal</p>
-					<p>$200</p>
+					<p>Tổng tiền</p>
+					<p>{ formatMoney(getTotalMoney()) }</p>
 				</div>
-				<p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+				<p className="mt-0.5 text-sm text-gray-500">Có thể thêm các chi phí giao hàng khi thanh toán.</p>
 				<div className="mt-6 flex">
-					<a
-						href="/Cart"
+					<Link to={"/cart"}
 						className="flex items-center justify-center rounded-full pl-16 pr-16 border border-md  px-6 py-3  font-medium text-black shadow-sm"
-					>			View cart
-					</a>
-					<a
+					>			Xem giỏ hàng
+					</Link>
+					<Link to={"/checkout"}
 						href="#"
 						className="flex items-center justify-center rounded-full ml-2 pl-16 pr-16 border border-transparent px-6 py-3 text-base font-medium text-white shadow-sm bg-indigo-700"
-					>			Checkout
-					</a>
-				</div>
-				<div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-					<p>
-						or
-						<button
-							type="button"
-							className="font-medium text-indigo-600 hover:text-indigo-500 ml-1"
-							onClick={() => Select(false)}
-						>
-							Continue Shopping
-							<span aria-hidden="true"> &rarr;</span>
-						</button>
-					</p>
+					>			Thanh toán
+					</Link>
 				</div>
 			</div>
 			{/* Code here */}

@@ -4,19 +4,23 @@ import com.learn.ecommerce.Entity.Brand;
 import com.learn.ecommerce.Entity.Category;
 import com.learn.ecommerce.Entity.Media;
 import com.learn.ecommerce.Entity.Product;
+import com.learn.ecommerce.Entity.User;
 import com.learn.ecommerce.Repository.CategoryRepository;
 import com.learn.ecommerce.Repository.ProductQueryAdvanced;
 import com.learn.ecommerce.Repository.BrandRepository;
 import com.learn.ecommerce.Request.CreateProductRequest;
 import com.learn.ecommerce.Request.EditProductRequest;
 import com.learn.ecommerce.Response.ErrorResponse;
+import com.learn.ecommerce.Response.MediaResponse;
 import com.learn.ecommerce.Response.ProductDetailResponse;
 import com.learn.ecommerce.Response.ProductListItemResponse;
 import com.learn.ecommerce.Response.SuccessResponse;
 import com.learn.ecommerce.Service.Implementation.MediaImp;
 import com.learn.ecommerce.Service.Implementation.ProductImp;
+import com.learn.ecommerce.Ultis.AuthUtils;
 import com.learn.ecommerce.Ultis.ModelMapperUtils;
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -37,12 +40,15 @@ public class ProductController {
     private final BrandRepository brandRepository;
 
     private final CategoryRepository categoryRepository;
+    
+    private final AuthUtils authUtils;
 
-    public ProductController(@Autowired ProductImp s, @Autowired MediaImp mediaImp, @Autowired BrandRepository brandRepository, @Autowired CategoryRepository categoryRepository) {
+    public ProductController(@Autowired ProductImp s, @Autowired MediaImp mediaImp, @Autowired BrandRepository brandRepository, @Autowired CategoryRepository categoryRepository, @Autowired AuthUtils authUtils) {
         this.service = s;
         this.mediaImp = mediaImp;
         this.brandRepository = brandRepository;
         this.categoryRepository = categoryRepository;
+        this.authUtils = authUtils;
     }
 
     // Hàm dùng để tìm kiếm product
@@ -70,7 +76,13 @@ public class ProductController {
             item.setReviewCount(product.getReviewer());
             Optional<Media> media = mediaImp.getProductPrimaryMedia(product.getProduct().getProductId());
             item.setImageUrl(Media.DEFAULT_IMAGE);
-            media.ifPresent(value -> item.setImageUrl(value.getImageUrl()));
+            media.ifPresent(value -> {
+                if (value.isExternalImage())
+                    item.setImageUrl(value.getImageUrl());
+                else {
+                    item.setImageUrl(MainController.url+"/"+Media.mediaPath+value.getImageUrl());
+                }
+            });
             return item;
         });
     }
@@ -80,12 +92,46 @@ public class ProductController {
     public ResponseEntity<?> getProductDetail(@PathVariable("id") int id){
         Optional<Product> p = service.findById(id);
         if (p.isPresent()){
+            Optional<User> userOptional = authUtils.getCurrentUser();
+            List<Media> medias = mediaImp.getMediasByProduct(p.get());
             ProductDetailResponse d = ModelMapperUtils.map(p.get(), ProductDetailResponse.class);
+            List<MediaResponse> images = ModelMapperUtils.mapAll(medias, MediaResponse.class);
+            if(userOptional.isPresent()){
+                p.get().getUsers().forEach(user -> {
+                    System.out.println(user.getId());
+                    if(user.getId() == userOptional.get().getId()){
+                        d.setFavorite(true);
+                        System.out.println("User " + user.getFullname() + " thích sản phẩm này!");
+                    }
+
+                });
+            }
+            
+            d.setMedias(images);
             // TODO: Gắn token vào và check nó có yêu thích sản phẩm này không
             // d.isFavorite = true
             return ResponseEntity.ok(d);
         }
         return ResponseEntity.badRequest().body(new ErrorResponse("Không tìm thấy sản phẩm"));
+    }
+
+    // Role: User
+    @GetMapping("/getList")
+    public List<ProductListItemResponse> getListProductDetail(@RequestParam(required = true) List<Integer> listId){
+        List<Product> products = service.getProductInList(listId);
+        List<ProductListItemResponse> listItem = ModelMapperUtils.mapAll(products, ProductListItemResponse.class);
+        listItem.forEach(item -> {
+            Optional<Media> media = mediaImp.getProductPrimaryMedia(item.getProductId());
+            item.setImageUrl(Media.DEFAULT_IMAGE);
+            media.ifPresent(value -> {
+                if (value.isExternalImage())
+                    item.setImageUrl(value.getImageUrl());
+                else {
+                    item.setImageUrl(MainController.url+"/"+Media.mediaPath+value.getImageUrl());
+                }
+            });
+        });
+        return listItem;
     }
 
     // Role: Manager
@@ -162,13 +208,34 @@ public class ProductController {
     }
 
     // Role: User
-    @PostMapping("/add-favorite")
-    public ResponseEntity<?> addUserFavorite(){
-        return null;
+    @GetMapping("/add-favorite/{productID}")
+    public ResponseEntity<?> addUserFavorite(@PathVariable Integer productID){
+        Optional<User> userOptional = authUtils.getCurrentUser();
+        if(userOptional.isPresent()){
+            Optional<Product> pOptional = service.findById(productID);
+            if(pOptional.isPresent()){
+                pOptional.get().getUsers().add(userOptional.get());
+                service.save(pOptional.get());
+                return ResponseEntity.ok("Ok");
+            }
+            return ResponseEntity.badRequest().body("Không tìm thấy sản phẩm!");
+        }
+        return ResponseEntity.badRequest().body("Vui lòng tải lại trang!");
     }
 
-    @DeleteMapping("/delete-favorite")
-    public ResponseEntity<?> deleteFavorite(){
-        return null;
+    @GetMapping("/delete-favorite/{productID}")
+    public ResponseEntity<?> deleteFavorite(@PathVariable Integer productID){
+
+        Optional<User> userOptional = authUtils.getCurrentUser();
+        if(userOptional.isPresent()){
+            Optional<Product> pOptional = service.findById(productID);
+            if(pOptional.isPresent()){
+                pOptional.get().getUsers().remove(userOptional.get());
+                service.save(pOptional.get());
+                return ResponseEntity.ok("Ok");
+            }
+            return ResponseEntity.badRequest().body("Không tìm thấy sản phẩm!");
+        }
+        return ResponseEntity.badRequest().body("Vui lòng tải lại trang!");
     }
 }

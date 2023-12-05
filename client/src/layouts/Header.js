@@ -6,20 +6,32 @@ import NavMenuDropDown from "../components/main/NavMenuDropDown";
 import "flowbite";
 import {useContext, useEffect, useState} from "react";
 import baseUrl from "../config";
-import {useAuth} from "../context/AuthContext";
+import {AuthProvider, AuthContext} from "../context/AuthContext";
 
 export default function Header() {
 
 	// const [user, setUser] = useState("");
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const {user} = useAuth();
+	const UserContext = useContext(AuthContext);
+	const {user, setUser, autoLogin} = UserContext;
 	useEffect(() => {
-		const token = localStorage.getItem('accessToken');
-		if (token) {
-			setIsLoggedIn(true);
-		} else {
-			setIsLoggedIn(false);
-		}
+		
+		console.log("user:", user)
+		
+		
+		autoLogin().then(data => {
+			
+			
+			if (data){
+				setIsLoggedIn(true);
+				setUser({username:data.username,
+					fullname:data.fullname,
+					role:data.role})
+					console.log("User auto login: ", data.username, data.fullname, data.role)
+			} else setIsLoggedIn(false);
+		})
+		
+		
 	}, []);
 	const handleLogout = () =>{
 		const token = localStorage.getItem('accessToken');
@@ -77,7 +89,7 @@ export default function Header() {
 								{
 									isLoggedIn ?
 										<div class="flex">
-										<label class="text-m font-bold text-gray-900 mx-auto my-auto mr-4">Hi,{user.fullname + user.username}</label>
+										<label class="text-m font-bold text-gray-900 mx-auto my-auto mr-4">Hi,{user.fullname}</label>
 										<button
 											onClick={handleLogout}
 											type="button"
