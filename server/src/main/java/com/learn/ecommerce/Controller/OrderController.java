@@ -1,6 +1,17 @@
 package com.learn.ecommerce.Controller;
 
 import com.learn.ecommerce.Entity.Order;
+import com.learn.ecommerce.Request.PlaceOrderRequest;
+import com.learn.ecommerce.Response.ErrorResponse;
+import com.learn.ecommerce.Response.OrderResponse;
+import com.learn.ecommerce.Service.Implementation.OrderImp;
+import com.learn.ecommerce.Ultis.ModelMapperUtils;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.sql.Date;
+import java.util.List;
+
 import com.learn.ecommerce.Entity.Product;
 import com.learn.ecommerce.Entity.ShipInfo;
 import com.learn.ecommerce.Entity.User;
@@ -29,9 +40,12 @@ public class OrderController {
     @Autowired
     private ShipInfoImp shipInfoImp;
     @Autowired
-    private OrderImp orderImp;
-    @Autowired
     private AuthUtils auth;
+
+    private final OrderImp orderImp;
+    OrderController( @Autowired OrderImp orderImp ){
+        this.orderImp = orderImp;
+    }
 
     // ROLE: User
     @PostMapping("/place")
@@ -40,7 +54,7 @@ public class OrderController {
             return ResponseEntity.badRequest().body(new ErrorResponse("Dữ liệu " + result.getFieldError().getField() + " không hợp lệ!"));
         }
         Optional<ShipInfo> shipInfo = shipInfoImp.findShipInfoById(request.getShipId());
-        if (shipInfo.isEmpty())
+        if (!shipInfo.isPresent())
             return ResponseEntity.badRequest().body(new ErrorResponse("Thông tin nhận hàng không tồn tại!"));
 
         Optional<User> optionalUser = auth.getCurrentUser();
@@ -65,10 +79,34 @@ public class OrderController {
     }
 
     // ROLE: Admin
-//    @GetMapping("/all")
-//    public ResponseEntity<?> getAllOrders(){
-//
-//    }
+   @GetMapping("/all")
+   public ResponseEntity<?> getAllOrders(@RequestParam(value = "text", required = false, defaultValue = "") String text,
+                                            @RequestParam(value = "start", required = false, defaultValue = "") String time_start, 
+                                            @RequestParam(value = "end", required = false, defaultValue = "") String time_end,
+                                            @RequestParam(value = "status" , required = false) Integer status){
+        Date start = time_start.equals("") ? Date.valueOf("1970-01-01") : Date.valueOf(time_start);
+        Date end = time_end.equals("") ? Date.valueOf(LocalDate.now()) : Date.valueOf(time_end);
+        Integer isAllStatus = 0;
+        if(status == null){
+            status = 0;
+            isAllStatus = 1;
+        }
+
+        System.out.println(text);        
+        System.out.println(start);
+        System.out.println(end);
+        System.out.println(status);
+
+        List<Order> listOrders = orderImp.getFilterOrders(start, end, status, isAllStatus);
+        if(!listOrders.isEmpty()){
+            List<OrderResponse> listResult = new ArrayList<>();
+            for (Order order : listOrders) {
+                listResult.add(ModelMapperUtils.map(order, OrderResponse.class));
+            }
+            return ResponseEntity.ok(listResult);
+        }
+        return ResponseEntity.ok(new ErrorResponse("Không tìm thấy dữ liệu!"));
+   }
 
 
 }

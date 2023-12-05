@@ -1,19 +1,24 @@
 package com.learn.ecommerce.Service.Implementation;
 import com.learn.ecommerce.Entity.Order;
+import com.learn.ecommerce.Repository.OrderReponsitory;
+import com.learn.ecommerce.Service.OrderService;
+
+import jakarta.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.sql.Date;
 import com.learn.ecommerce.Entity.OrderLine;
 import com.learn.ecommerce.Entity.Product;
 import com.learn.ecommerce.Repository.OrderLineReponsitory;
-import com.learn.ecommerce.Repository.OrderReponsitory;
 import com.learn.ecommerce.Request.PlaceOrderItem;
-import com.learn.ecommerce.Service.OrderService;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 @Component
 public class OrderImp implements OrderService {
+
     private final OrderReponsitory orderReponsitory;
     private final OrderLineReponsitory orderLineReposiotry;
     private final ProductImp productImp;
@@ -78,6 +83,8 @@ public class OrderImp implements OrderService {
         return orderReponsitory.findAll();
     }
 
+    public List<Order> getFilterOrders(Date time_start, Date time_end, Integer status, Integer isAllStatus) {
+        return orderReponsitory.getFilterOrders(time_start, time_end, status, isAllStatus);
     @Override
     public void save(Order T) {
         orderReponsitory.save(T);
