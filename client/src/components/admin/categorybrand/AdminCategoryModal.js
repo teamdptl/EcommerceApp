@@ -2,10 +2,9 @@ import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../config";
 
-const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
+const AdminCategoryModal = ({ isShow, callInModal, closeModal, editCategory}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-
   useEffect(() => {
     if (editCategory) {
       setName(editCategory.name);
@@ -13,13 +12,17 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
     }
   }, [editCategory]);
 
+  useEffect(() => {
+    console.log(closeModal);
+    console.log(callInModal);
+  })
+
   const handleAddCategory = () => {
     // Tạo một đối tượng chứa dữ liệu để gửi lên server
     const newData = {
       name: name,
       description: description,
     };
-    console.log(newData);
     // Gửi request đến API
     fetch(baseUrl + "/api/v1/category/add", {
       method: "POST",
@@ -33,7 +36,6 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
       .then((data) => {
         // Xử lý dữ liệu từ server nếu cần
         console.log("Success:", data);
-        window.location.reload();
       })
       .catch((error) => {
         // Xử lý lỗi nếu có
@@ -47,7 +49,7 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
       name: name,
       description: description,
     };
-    console.log(updateData);
+    // console.log(updateData);
     // Gửi request đến API
     fetch(baseUrl + `/api/v1/category/update/${editCategory.categoryId}`, {
       method: "PUT",
@@ -61,7 +63,6 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
       .then((data) => {
         // Xử lý dữ liệu từ server nếu cần
         console.log("Success:", data);
-        window.location.reload();
       })
       .catch((error) => {
         // Xử lý lỗi nếu có

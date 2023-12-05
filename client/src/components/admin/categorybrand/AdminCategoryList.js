@@ -1,7 +1,7 @@
 import { Button, Checkbox, Table } from "flowbite-react";
 import { MdEdit } from "react-icons/md";
 import { HiOutlineTrash } from "react-icons/hi";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import baseUrl from "../../../config";
 import AdminConfirmModal from "../AdminConfirmModal";
 import AdminCategoryModal from "./AdminCategoryModal";
@@ -14,7 +14,8 @@ const AdminCategoryList = () => {
   const [confirmModalShow, setConfirmModalShow] = useState(false);
   const [categoryModalShow, setCategoryModalShow] = useState(false);
 
-  const fetchData = async () => {
+
+  const fetchData = useCallback(async () => {
     try {
       const response = await fetch(baseUrl + "/api/v1/category/get");
       const result = await response.json();
@@ -22,11 +23,15 @@ const AdminCategoryList = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const call = () => {
+    console.log("done fetching data");
+  }
 
   const handleGetCategory = (isCategory) => {
     setEditCategory(isCategory);
@@ -43,7 +48,7 @@ const AdminCategoryList = () => {
       })
         .then((response) => {
           console.log(response);
-          window.location.reload();
+          fetchData();
         }) // Chuyển response thành JSON
         .catch((error) => {
           // Xử lý lỗi nếu có
@@ -111,6 +116,7 @@ const AdminCategoryList = () => {
       />
       <AdminCategoryModal
         isShow={categoryModalShow}
+        callInModal={() => setCategoryModalShow(false)}
         closeModal={() => setCategoryModalShow(false)}
         editCategory={editCategory}
       />

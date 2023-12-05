@@ -26,7 +26,6 @@ const AdminEditBrandModal = ({ isShow, closeModal, editBrand }) => {
     })
       .then((response) => {
         response.json();
-        window.location.reload();
       })
 
       .catch((error) => {
