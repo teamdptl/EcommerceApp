@@ -12,4 +12,6 @@ import java.util.List;
 // SELECT DISTINCT b.name FROM `brand` b JOIN product p ON p.brand_id = b.brand_id WHERE p.category_id = 2;
   @Query("SELECT b FROM Brand b JOIN Product p ON p.brand.brandId = b.brandId WHERE p.category.categoryId = :categoryId GROUP BY b.brandId")
   List<Brand> findDistinctBrandsByCategory(@Param("categoryId") Integer categoryId);
+  @Query("SELECT b FROM Brand b WHERE b.isDeleted = false")
+  List<Brand> findAll();
 }

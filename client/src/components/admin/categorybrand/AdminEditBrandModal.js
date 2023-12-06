@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import baseUrl from "../../../config";
 
-const AdminEditBrandModal = ({ isShow, closeModal, editBrand }) => {
+const AdminEditBrandModal = ({ isShow, closeModal, editBrand, callModalBrand}) => {
   const [name, setName] = useState("");
 
   useEffect(() => {
+
     if (editBrand) {
       setName(editBrand.name || ""); // Set initial value based on editBrand
     }
@@ -26,7 +27,11 @@ const AdminEditBrandModal = ({ isShow, closeModal, editBrand }) => {
     })
       .then((response) => {
         response.json();
-        window.location.reload();
+      })
+      .then((data) => {
+        // Xử lý dữ liệu từ server nếu cần
+        console.log("Success:", data);
+        callModalBrand();
       })
 
       .catch((error) => {
