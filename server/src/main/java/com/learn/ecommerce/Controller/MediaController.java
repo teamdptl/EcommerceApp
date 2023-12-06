@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
@@ -47,7 +48,15 @@ public class MediaController {
         } catch (Exception e){
             return ResponseEntity.notFound().build();
         }
+    }
 
+    @PostMapping("/photo")
+    public ResponseEntity<?> uploadFile(MultipartFile file){
+        Media media = mediaImp.saveProductFile(file);
+        if (media != null){
+            return ResponseEntity.ok(media);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     private MediaType getImageMediaType(String fileName) {
