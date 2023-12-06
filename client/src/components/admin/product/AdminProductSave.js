@@ -24,6 +24,9 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [infoBox, setInfoBox] = useState({show: false, msg: '', icon: 'fail', error: 0});
 
+    let removeImageIds = [];
+    let isPrimaryInUpload = false;
+
     useEffect(() => {
         if (!show) return;
         fetch(baseUrl + '/api/v1/category/get').then(res => res.json())
@@ -48,7 +51,12 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
             // Loading product data from db
             fetch(baseUrl + `/api/v1/product/get/${productId}`).then(res => res.json())
                 .then(json => {
-                    setProduct(json);
+                    setProduct({
+                        ...json,
+                        attributes: JSON.parse(json.attributes) ?? []
+                    });
+                    const index = json.medias.findIndex(item => item.isPrimary) ?? 0;
+                    setSelectIndex(index);
                 })
                 .catch((e) => {
                     console.log(e);
@@ -63,8 +71,12 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
                 oldPrice: 0,
                 origin: 'Trung Quốc',
                 warrantyMonths: 12,
-                quantity: 100
+                quantity: 100,
+                medias: []
             });
+            setUploadImages([]);
+            setSelectIndex(0);
+
         }
     }, [isEdit, productId]);
 
@@ -73,7 +85,10 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
         // setIsLoading(true);
         const formData = new FormData();
         for (const [key, value] of Object.entries(product)) {
-            formData.append(key, value);
+            if (key === "attributes")
+                formData.append(key, JSON.stringify(product.attributes))
+            else
+                formData.append(key, value);
         }
 
         uploadImages.forEach((item) => {
@@ -108,6 +123,10 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
     useEffect(() => {
         console.log(product);
     }, [product]);
+
+    useEffect(() => {
+        console.log(selectIndex);
+    }, [selectIndex]);
 
     return <>
         <div id="productSave" className={`col-span-6 bg-white p-6 rounded-md border-2 border-zinc-100 ${show? '' : 'hidden'}`}>
@@ -212,7 +231,7 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
                     </div>
                     <div class="flex flex-nowrap gap-3 max-w-full overflow-y-auto p-2">
                         {uploadImages.map((img, index) => (
-                            <UploadedImageItem key={img.src} img={img} isSelect={index === selectIndex}
+                            <UploadedImageItem key={img.src} img={img} src={img.src} isSelect={index === selectIndex}
                                                removeCurrent={() => {
                                                    if (selectIndex === index){
                                                        setSelectIndex(0);
@@ -220,6 +239,18 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
                                                    setUploadImages(uploadImages.filter(file => file.src !== img.src));
                                                }}
                                                selectCurrent={() => setSelectIndex(index)}/>
+                        ))}
+                        { product && product.medias && product.medias.map((img) => (
+                            <UploadedImageItem key={uploadImages.length + img.imageId} img={img} src={img.imageUrl} isSelect={(uploadImages.length + img.imageId) === selectIndex}
+                                               removeCurrent={() => {
+                                                   if (selectIndex === (uploadImages.length + img.imageId)){
+                                                       setSelectIndex(0);
+                                                   }
+                                                   const newMedia = product.medias.filter(file => (file.imageId !== img.imageId))
+                                                   setProduct({...product, medias: newMedia});
+                                                   removeImageIds.push(img.imageId);
+                                               }}
+                                               selectCurrent={() => setSelectIndex((uploadImages.length + img.imageId))}/>
                         ))}
                     </div>
                 </div>

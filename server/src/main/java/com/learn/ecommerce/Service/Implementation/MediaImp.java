@@ -13,7 +13,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Component
@@ -73,6 +72,26 @@ public class MediaImp implements MediaService {
         } catch (Exception ex){
             System.out.println(ex.toString());
         }
+    }
+
+    @Override
+    public Media saveProductFile(MultipartFile file) {
+        try {
+            String fileName =  UUID.randomUUID() + file.getOriginalFilename();
+            Path path = Paths.get(filePath + fileName);
+            Files.createDirectories(path.getParent());
+
+            FileCopyUtils.copy(file.getBytes(), path.toFile());
+
+            Media media = new Media();
+            media.setImageUrl(fileName);
+            media.setProduct(null);
+            media.setPrimary(false);
+            return repository.save(media);
+        } catch (Exception ex){
+            System.out.println(ex.toString());
+        }
+        return null;
     }
 
     @Override

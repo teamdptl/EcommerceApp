@@ -106,7 +106,8 @@ public class ProductController {
 
                 });
             }
-            
+            d.setCategoryId(p.get().getCategory().getCategoryId());
+            d.setBrandId(p.get().getBrand().getBrandId());
             d.setMedias(images);
             // TODO: Gắn token vào và check nó có yêu thích sản phẩm này không
             // d.isFavorite = true
