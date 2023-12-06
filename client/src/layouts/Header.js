@@ -89,7 +89,7 @@ export default function Header() {
 								{
 									isLoggedIn ?
 										<div class="flex">
-										<label class="text-m font-bold text-gray-900 mx-auto my-auto mr-4">Hi,{user.fullname}</label>
+										<label class="text-m text-black-900 mx-auto my-auto mr-4">Hi,{user.fullname}</label>
 										<button
 											onClick={handleLogout}
 											type="button"
