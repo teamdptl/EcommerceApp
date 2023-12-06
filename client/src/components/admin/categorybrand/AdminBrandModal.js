@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import baseUrl from "../../../config";
 
@@ -20,10 +20,7 @@ const AdminBrandModal = ({ isShow, closeModal, callModalBrand}) => {
     })
       .then((response) => {
         response.json();
-        // window.location.reload();
-      
-      })
-      .then(()=>{ 
+        setName("");
         callModalBrand();
       })
       .catch((error) => {

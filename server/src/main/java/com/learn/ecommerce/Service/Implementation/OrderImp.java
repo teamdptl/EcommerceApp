@@ -84,7 +84,7 @@ public class OrderImp implements OrderService {
     }
 
     public List<Order> getFilterOrders(Date time_start, Date time_end, Integer status, Integer isAllStatus) {
-        return orderReponsitory.getFilterOrders(time_start, time_end, status, isAllStatus);
+        return orderReponsitory.getFilterOrders(time_start, time_end, status, isAllStatus);}
     @Override
     public void save(Order T) {
         orderReponsitory.save(T);
@@ -94,4 +94,5 @@ public class OrderImp implements OrderService {
     public void delete(Integer id) {
         orderReponsitory.deleteById(id);
     }
+
 }

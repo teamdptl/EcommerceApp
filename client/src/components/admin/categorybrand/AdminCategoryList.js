@@ -6,26 +6,16 @@ import baseUrl from "../../../config";
 import AdminConfirmModal from "../AdminConfirmModal";
 import AdminCategoryModal from "./AdminCategoryModal";
 
-const AdminCategoryList = () => {
-  const [data, setData] = useState([]);
+const AdminCategoryList = ({dataFetch,callApi}) => {
   const [isId, setId] = useState(null);
   const [editCategory, setEditCategory] = useState({});
 
   const [confirmModalShow, setConfirmModalShow] = useState(false);
   const [categoryModalShow, setCategoryModalShow] = useState(false);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch(baseUrl + "/api/v1/category/get");
-      const result = await response.json();
-      setData(result);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   useEffect(() => {
-    fetchData();
+    callApi();
   }, []);
 
   const handleGetCategory = (isCategory) => {
@@ -43,12 +33,11 @@ const AdminCategoryList = () => {
       })
         .then((response) => {
           console.log(response);
-          fetchData();
+          callApi();
         }) // Chuyển response thành JSON
         .catch((error) => {
           // Xử lý lỗi nếu có
           console.error("Error:", error);
-        
         });
     } else {
       console.warn("Please select an item.");
@@ -65,9 +54,9 @@ const AdminCategoryList = () => {
           <Table.HeadCell>Mô tả thể loại</Table.HeadCell>
           <Table.HeadCell>Thao tác</Table.HeadCell>
         </Table.Head>
-        {data ? (
+        {dataFetch ? (
           <Table.Body className="divide-y">
-            {data.map((item) => (
+            {dataFetch.map((item) => (
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                 <>
                   <Table.Cell className="p-4"></Table.Cell>
@@ -114,7 +103,7 @@ const AdminCategoryList = () => {
         isShow={categoryModalShow}
         closeModal={() => setCategoryModalShow(false)}
         editCategory={editCategory}
-        // iscategoryModalShow={setCategoryModalShow(true)}
+        callCategoryModal = {() =>{callApi()}}
       />
     </>
   );
