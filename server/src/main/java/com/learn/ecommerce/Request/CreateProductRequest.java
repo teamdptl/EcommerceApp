@@ -7,10 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Data
 public class CreateProductRequest{
     @NotEmpty
-    private MultipartFile[] files;
+    private List<Integer> fileIds;
     @NotEmpty
     private String name;
     @NotEmpty

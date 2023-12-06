@@ -16,17 +16,15 @@
 
 //  Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page);
 
-  Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page);
+     Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page);
 
      List<Product> getProductInList(List<Integer> ids);
 
      public void favoriteProduct(Product product, User user);
 
-  public Page<Product> favoriteList(User user, Pageable pageable);
+     public Page<Product> favoriteList(User user, Pageable pageable);
 
-  public List<Product> featureProducts(Integer page);
+     public List<Product> featureProducts(Integer page);
+     void saveProductWithMedia(Product product, List<Integer> fileIds, Integer primaryImageIndex);
 
-  void saveProductWithMedia(Product product, List<MultipartFile> files, Integer primaryImageIndex);
-
-  void removeProductMedia(Product product, Integer[] mediaIds);
  }
