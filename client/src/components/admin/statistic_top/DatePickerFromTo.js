@@ -12,6 +12,9 @@ const DatePickerFromTo = (props) => {
     const handleChangeDateTo = (selectedDate) =>{
         props.handleChangeDateTo(selectedDate);
     }
+    const search = () =>{
+        props.search();
+    }
     return (
         <>
             <div class="flex justify-between items-end gap-x-2 px-4 py-2">
@@ -27,7 +30,7 @@ const DatePickerFromTo = (props) => {
                     </div>
                     <Datepicker onSelectedDateChanged={(date)=>{handleChangeDateTo(date)}} language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()}/>
                 </div>
-                <Button className="mb-1" color="gray"><IoIosSearch/></Button>
+                <Button onClick={search} className="mb-1" color="gray"><IoIosSearch/></Button>
             </div>
         </>
     )

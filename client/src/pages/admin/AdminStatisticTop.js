@@ -16,32 +16,30 @@ const AdminStatisticTop = () => {
 
     const [dateFrom , setDateFrom] = useState(["","",""]);
     const [dateTo , setDateTo] = useState(["","",""]);
-
+    const [isLoading, setIsLoading] = useState(["false", "false", "false"]);
 
     const formatDate =(date)=>{
         const originalDate = new Date(date);
-
         const year = originalDate.getFullYear(); // Lấy năm
         const month = (originalDate.getMonth() + 1).toString().padStart(2, '0'); // Lấy tháng và thêm số 0 ở đầu nếu cần
         const day = originalDate.getDate().toString().padStart(2, '0'); // Lấy ngày và thêm số 0 ở đầu nếu cần
-
         const formattedDate = `${year}-${month}-${day}`;
         return formattedDate;
     }
     const handleChangeDateFrom= (text,type)=> {
         const updatedState = [...dateFrom];
+        const date  = formatDate(text);
         switch (type){
             case "product":
-                updatedState[0]=text
-                console.log( updatedState[0])
+                updatedState[0]=date
                 setDateFrom(updatedState);
                 break;
             case "brand":
-                updatedState[1]=text
+                updatedState[1]=date
                 setDateFrom(updatedState);
                 break;
             case "user":
-                updatedState[2]=text
+                updatedState[2]=date
                 setDateFrom(updatedState);
                 break;
         }
@@ -49,76 +47,79 @@ const AdminStatisticTop = () => {
 
     const handleChangeDateTo= (text,type)=> {
         const updatedState = [...dateTo];
+        const date  = formatDate(text);
         switch (type){
             case "product":
-                updatedState[0]=text
+                updatedState[0]=date
                 setDateTo(updatedState);
                 break;
             case "brand":
-                updatedState[1]=text
+                updatedState[1]=date
                 setDateTo(updatedState);
                 break;
             case "user":
-                updatedState[2]=text
+                updatedState[2]=date
                 setDateTo(updatedState);
                 break;
         }
     }
 
-
-
-
     const fetchTopProduct =()=>{
         let data = null;
+
+        const updateLoading =[...isLoading];
+        updateLoading[0] = true
+        setIsLoading(updateLoading)
+
         if(dateFrom[0] || dateTo[0])
         {
             data = {
-                dateStart : dateFrom[0],
-                dateEnd : dateTo[0]
+                startDate : dateFrom[0],
+                endDate : dateTo[0]
             }
         }
-        const option =null;
-        if (data !== null) {
-            option.body = JSON.stringify(data);
-        }
-        fetch(`${baseUrl}/api/v1/admin/statistic-product`,{
-            method:"POST",
-            header:{
+        const requestOptions = {
+            method: "POST",
+            headers: {
                 'Content-Type': 'application/json'
-
-            },
-            // body: JSON.stringify(data)
-        },option)
+            }
+        };
+        if (data !== null) {
+            console.log(data)
+            requestOptions.body = JSON.stringify(data);
+        }
+        fetch(`${baseUrl}/api/v1/admin/statistic-product`, requestOptions)
        .then(response =>{
-
             return response.json()
         }).then(data =>{
             console.log(data)
             setProductList(data)
         })
+
     }
 
     const fetchTopBrand =()=>{
-
         let data = null;
         if(dateFrom[1] || dateTo[1])
         {
             data = {
-                dateStart : dateFrom[1],
-                dateEnd : dateTo[1]
+                startDate : dateFrom[1],
+                endDate : dateTo[1]
             }
         }
-        const option =null;
-        if (data !== null) {
-            option.body = JSON.stringify(data);
-        }
-
-        fetch(`${baseUrl}/api/v1/admin/statistic-brand`,{
-            method:"POST",
-            header:{
+        const requestOptions = {
+            method: "POST",
+            headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(response =>{
+        };
+        if (data !== null) {
+            console.log(data)
+            requestOptions.body = JSON.stringify(data);
+        }
+
+        fetch(`${baseUrl}/api/v1/admin/statistic-brand`,requestOptions)
+            .then(response =>{
             return response.json()
         }).then(data =>{
             console.log(data)
@@ -126,26 +127,28 @@ const AdminStatisticTop = () => {
         })
     }
     const fetchTopUser =()=>{
-
         let data = null;
         if(dateFrom[2] || dateTo[2])
         {
             data = {
-                dateStart : dateFrom[2],
-                dateEnd : dateTo[2]
+                startDate : dateFrom[2],
+                endDate : dateTo[2]
             }
-        }
-        const option =null;
-        if (data !== null) {
-            option.body = JSON.stringify(data);
         }
 
-        fetch(`${baseUrl}/api/v1/admin/statistic-user`,{
-            method:"POST",
-            header:{
+        const requestOptions = {
+            method: "POST",
+            headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(response =>{
+        };
+        if (data !== null) {
+            console.log(data)
+            requestOptions.body = JSON.stringify(data);
+        }
+
+        fetch(`${baseUrl}/api/v1/admin/statistic-user`,requestOptions)
+            .then(response =>{
             return response.json()
         }).then(data =>{
             console.log(data)
@@ -163,7 +166,8 @@ const AdminStatisticTop = () => {
         <div className="col-span-2 bg-white rounded-md border-2 border-zinc-100">
             <p class="text-base p-4 rounded-t-md font-semibold text-white bg-blue-500">Thống kê top 10 sản phẩm</p>
             <DatePickerFromTo handleChangeDateFrom={(text)=>handleChangeDateFrom(text,"product")}
-                              handleChangeDateTo={(text)=>handleChangeDateTo(text,"product")}/>
+                              handleChangeDateTo={(text)=>handleChangeDateTo(text,"product")}
+                              search={fetchTopProduct}/>
             <ul class="p-4 pt-2">
                 <li class="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">
                     <div class="col-span-2">
@@ -177,20 +181,21 @@ const AdminStatisticTop = () => {
                     </div>
                 </li>
                 {
-                    productList.map((item,index )=>(
-                        <li className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">
-                            <div className="col-span-2">
-                                <img className="aspect-square w-20" src={item.imageUrl}></img>
-                            </div>
-                            <div className="col-span-3">
-                                <p className="text-base">{item.name}</p>
-                                <p className="text-sm font-semibold mt-1">{item.price}</p>
-                            </div>
-                            <div className="col-span-1">
-                                {item.totalSales}
-                            </div>
-                        </li>
-                    ))
+
+                        productList.map((item, index) => (
+                            <li className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">
+                                <div className="col-span-2">
+                                    <img className="aspect-square w-20" src={item.imageUrl}></img>
+                                </div>
+                                <div className="col-span-3">
+                                    <p className="text-base">{item.name}</p>
+                                    <p className="text-sm font-semibold mt-1">{item.price}</p>
+                                </div>
+                                <div className="col-span-1">
+                                    {item.totalSales}
+                                </div>
+                            </li>
+                        ))
                 }
                 {/*{Array(5).fill(0).map((item) => (*/}
                 {/*    <li className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">*/}
@@ -211,7 +216,8 @@ const AdminStatisticTop = () => {
         <div className="col-span-2 bg-white rounded-md border-2 border-zinc-100">
             <p className="text-base p-4 rounded-t-md font-semibold text-white bg-blue-500">Thống kê top 5 hãng</p>
             <DatePickerFromTo handleChangeDateFrom={(text)=>handleChangeDateFrom(text,"brand")}
-                              handleChangeDateTo={(text)=>handleChangeDateTo(text,"brand")}/>
+                              handleChangeDateTo={(text)=>handleChangeDateTo(text,"brand")}
+                              search={fetchTopBrand}/>
             <ul class="p-4 pt-2">
                 <li className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">
                     <div className="col-span-3">
@@ -239,7 +245,8 @@ const AdminStatisticTop = () => {
         <div className="col-span-2 bg-white rounded-md border-2 border-zinc-100">
             <p className="text-base p-4 rounded-t-md font-semibold text-white bg-blue-500">Thống kê top 5 khách hàng</p>
             <DatePickerFromTo handleChangeDateFrom={(text)=>handleChangeDateFrom(text,"user")}
-                              handleChangeDateTo={(text)=>handleChangeDateTo(text,"user")}/>
+                              handleChangeDateTo={(text)=>handleChangeDateTo(text,"user")}
+                              search={fetchTopUser}/>
             <ul className="mt-3 p-4 pt-2">
                 <li className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">
                     <div className="col-span-1">
