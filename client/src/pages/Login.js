@@ -1,11 +1,13 @@
 import Header from "../layouts/Header";
 import Footer from '../layouts/Footer';
 import { Link,useNavigate   } from "react-router-dom";
+import axios from 'axios';
 
 import React, {useContext, useState} from 'react';
 import baseUrl from "../config";
 import {useAuth} from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
+import setAuthToken from "../context/Axios";
 import {Button, Modal} from "flowbite-react";
 import {HiOutlineExclamationCircle} from "react-icons/hi";
 
@@ -20,7 +22,7 @@ const Login = () => {
 
 	const submitForm = (e) => {
 		e.preventDefault();
-		const data = {
+			const data = {
 			password: password,
 			email: email
 		};
@@ -43,12 +45,10 @@ const Login = () => {
 				localStorage.setItem('accessToken', accessToken);
 				localStorage.setItem('refresh_token', data.refresh_token);
 				const decoded = jwtDecode(accessToken);
-				setUser({
-					username: decoded.username,
-					fullname: decoded.fullname,
-					role: decoded.role
-				})
-				navigate('/', {replace: true});
+				setUser({username:decoded.username,
+						fullname:decoded.fullname,
+						role:decoded.role})
+				navigate('/', { replace: true });
 			})
 			.catch(data => {
 				console.log(data)
