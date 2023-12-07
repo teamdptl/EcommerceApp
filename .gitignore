@@ -6,3 +6,4 @@
 server/src/main/resources/application.properties
 upload/product/*
 *.properties
+node_modules/*

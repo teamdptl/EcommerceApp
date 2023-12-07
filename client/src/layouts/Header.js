@@ -6,33 +6,15 @@ import NavMenuDropDown from "../components/main/NavMenuDropDown";
 import "flowbite";
 import {useContext, useEffect, useState} from "react";
 import baseUrl from "../config";
-import {AuthProvider, AuthContext} from "../context/AuthContext";
+import {AuthProvider, AuthContext, useAuth} from "../context/AuthContext";
 
 export default function Header() {
+	const {user, setUser} = useAuth();
 
-	// const [user, setUser] = useState("");
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const UserContext = useContext(AuthContext);
-	const {user, setUser, autoLogin} = UserContext;
 	useEffect(() => {
-		
 		console.log("user:", user)
-		
-		
-		autoLogin().then(data => {
-			
-			
-			if (data){
-				setIsLoggedIn(true);
-				setUser({username:data.username,
-					fullname:data.fullname,
-					role:data.role})
-					console.log("User auto login: ", data.username, data.fullname, data.role)
-			} else setIsLoggedIn(false);
-		})
-		
-		
 	}, []);
+
 	const handleLogout = () =>{
 		const token = localStorage.getItem('accessToken');
 		fetch(`${baseUrl}/api/v1/auth/logout`, {
@@ -43,34 +25,17 @@ export default function Header() {
 		})
 			.then(() => {
 				localStorage.removeItem('accessToken');
+				localStorage.removeItem('refreshToken');
+				localStorage.removeItem('refresh_token');
+				localStorage.removeItem('cart');
+				setUser(null);
 				window.location.reload();
 			})
 			.catch(() => {
-
+				alert("Lỗi không thể đăng xuất");
 			});
 	}
-	// const getUserByToken = (token)=>{
-	// 	console.log("getUserByToken")
-	// 	fetch(`${baseUrl}/api/token/user?token=${token}`, {
-	// 		method: 'GET',
-	// 		headers: {
-	// 			'Authorization': `Bearer ${token}`
-	// 		}
-	// 	})
-	// 		.then(response => {
-	// 			if (!response.ok) {
-	// 				throw new Error('Network response was not ok.');
-	// 			}
-	// 			return response.json();
-	// 		})
-	//
-	// 		.then(data => {
-	// 			setUser(data.fullname)
-	// 		})
-	// 		.catch(data => {
-	// 			// setMessage("Tài khoản hoặc mật khẩu không trùng khớp")
-	// 		});
-	// }
+
 	return (
 		<>
 			<header class="bg-white h-[72px]">
@@ -87,9 +52,9 @@ export default function Header() {
 									<CartDropDown></CartDropDown>
 								</div>
 								{
-									isLoggedIn ?
+									user ?
 										<div class="flex">
-										<label class="text-m font-bold text-gray-900 mx-auto my-auto mr-4">Hi,{user.fullname}</label>
+										<label class="text-m text-black-900 mx-auto my-auto mr-4">Hi,{user.fullname}</label>
 										<button
 											onClick={handleLogout}
 											type="button"

@@ -2,7 +2,7 @@ import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../config";
 
-const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
+const AdminCategoryModal = ({ isShow, closeModal, editCategory, callCategoryModal}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -10,6 +10,7 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
     if (editCategory) {
       setName(editCategory.name);
       setDescription(editCategory.description);
+    }else{
     }
   }, [editCategory]);
 
@@ -33,7 +34,9 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
       .then((data) => {
         // Xử lý dữ liệu từ server nếu cần
         console.log("Success:", data);
-        window.location.reload();
+        setName("");
+        setDescription("");
+        callCategoryModal();
       })
       .catch((error) => {
         // Xử lý lỗi nếu có
@@ -61,7 +64,7 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
       .then((data) => {
         // Xử lý dữ liệu từ server nếu cần
         console.log("Success:", data);
-        window.location.reload();
+        callCategoryModal();
       })
       .catch((error) => {
         // Xử lý lỗi nếu có

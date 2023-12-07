@@ -4,8 +4,11 @@ import AdminPage from "../../layouts/AdminPage";
 import {useEffect, useState} from "react";
 import baseUrl from "../../config";
 
-const AdminStatisticTop = () => {
 
+
+
+
+const AdminStatisticTop = () => {
 
     const [productList,setProductList] = useState([]);
     const [brandList,setBrandList] = useState([]);
@@ -61,11 +64,15 @@ const AdminStatisticTop = () => {
                 break;
         }
     }
+
+
+
+
     const fetchTopProduct =()=>{
         let data = null;
         if(dateFrom[0] || dateTo[0])
         {
-             data = {
+            data = {
                 dateStart : dateFrom[0],
                 dateEnd : dateTo[0]
             }
@@ -74,15 +81,16 @@ const AdminStatisticTop = () => {
         if (data !== null) {
             option.body = JSON.stringify(data);
         }
-
         fetch(`${baseUrl}/api/v1/admin/statistic-product`,{
             method:"POST",
             header:{
                 'Content-Type': 'application/json'
+
             },
             // body: JSON.stringify(data)
         },option)
-            .then(response =>{
+       .then(response =>{
+
             return response.json()
         }).then(data =>{
             console.log(data)
@@ -91,6 +99,7 @@ const AdminStatisticTop = () => {
     }
 
     const fetchTopBrand =()=>{
+
         let data = null;
         if(dateFrom[1] || dateTo[1])
         {
@@ -103,6 +112,7 @@ const AdminStatisticTop = () => {
         if (data !== null) {
             option.body = JSON.stringify(data);
         }
+
         fetch(`${baseUrl}/api/v1/admin/statistic-brand`,{
             method:"POST",
             header:{
@@ -116,6 +126,7 @@ const AdminStatisticTop = () => {
         })
     }
     const fetchTopUser =()=>{
+
         let data = null;
         if(dateFrom[2] || dateTo[2])
         {
@@ -128,6 +139,7 @@ const AdminStatisticTop = () => {
         if (data !== null) {
             option.body = JSON.stringify(data);
         }
+
         fetch(`${baseUrl}/api/v1/admin/statistic-user`,{
             method:"POST",
             header:{
@@ -140,6 +152,7 @@ const AdminStatisticTop = () => {
             setUserList(data)
         })
     }
+
     useEffect(() => {
         fetchTopProduct();
         fetchTopBrand();
@@ -163,20 +176,36 @@ const AdminStatisticTop = () => {
                         Bán
                     </div>
                 </li>
-                {Array(5).fill(0).map((item) => (
-                    <li className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">
-                        <div className="col-span-2">
-                            <img className="aspect-square w-20" src="https://flowbite-admin-dashboard.vercel.app/images/products/iphone.png"></img>
-                        </div>
-                        <div className="col-span-3">
-                            <p className="text-base">Điện thoại Samsungn sdhahd das</p>
-                            <p className="text-sm font-semibold mt-1">3.000.000đ</p>
-                        </div>
-                        <div className="col-span-1">
-                            10
-                        </div>
-                    </li>
-                ))}
+                {
+                    productList.map((item,index )=>(
+                        <li className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">
+                            <div className="col-span-2">
+                                <img className="aspect-square w-20" src={item.imageUrl}></img>
+                            </div>
+                            <div className="col-span-3">
+                                <p className="text-base">{item.name}</p>
+                                <p className="text-sm font-semibold mt-1">{item.price}</p>
+                            </div>
+                            <div className="col-span-1">
+                                {item.totalSales}
+                            </div>
+                        </li>
+                    ))
+                }
+                {/*{Array(5).fill(0).map((item) => (*/}
+                {/*    <li className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">*/}
+                {/*        <div className="col-span-2">*/}
+                {/*            <img className="aspect-square w-20" src="https://flowbite-admin-dashboard.vercel.app/images/products/iphone.png"></img>*/}
+                {/*        </div>*/}
+                {/*        <div className="col-span-3">*/}
+                {/*            <p className="text-base">Điện thoại Samsungn sdhahd das</p>*/}
+                {/*            <p className="text-sm font-semibold mt-1">3.000.000đ</p>*/}
+                {/*        </div>*/}
+                {/*        <div className="col-span-1">*/}
+                {/*            10*/}
+                {/*        </div>*/}
+                {/*    </li>*/}
+                {/*))}*/}
             </ul>
         </div>
         <div className="col-span-2 bg-white rounded-md border-2 border-zinc-100">
@@ -192,14 +221,19 @@ const AdminStatisticTop = () => {
                         Số lượng bán
                     </div>
                 </li>
-                <li className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">
-                    <div className="col-span-3">
-                        Samsung
-                    </div>
-                    <div className="col-span-3">
-                        10
-                    </div>
-                </li>
+                {
+                    brandList.map((item,index)=>(
+                        <li id={item.brandId} className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">
+                            <div className="col-span-3">
+                                {item.name}
+                            </div>
+                            <div className="col-span-3">
+                                {item.totalSale}
+                            </div>
+                        </li>
+                    ))
+                }
+
             </ul>
         </div>
         <div className="col-span-2 bg-white rounded-md border-2 border-zinc-100">
@@ -218,17 +252,22 @@ const AdminStatisticTop = () => {
                         Chi tiêu
                     </div>
                 </li>
-                <li className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">
-                    <div className="col-span-1">
-                        1
-                    </div>
-                    <div className="col-span-3">
-                        Huỳnh Khánh Duy
-                    </div>
-                    <div className="col-span-2">
-                        100.000.000 vnđ
-                    </div>
-                </li>
+                {
+                    userList.map((item,index)=>(
+                        <li className="grid grid-cols-6 justify-center items-center pb-4 mb-4 border-b-2 border-b-zinc-100">
+                            <div className="col-span-1">
+                                {item.userId}
+                            </div>
+                            <div className="col-span-3">
+                                {item.name}
+                            </div>
+                            <div className="col-span-2">
+                                {item.totalBuy}
+                            </div>
+                        </li>
+                    ))
+                }
+
             </ul>
         </div>
     </AdminPage>

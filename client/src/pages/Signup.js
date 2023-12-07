@@ -12,7 +12,10 @@ const Signup = () => {
 	const [password, setPassword] = useState('');
 	const [fullname, setFullname] = useState('');
 	const navigate = useNavigate();
-	
+	const validateEmail = (email) => {
+		const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return regex.test(email);
+	};
 	const submitForm = (e) => {
 		e.preventDefault();
 		
@@ -20,7 +23,14 @@ const Signup = () => {
 			setMessage("Vui lòng không để trống dữ liệu");
 			return;
 		}
-	
+		if(!validateEmail(email)){
+			setMessage("Email không đúng định đạng")
+			return;
+		}
+		if(password.length < 6){
+			setMessage("Mật khẩu phải lớn hơn 6 kí tự")
+			return;
+		}
 		const data = {
 			password: password,
 			email: email,
@@ -43,9 +53,11 @@ const Signup = () => {
 				return response.json()
 			})
 			.then(data => {
-				let { accessToken, refreshToken, message } = data;
-				localStorage.setItem('accessToken', accessToken);
-				localStorage.setItem("refreshToken", refreshToken);
+				console.log(data)
+				let { access_token, refresh_token, message } = data;
+				console.log(access_token)
+				localStorage.setItem('accessToken',access_token);
+				localStorage.setItem("refreshToken",refresh_token);
 				navigate("/", { replace: true });
 				// window.location.href = "/";
 			})
