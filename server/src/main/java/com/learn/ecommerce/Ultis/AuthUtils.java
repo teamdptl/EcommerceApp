@@ -15,10 +15,12 @@ public class AuthUtils {
     
     public Optional<User> getCurrentUser(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(email);
         if(email == null)
-            return null;
+            return Optional.empty();
         return repository.findByEmail(email);
-        
     }
+
+//    public boolean isTokenValid(){
+//
+//    }
 }

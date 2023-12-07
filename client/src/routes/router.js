@@ -25,20 +25,17 @@ import AdminOrder from "../pages/admin/AdminOrder";
 import AdminStatisticTop from "../pages/admin/AdminStatisticTop";
 import AdminStatisticMoney from "../pages/admin/AdminStatisticMoney";
 
-const isAdmin = (user) => user !== null && user.role === 'admin';
-const isUser = (user) => user !== null;
-
 function AuthRoute({children, condition, navigatePage}) {
     const { user } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!condition(user) && false)
+        if (!condition() && false)
             navigate(navigatePage)
     }, [user]);
 
-    return true ? children : <NoPage/>
-    // return condition(user) ? children : <NoPage/>
+    // return true ? children : <NoPage/>
+    return condition() ? children : <NoPage/>
 }
 
 const adminPath = [
@@ -69,6 +66,7 @@ const adminPath = [
 ]
 
 const Router = ()  =>  {
+    const { isAdmin, isUser } = useAuth();
     return (
         <BrowserRouter>
             <Routes>
