@@ -1,20 +1,28 @@
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../config";
+import AdminConfirmModal from "../AdminConfirmModal";
 
-const AdminCategoryModal = ({ isShow, closeModal, editCategory, callCategoryModal}) => {
+const AdminCategoryModal = ({
+  isShow,
+  closeModal,
+  editCategory,
+  callCategoryModal,
+}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [confirmModalShow, setConfirmModalShow] = useState(false);
 
   useEffect(() => {
     if (editCategory) {
       setName(editCategory.name);
       setDescription(editCategory.description);
-    }else{
+    } else {
     }
   }, [editCategory]);
 
   const handleAddCategory = () => {
+    setConfirmModalShow(true);
     // Tạo một đối tượng chứa dữ liệu để gửi lên server
     const newData = {
       name: name,
@@ -45,6 +53,7 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory, callCategoryModa
   };
 
   const handleEditCategory = () => {
+    setConfirmModalShow(true);
     // Tạo một đối tượng chứa dữ liệu để gửi lên server
     const updateData = {
       name: name,
@@ -112,8 +121,9 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory, callCategoryModa
               closeModal();
               if (editCategory && editCategory.categoryId) {
                 handleEditCategory();
-              }else {
-              handleAddCategory();}
+              } else {
+                handleAddCategory();
+              }
             }}
           >
             Lưu
@@ -123,6 +133,12 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory, callCategoryModa
           </Button>
         </Modal.Footer>
       </Modal>
+      <AdminConfirmModal
+        isShow={confirmModalShow}
+        closeModal={() => setConfirmModalShow(false)}
+        content="Success!"
+        type={"success"}
+      />
     </>
   );
 };

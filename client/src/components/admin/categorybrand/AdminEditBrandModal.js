@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import baseUrl from "../../../config";
+import AdminConfirmModal from "../AdminConfirmModal";
 
-const AdminEditBrandModal = ({ isShow, closeModal, editBrand, callModalBrand}) => {
+const AdminEditBrandModal = ({ isShow, closeModal, editBrand, callModalBrand, type}) => {
   const [name, setName] = useState("");
+  const [confirmModalShow, setConfirmModalShow] = useState(false);
 
   useEffect(() => {
 
@@ -13,6 +15,7 @@ const AdminEditBrandModal = ({ isShow, closeModal, editBrand, callModalBrand}) =
   }, [editBrand]);
 
   const handleEditBrand = () => {
+    setConfirmModalShow(true);
     const newBrand = {
       name: name,
     };
@@ -73,6 +76,12 @@ const AdminEditBrandModal = ({ isShow, closeModal, editBrand, callModalBrand}) =
           </Button>
         </Modal.Footer>
       </Modal>
+      <AdminConfirmModal
+        isShow={confirmModalShow}
+        closeModal={() => setConfirmModalShow(false)}
+        content="Success!"
+        type={'success'}
+      />
     </>
   );
 };
