@@ -96,6 +96,13 @@ public class ProductController {
             List<Media> medias = mediaImp.getMediasByProduct(p.get());
             ProductDetailResponse d = ModelMapperUtils.map(p.get(), ProductDetailResponse.class);
             List<MediaResponse> images = ModelMapperUtils.mapAll(medias, MediaResponse.class);
+            List<MediaResponse> mappedImages = images.stream().peek(item -> {
+                if (item.isExternalImage())
+                    item.setImageUrl(item.getImageUrl());
+                else {
+                    item.setImageUrl(MainController.url+"/"+Media.mediaPath+item.getImageUrl());
+                }
+            }).toList();
             if(userOptional.isPresent()){
                 p.get().getUsers().forEach(user -> {
                     System.out.println(user.getId());
@@ -106,8 +113,9 @@ public class ProductController {
 
                 });
             }
-            
-            d.setMedias(images);
+            d.setCategoryId(p.get().getCategory().getCategoryId());
+            d.setBrandId(p.get().getBrand().getBrandId());
+            d.setMedias(mappedImages);
             // TODO: Gắn token vào và check nó có yêu thích sản phẩm này không
             // d.isFavorite = true
             return ResponseEntity.ok(d);
@@ -152,7 +160,7 @@ public class ProductController {
                     .body(new ErrorResponse("Category không tồn tại!"));
         product.setBrand(brand.get());
         product.setCategory(category.get());
-        service.saveProductWithMedia(product, List.of(createData.getFiles()), createData.getPrimaryImageIndex());
+        service.saveProductWithMedia(product, createData.getFileIds(), createData.getPrimaryImageIndex());
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
 
@@ -179,14 +187,7 @@ public class ProductController {
                     .body(new ErrorResponse("Category không tồn tại!"));
         product.setBrand(brand.get());
         product.setCategory(category.get());
-
-        if (editData.getRemoveMediaIds().length > 0)
-            service.removeProductMedia(product, editData.getRemoveMediaIds());
-
-        if (editData.getFiles().length > 0)
-            service.saveProductWithMedia(product, List.of(editData.getFiles()), editData.getPrimaryImageIndex());
-        service.adjustProductMedia(product);
-
+        service.saveProductWithMedia(product, editData.getFileIds(), editData.getPrimaryImageIndex());
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
 

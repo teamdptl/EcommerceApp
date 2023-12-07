@@ -13,7 +13,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Component
@@ -44,20 +43,36 @@ public class MediaImp implements MediaService {
         repository.deleteById(id);
     }
 
-    @Override
-    public void saveProductFile(MultipartFile file, Product p) {
-        saveProductFile(file, p, false);
-    }
 
     @Override
-    public void saveFiles(List<MultipartFile> files, Product p) {
-        for (MultipartFile file: files) {
-            this.saveProductFile(file, p);
+    public void saveFiles(List<Integer> fileIds, Product p, Integer primary) {
+        List<Integer> currentIds = new java.util.ArrayList<>(getMediasByProduct(p).stream().map(Media::getImageId).toList());
+        currentIds.removeAll(fileIds);
+        removeMedia(currentIds);
+        boolean isExistPrimary = false;
+        Media firstMedia = null;
+        for (Integer id: fileIds) {
+            Optional<Media> media = repository.findById(id);
+            if (media.isPresent()){
+                Media m = media.get();
+                firstMedia = m;
+                if (primary.equals(id)){
+                    m.setPrimary(true);
+                    isExistPrimary = true;
+                }
+                else {
+                    m.setPrimary(false);
+                }
+                m.setProduct(p);
+                repository.save(m);
+            }
         }
+        if (!isExistPrimary && firstMedia != null)
+            firstMedia.setPrimary(true);
     }
 
     @Override
-    public void saveProductFile(MultipartFile file, Product p, boolean isPrimary) {
+    public Media saveProductFile(MultipartFile file) {
         try {
             String fileName =  UUID.randomUUID() + file.getOriginalFilename();
             Path path = Paths.get(filePath + fileName);
@@ -67,29 +82,19 @@ public class MediaImp implements MediaService {
 
             Media media = new Media();
             media.setImageUrl(fileName);
-            media.setProduct(p);
-            media.setPrimary(isPrimary);
-            repository.save(media);
+            media.setProduct(null);
+            media.setPrimary(false);
+            return repository.save(media);
         } catch (Exception ex){
             System.out.println(ex.toString());
         }
+        return null;
     }
 
-    @Override
-    public void saveFiles(List<MultipartFile> files, Product product, Integer primary) {
-        int index = 0;
-        for (MultipartFile file: files){
-            this.saveProductFile(file, product, index == primary);
-            index ++;
-        }
-    }
-
-    public void removeMediaFromProduct(Product product, Integer[] ids){
-        for (int id : ids){
+    public void removeMedia(List<Integer> removeIds){
+        for (int id : removeIds){
             Optional<Media> media = repository.findById(id);
-            if (media.isPresent() && media.get().getProduct().getProductId() == product.getProductId()){
-                repository.delete(media.get());
-            }
+            media.ifPresent(value -> repository.delete(value));
         }
     }
 

@@ -55,6 +55,7 @@ const Checkout = () => {
 
 	const placeOrder = async() => {
 		if (!shipInfo || !shipInfo.isValid){
+			setMsg({...msg, error: 1, text: "Vui lòng điền đầy đủ hoặc chọn thông tin giao hàng", show: true});
 			return;
 		}
 		const { shipId } = await saveShipInfo();

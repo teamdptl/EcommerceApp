@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -100,28 +99,8 @@ public class ProductImp implements ProductService {
     }
 
     @Override
-    public void saveProductWithMedia(Product product, List<MultipartFile> files, Integer primaryImageIndex) {
+    public void saveProductWithMedia(Product product, List<Integer> fileIds, Integer primaryImageIndex) {
         Product saved = reponsitory.save(product);
-        mediaImp.saveFiles(files, saved, primaryImageIndex);
-    }
-
-    @Override
-    public void removeProductMedia(Product product, Integer[] mediaIds){
-        mediaImp.removeMediaFromProduct(product, mediaIds);
-    }
-
-    // Chỉ có 1 ảnh đại diện
-    public void adjustProductMedia(Product product){
-        Set<Media> mediaSet = product.getMedias();
-        int countPrimary = 0;
-        for (Media media : mediaSet){
-            if (media.isPrimary()){
-                if (countPrimary > 1){
-                    media.setPrimary(false);
-                    mediaImp.save(media);
-                }
-                countPrimary ++;
-            }
-        }
+        mediaImp.saveFiles(fileIds, saved, primaryImageIndex);
     }
 }

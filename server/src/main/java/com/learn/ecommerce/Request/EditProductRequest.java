@@ -7,10 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Data
 public class EditProductRequest{
-    private MultipartFile[] files;
-    private Integer[] removeMediaIds;
+    @NotEmpty
+    private List<Integer> fileIds;
     @NotEmpty
     private String name;
     @NotEmpty
@@ -33,5 +35,5 @@ public class EditProductRequest{
     private int brandId;
     @Min(1)
     private int categoryId;
-    private int primaryImageIndex = -1;
+    private int primaryImageIndex = 0;
 }

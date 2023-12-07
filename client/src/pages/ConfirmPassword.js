@@ -24,7 +24,6 @@ const ConfirmPassword = () => {
 	const [message,setMessage] = useState("");
 	const [isExpiration,setIsExpiration] = useState(false);
 	const [isChangeSuccess , setIsChangeSuccess] = useState(false)
-
 	const [showPassword, setShowPassword] = useState([false, false]);
 
 
@@ -108,28 +107,7 @@ const ConfirmPassword = () => {
 								<p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-gray-600">Hãy nhập mật khẩu của bạn vào ô bên dưới</p>
 							</div>
 
-							{/*<form action="#" method="POST" class="max-w-xl mx-auto mt-12">*/}
-							{/*	/!*<div class="flex flex-col items-center sm:flex-row sm:justify-center">*!/*/}
-							{/*	/!*	<div class="flex-1 w-full max-w-[200px] min-w-0 px-4 sm:px-0">*!/*/}
-							{/*	/!*		<label for="otp" class="sr-only">*!/*/}
-							{/*	/!*			Mã OTP*!/*/}
-							{/*	/!*		</label>*!/*/}
-							{/*	/!*		<input*!/*/}
-							{/*	/!*			type="text"*!/*/}
-							{/*	/!*			name="otp"*!/*/}
-							{/*	/!*			id="otp"*!/*/}
-							{/*	/!*			placeholder="Nhập OTP của bạn"*!/*/}
-							{/*	/!*			class="block w-full px-4 py-4 text-base text-black placeholder-gray-500 transition-all duration-200 border-transparent rounded-md caret-indigo-600 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"*!/*/}
-							{/*	/!*			required*!/*/}
-							{/*	/!*		/>*!/*/}
-							{/*	/!*	</div>*!/*/}
-							{/*	/!*	<button*!/*/}
-							{/*	/!*		type="submit"*!/*/}
-							{/*	/!*		class="inline-flex items-center justify-center w-auto px-4 py-4 mt-4 font-semibold text-white transition-all duration-200 bg-indigo-600 border border-transparent rounded-md sm:ml-4 sm:mt-0 sm:w-auto hover:bg-indigo-700 focus:bg-indigo-700">*!/*/}
-							{/*	/!*		Xác nhận*!/*/}
-							{/*	/!*	</button>*!/*/}
-							{/*	/!*</div>*!/*/}
-							{/*</form>*/}
+
 							<p className="text-center mt-10 text-black text-xl font-bold">Thay đổi mật khẩu của bạn</p>
 							<form className="max-w-xl mx-auto mt-6">
 								<div className="flex flex-col items-center sm:justify-center">
@@ -165,7 +143,6 @@ const ConfirmPassword = () => {
 
 								<div className="flex justify-center mt-4">
 									<button
-
 										onClick={submitForm}
 										type="button"
 										className="inline-flex items-center justify-center w-auto px-4 py-4 mt-4 font-semibold text-white transition-all duration-200 bg-indigo-600 border border-transparent rounded-md sm:ml-4 sm:mt-0 sm:w-auto hover:bg-indigo-700 focus:bg-indigo-700">
@@ -178,7 +155,7 @@ const ConfirmPassword = () => {
 								<p className="mt-2 text-base text-gray-600">
 									Bạn muốn đăng nhập chứ ?{" "}
 									<Link
-										to="/signup"
+										to="/login"
 										title=""
 										class="font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 hover:underline focus:text-blue-700">
 										Đăng nhập
@@ -187,7 +164,12 @@ const ConfirmPassword = () => {
 							</div>
 						</div>
 					</section>:
-						<p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-gray-600 text-center">Liên kết đã hết hạn vui lòng gửi yêu cầu mới</p>
+						<section className="items-center text-center h-60 flex justify-center flex-col">
+							<h1 className="text-6xl text-blue-500 m-5 font-bold">Opps!</h1>
+							<p className="max-w-xl mx-auto mt-4 text-base leading-relaxed text-gray-600">Liên kết đã hết hạn của bạn đã hết hạn vui lòng gửi yêu cầu mới</p>
+						</section>
+
+
 
 				}
 
@@ -196,12 +178,23 @@ const ConfirmPassword = () => {
 					<Modal.Header />
 					<Modal.Body>
 						<div className="text-center">
+							{/*<HiOutlineCheckCircle className="mx-auto mb-4 h-14 w-14 text-green-400 dark:text-gray-200"/>*/}
+							{/*<h3 className="mb-5 text-3xl  text-black-500 font-bold dark:text-gray-400">Thành công</h3>*/}
+
 							{
 								isChangeSuccess ?
-									<HiOutlineCheckCircle className="mx-auto mb-4 h-14 w-14 text-green-400 dark:text-gray-200"/>
-									:
-									<HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-red-400 dark:text-gray-200" />
+									<div className="mb-3">
+										<HiOutlineCheckCircle className="mx-auto mb-4 h-14 w-14 text-green-400 dark:text-gray-200"/>
+										<label className="mb-5 text-3xl  text-black-500 font-bold dark:text-gray-400">Thành công</label>
+									</div>
+								:
+									<div className="mb-3">
+										<HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-red-400 dark:text-gray-200"/>
+										<label className="mb-5 text-3xl  text-black-500 font-bold dark:text-gray-400">Thất bại</label>
+									</div>
+
 							}
+
 							<h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{message}</h3>
 							 <div className="flex justify-center gap-4">
 								 {

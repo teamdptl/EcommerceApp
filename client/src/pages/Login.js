@@ -8,6 +8,8 @@ import baseUrl from "../config";
 import {useAuth} from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import setAuthToken from "../context/Axios";
+import {Button, Modal} from "flowbite-react";
+import {HiOutlineExclamationCircle} from "react-icons/hi";
 
 
 const Login = () => {
@@ -83,7 +85,7 @@ const Login = () => {
 							</p>
 
 							<form  class="mt-8">
-								<label class="text-red-500 font-medium">{message}</label>
+								{/*<label class="text-red-500 font-medium">{message}</label>*/}
 								<div class="space-y-5">
 									<div>
 										<label for="" class="text-base font-medium text-gray-900">
@@ -181,6 +183,21 @@ const Login = () => {
 				</div>
 			</section>
 			<Footer></Footer>
+			<Modal show={message !== ""} size="md" onClose={() => setMessage("")} popup dismissible>
+				<Modal.Header />
+				<Modal.Body>
+					<div className="text-center">
+						<HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-red-400 dark:text-gray-200" />
+						<label className="mb-5 text-3xl  text-black-500 font-bold dark:text-gray-400">Thất bại</label>
+						<h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{message}</h3>
+						<div className="flex justify-center gap-4">
+							<Button color="gray" onClick={() => setMessage("")}>
+								Xác nhận
+							</Button>
+						</div>
+					</div>
+				</Modal.Body>
+			</Modal>
 		</>
 	);
 };
