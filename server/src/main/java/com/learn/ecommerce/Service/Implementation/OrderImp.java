@@ -81,11 +81,11 @@ public class OrderImp implements OrderService {
 
     @Override
     public List<TopProductDTO> findTopSellingProducts(Date startDate, Date endDate) {
-        String nativeQuery = "SELECT p.productId, p.name, SUM(ol.quantity) AS totalSales, m.image_url , p.price  " +
+        String nativeQuery = "SELECT p.product_id, p.name, SUM(ol.quantity) AS totalSales, m.image_url , p.price  " +
                 "FROM order_line ol " +
-                "JOIN product p ON ol.product_id = p.productId " +
-                "JOIN Orders o ON ol.order_id = o.orderId " +
-                "JOIN media m ON m.product_id = p.productId "+
+                "JOIN product p ON ol.product_id = p.product_id " +
+                "JOIN Orders o ON ol.order_id = o.order_id " +
+                "JOIN media m ON m.product_id = p.product_id "+
                 "WHERE o.create_at BETWEEN :startDate AND :endDate and o.is_deleted = 0 and m.is_primary = 1 " +
                 "GROUP BY ol.product_id " +
                 "ORDER BY totalSales DESC " +
@@ -122,8 +122,8 @@ public class OrderImp implements OrderService {
         System.out.println(endDate);
         String nativeQuery = "SELECT b.brand_id ,b.name, SUM(ol.quantity) AS totalSales"+
                 " FROM order_line ol"+
-                " JOIN product p ON ol.product_id = p.productId "+
-                " JOIN Orders o ON ol.order_id = o.orderId "+
+                " JOIN product p ON ol.product_id = p.product_id "+
+                " JOIN Orders o ON ol.order_id = o.order_id "+
                 " JOIN Brand b ON p.brand_id = b.brand_id"+
                 " WHERE o.create_at BETWEEN :startDate AND :endDate AND o.is_deleted = 0 GROUP BY b.brand_id "+
                 " ORDER BY totalSales DESC LIMIT 5";
