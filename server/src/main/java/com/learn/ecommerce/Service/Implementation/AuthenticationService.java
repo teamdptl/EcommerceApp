@@ -114,22 +114,31 @@ public class AuthenticationService {
     tokenRepository.saveAll(validUserTokens);
   }
 
-  public ResponseEntity<AuthenticationResponse> refreshToken(String refreshToken) {
-    String userEmail = jwtService.extractUsername(refreshToken);
+  public void refreshToken(
+          HttpServletRequest request,
+          HttpServletResponse response
+  ) throws IOException {
+    final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+    final String refreshToken;
+    final String userEmail;
+    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+      return;
+    }
+    refreshToken = authHeader.substring(7);
+    userEmail = jwtService.extractUsername(refreshToken);
     if (userEmail != null) {
-      var user = this.repository.findByEmail(userEmail);
-      if (user.isEmpty()) return ResponseEntity.badRequest().build();
-      if (jwtService.isTokenValid(refreshToken, user.get())) {
-        var accessToken = jwtService.generateToken(user.get());
-        revokeAllUserTokens(user.get());
-        saveUserToken(user.get(), accessToken);
+      var user = this.repository.findByEmail(userEmail)
+              .orElseThrow();
+      if (jwtService.isTokenValid(refreshToken, user)) {
+        var accessToken = jwtService.generateToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, accessToken);
         var authResponse = AuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
-        return ResponseEntity.ok(authResponse);
+        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
       }
     }
-    return ResponseEntity.badRequest().build();
   }
 }
