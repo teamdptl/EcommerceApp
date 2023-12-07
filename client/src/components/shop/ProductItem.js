@@ -4,6 +4,7 @@ import {FaCartPlus} from "react-icons/fa";
 import {IoCartOutline, IoHeart} from "react-icons/io5";
 import useCart from "../../hooks/useCart";
 import {useCartContext} from "../../context/CartContext";
+import formatMoney from "../../utils/currency";
 const ProductItem = ({ product }) => {
     const ratingArr = Array(parseInt(product.rating, 10)).fill("");
 	const { addItemToCart } = useCartContext();
@@ -13,8 +14,8 @@ const ProductItem = ({ product }) => {
 					<div className="relative aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md flex justify-center items-center">
 						<div class="h-52 w-52 hover:opacity-75">
 							<img
-								src={product.imageSrc}
-								alt={product.imageAlt}
+								src={product.imageUrl}
+								alt={"Ảnh sản phẩm"}
 								className="object-cover w-full h-full object-center"
 							/>
 						</div>
@@ -23,12 +24,12 @@ const ProductItem = ({ product }) => {
 						<h3 className="text-sm text-gray-700">
 							{product.name}
 						</h3>
-						<p className="text-base mt-2 mb-2 font-medium text-red-700">{product.price}</p>
+						<p className="text-base mt-2 mb-2 font-medium text-red-700">{ formatMoney(product.price) }</p>
 						{product.rating >= 0 ? (
 							<Rating>
 								{Array(5).fill('').map((value, index) => (index + 1 <= product.rating ? <Rating.Star /> : <Rating.Star filled={false} />))}
 								<p className="ml-2 text-sm font-medium text-gray-900">{product.rating}</p>
-								<p className="ml-2 text-xs font-medium text-gray-900">({product.numRate})</p>
+								<p className="ml-2 text-xs font-medium text-gray-900">({product.reviewCount})</p>
 							</Rating>
 						) : (
 							<Rating></Rating>

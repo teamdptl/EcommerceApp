@@ -18,7 +18,7 @@ const FilterBar = ({ onChange }) => {
     const [isActive, setIsActive] = useState(false);
 
     //-------thể loại sản phẩm--------------
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState('');
 
     // Hàm xử lý sự kiện khi người dùng chọn loại sp
     const handleCategoryClick = (categoryId) => {
@@ -26,7 +26,6 @@ const FilterBar = ({ onChange }) => {
         console.log(`User clicked category with ID: ${categoryId}`);
         onChange({
             categoryId: categoryId,
-            // .... 
         });
     };
 
@@ -67,8 +66,8 @@ const FilterBar = ({ onChange }) => {
 
 
     //-----------xuất xứ----------------------
-    const [isOrigin, setOrigin] = useState([]);
     const listOrigin = ['Việt Nam', 'Trung Quốc', 'Thái Lan', 'Indonesia', 'Nhật Bản'];
+    const [isOrigin, setOrigin] = useState([]);
     const handleCheckboxChange = (e) => {
         const { value, checked } = e.target;
         if (checked) {
@@ -197,10 +196,20 @@ const FilterBar = ({ onChange }) => {
 
 
     return (
-        <div class="flex flex-col mx-auto relative mb-12 w-screen max-w-screen-xl">
+        <div class="flex flex-col mx-auto relative mb-4 w-screen max-w-screen-xl">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between space-y-6 lg:space-y-0 lg:space-x-2 ">
                 <nav class=" relative flex w-full overflow-x-auto text-sm md:text-base hiddenScrollbar" >
                     <ul class="flex sm:space-x-2" >
+                        <li key={'all'} className="relative">
+                            <button
+                                onClick={() => handleCategoryClick('')}
+                                className={`block !leading-none font-medium whitespace-nowrap px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full
+                              ${selectedCategory === '' ? 'text-slate-100 bg-slate-800' : 'text-slate-500 dark:text-slate-400 dark:hover:text-slate-100 hover:text-slate-800 hover:bg-slate-100/75 dark:hover:bg-slate-800'} focus:outline-none`}
+                            >
+                                Tất cả
+                            </button>
+
+                        </li>
                         {isCategory.map((item) => (
                             <li key={item.categoryId} className="relative">
                                 <button
@@ -223,7 +232,7 @@ const FilterBar = ({ onChange }) => {
                             <path d="M14.3201 19.07C14.3201 19.68 13.92 20.48 13.41 20.79L12.0001 21.7C10.6901 22.51 8.87006 21.6 8.87006 19.98V14.63C8.87006 13.92 8.47006 13.01 8.06006 12.51L4.22003 8.47C3.71003 7.96 3.31006 7.06001 3.31006 6.45001V4.13C3.31006 2.92 4.22008 2.01001 5.33008 2.01001H18.67C19.78 2.01001 20.6901 2.92 20.6901 4.03V6.25C20.6901 7.06 20.1801 8.07001 19.6801 8.57001" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
                             <path d="M16.07 16.52C17.8373 16.52 19.27 15.0873 19.27 13.32C19.27 11.5527 17.8373 10.12 16.07 10.12C14.3027 10.12 12.87 11.5527 12.87 13.32C12.87 15.0873 14.3027 16.52 16.07 16.52Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
-                        <span class="block truncate ml-2.5"> Bộ Lọc Tìm Kiếm</span>
+                        <span class="block truncate ml-2.5"> Bộ Lọc</span>
                         <span class="absolute top-1/2 -translate-y-1/2 right-5">
                             <svg xmlns={FaAngleDown} fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-4 h-4 sm:w-5 sm:h-5 " >
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
@@ -238,13 +247,13 @@ const FilterBar = ({ onChange }) => {
                     <div class="flex lg:space-x-4">
                         <div class="hidden lg:flex flex-1 space-x-4">
                             <div class="relative ">
-                                <Dropdown label="Hãng" class="rounded-full border hover:bg-fuchsia-50">
+                                <Dropdown label="Hãng" class="rounded-full border hover:bg-sky-50">
                                     <div class="absolute z-10 w-screen max-w-sm  sm:px-0 lg:max-w-sm opacity-100 translate-y-0">
                                         <div class="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
                                             <div class="relative flex flex-col px-5 py-6 space-y-5">
                                                 {isBrand.map((brand) => (
                                                     <div key={brand.brandId} class="flex text-sm sm:text-base">
-                                                        <input type="checkbox" onChange={(event) => handleInputCheckbox(event, brand.brandId)} class="focus:ring-action-primary text-primary-500 rounded border-slate-400 hover:border-slate-700 bg-transparent dark:border-slate-700 dark:hover:border-slate-500 dark:checked:bg-primary-500 focus:ring-primary-500 w-6 h-6"></input>
+                                                        <input checked={selectedBrands.includes(brand.brandId)} type="checkbox" onChange={(event) => handleInputCheckbox(event, brand.brandId)} class="focus:ring-action-primary text-primary-500 rounded border-slate-400 hover:border-slate-700 bg-transparent dark:border-slate-700 dark:hover:border-slate-500 dark:checked:bg-primary-500 focus:ring-primary-500 w-6 h-6"></input>
                                                         <label class="pl-2.5 sm:pl-3.5 flex flex-col flex-1 justify-center select-none">
                                                             <span class="text-slate-900 dark:text-slate-100">{brand.name}</span>
                                                         </label>
@@ -265,13 +274,13 @@ const FilterBar = ({ onChange }) => {
                             </div>
 
                             <div class="relative">
-                                <Dropdown label="Giá Tiền" class="rounded-full border hover:bg-fuchsia-50 truncate ">
+                                <Dropdown label="Giá Tiền" class="rounded-full border hover:bg-sky-50 truncate ">
                                     <div class="absolute z-40 w-screen max-w-sm px-4 sm:px-0 lg:max-w-sm opacity-100 translate-y-0" >
                                         <div class="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
                                             <div class="relative flex flex-col px-5 py-6 space-y-8">
                                                 <div class="space-y-5">
                                                     <span class="font-medium">Khoảng giá</span>
-                                                    <RangeSlider value={isPrice} onInput={handlePriceChange} min={0} max={100000000} step={10000000}></RangeSlider>
+                                                    <RangeSlider value={isPrice} onInput={handlePriceChange} min={0} max={100000000} step={5000000}></RangeSlider>
                                                 </div>
                                                 <div class="flex justify-between space-x-5">
                                                     <div>
@@ -307,14 +316,14 @@ const FilterBar = ({ onChange }) => {
                             </div>
 
                             <div class="relative ">
-                                <Dropdown label="Xuất xứ" class="rounded-full border hover:bg-fuchsia-50">
+                                <Dropdown label="Xuất xứ" class="rounded-full border hover:bg-sky-50">
                                     <div class="absolute z-10 w-screen max-w-sm  sm:px-0 lg:max-w-sm opacity-100 translate-y-0">
                                         <div class="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
                                             <div class="relative flex flex-col px-5 py-6 space-y-5">
 
                                                 {listOrigin.map((item, index) => (
                                                     <div key={index} class="flex text-sm sm:text-base">
-                                                        <input type="checkbox" value={item} onChange={handleCheckboxChange} class="focus:ring-action-primary text-primary-500 rounded border-slate-400 hover:border-slate-700 bg-transparent dark:border-slate-700 dark:hover:border-slate-500 dark:checked:bg-primary-500 focus:ring-primary-500 w-6 h-6"></input>
+                                                        <input type="checkbox" checked={isOrigin.includes(item)} value={item} onChange={handleCheckboxChange} class="focus:ring-action-primary text-primary-500 rounded border-slate-400 hover:border-slate-700 bg-transparent dark:border-slate-700 dark:hover:border-slate-500 dark:checked:bg-primary-500 focus:ring-primary-500 w-6 h-6"></input>
                                                         <label class="pl-2.5 sm:pl-3.5 flex flex-col flex-1 justify-center select-none">
                                                             <span class="text-slate-900 dark:text-slate-100">{item}</span>
                                                         </label>
@@ -340,8 +349,8 @@ const FilterBar = ({ onChange }) => {
                             <div class="relative ">
                                 <Select id="countries" required value={selectedOption}
                                     onChange={handleSelectChange}
-                                    class="bg-white h-9 rounded-full border-slate-300  hover:bg-fuchsia-50 ">
-                                    <option value="0">Đánh giá</option>
+                                    class="bg-white h-9 rounded-full border-slate-300 hover:bg-sky-50 ">
+                                    <option value="-1">Đánh giá</option>
                                     <option value="1">1 Sao</option>
                                     <option value="2">2 Sao</option>
                                     <option value="3">3 Sao</option>
@@ -361,10 +370,11 @@ const FilterBar = ({ onChange }) => {
                                         value={selectedValue}
                                         onChange={handleSelect}
                                         required
-                                        class="bg-white h-9 rounded-full border-slate-300 w-screen max-w-xs  hover:bg-fuchsia-50">
-                                        <option>Tìm kiếm sản phẩm theo</option>
-                                        <option value="1">Giá từ Thấp đến Cao</option>
-                                        <option value="2">Giá từ Cao đến Thấp</option>
+                                        class="bg-white h-9 rounded-full border-slate-300 w-screen max-w-xs  hover:bg-sky-50">
+                                        <option value="0">Sắp xếp theo phổ biến</option>
+                                        <option value="1">Sắp xếp theo đánh giá cao</option>
+                                        <option value="2">Giá từ thấp đến cao</option>
+                                        <option value="3">Giá từ cao đến thấp</option>
                                     </Select>
                                 </div>
                             </div>
