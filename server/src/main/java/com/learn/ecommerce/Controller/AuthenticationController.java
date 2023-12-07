@@ -64,11 +64,8 @@ public class AuthenticationController {
   }
 
   @PostMapping("/refresh-token")
-  public void refreshToken(
-      HttpServletRequest request,
-      HttpServletResponse response
-  ) throws IOException {
-    service.refreshToken(request, response);
+  public ResponseEntity<AuthenticationResponse> getNewAccessToken(@RequestParam String refreshToken){
+    return service.refreshToken(refreshToken);
   }
   @GetMapping("/confirm-password")
   public Boolean checkExpritation(@RequestParam String UUID) {
