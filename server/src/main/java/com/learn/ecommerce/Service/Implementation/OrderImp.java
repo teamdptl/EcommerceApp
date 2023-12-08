@@ -1,5 +1,7 @@
 package com.learn.ecommerce.Service.Implementation;
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.learn.ecommerce.DTO.TopBrandDTO;
@@ -8,7 +10,9 @@ import com.learn.ecommerce.DTO.TopUserDTO;
 import com.learn.ecommerce.Entity.*;
 import com.learn.ecommerce.Repository.OrderReponsitory;
 import com.learn.ecommerce.Repository.ShipInfoReponsitory;
+import com.learn.ecommerce.Service.EmailService;
 import com.learn.ecommerce.Service.OrderService;
+
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -16,6 +20,7 @@ import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
@@ -31,26 +36,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 @Component
 public class OrderImp implements OrderService {
     @PersistenceContext
     private EntityManager entityManager;
     private final OrderReponsitory orderReponsitory;
 
-    private final ShipInfoReponsitory shipInfoReponsitory;
-
-
     private final OrderLineReponsitory orderLineReposiotry;
     private final ProductImp productImp;
 
-    private final ShipInfoImp shipInfoImp;
+    @Autowired
+    private EmailService emailServiceImp;
+
 
     public OrderImp(@Autowired OrderReponsitory orderReponsitory, ShipInfoReponsitory shipInfoReponsitory, @Autowired ProductImp productImp, @Autowired OrderLineReponsitory orderLineRepository, ShipInfoImp shipInfoImp) {
         this.orderReponsitory = orderReponsitory;
-        this.shipInfoReponsitory = shipInfoReponsitory;
         this.productImp = productImp;
         this.orderLineReposiotry = orderLineRepository;
-        this.shipInfoImp = shipInfoImp;
     }
 
     @Transactional
@@ -82,55 +85,108 @@ public class OrderImp implements OrderService {
         return orderReponsitory.save(order);
     }
 
-    public void generatePdfContent(Order order) throws FileNotFoundException, DocumentException {
+    public void generatePdfContent(Order order, String currentDateTime,  Optional<User> optionalUser) throws FileNotFoundException, DocumentException {
         try {
             Document document = new Document(PageSize.A4);
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String currentDateTime = dateFormat.format(new java.util.Date());
+//            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//            String currentDateTime = dateFormat.format(new java.util.Date());
             String filepath = "D:\\PDF"+currentDateTime+".pdf";
 
             PdfWriter.getInstance(document, new FileOutputStream(filepath));
             document.open();
-            Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-            fontTitle.setSize(18);
 
-            Paragraph paragraph = new Paragraph("Xác nhận đơn hàng",fontTitle );
+            ClassPathResource resource = new ClassPathResource("times.ttf");
+            BaseFont bf = BaseFont.createFont(resource.getURL().toString(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+            Font fontTitle = new Font(bf, 18, Font.BOLD);
+            Font fontParagraph  = new Font(bf, 13, Font.NORMAL);
+            Font fontHeaderParagraph = new Font(bf, 13, Font.BOLD);
+            Font fontHeaderIntro = new Font(bf, 11, Font.BOLD);
+            Font fontIntro = new Font(bf, 9, Font.NORMAL);
+
+            Paragraph headerIntro = new Paragraph(
+                    "SMARTHOME\n" ,fontHeaderIntro);
+            headerIntro.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(headerIntro);
+
+            Paragraph bodyIntro = new Paragraph(
+                      "Địa chỉ: phường Đa Kao, quận 1, TPHCM\n"+
+                            "Email: J2EEmailCompany@gmail.com"
+                            ,fontIntro);
+            bodyIntro.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(bodyIntro);
+
+
+            Paragraph paragraph = new Paragraph("\nXác nhận đơn hàng",fontTitle );
             paragraph.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(paragraph);
+
 
             if (order.getShipInfo() != null) {
                 ShipInfo shipInfo = order.getShipInfo();
 
+                Paragraph shipInfoParagraphHeader = new Paragraph(
+                        "\n1. Thông tin vận chuyển:\n" ,fontHeaderParagraph);
+                shipInfoParagraphHeader.setAlignment(Paragraph.ALIGN_LEFT);
+                document.add(shipInfoParagraphHeader);
+
                 Paragraph shipInfoParagraph = new Paragraph(
-                        "Thông tin vận chuyển:\n" +
-                                "Họ và tên: " + shipInfo.getFullName() + "\n" +
-                                "Địa chỉ: " + shipInfo.getAddress() + "\n" +
-                                "Số điện thoại: " + shipInfo.getPhone() + "\n"
+                          "Họ và tên: " + "   " +shipInfo.getFullName() + "\n" +
+                                "Địa chỉ: " + "  " + shipInfo.getAddress() + "\n" +
+                                "Số điện thoại: " + " " +shipInfo.getPhone() + "\n" +
+                                "\n" ,
+                                fontParagraph
                 );
                 shipInfoParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 document.add(shipInfoParagraph);
             }
 
-            List<OrderLine> orderLines = orderLineReposiotry.findAllById(Collections.singleton(order.getOrderId()));
+            Paragraph shipInfoParagraphHeader2 = new Paragraph(
+                    "\n2. Danh sách các sản phẩm:\n" ,fontHeaderParagraph);
+            shipInfoParagraphHeader2.setAlignment(Paragraph.ALIGN_LEFT);
+            document.add(shipInfoParagraphHeader2);
 
                 PdfPTable orderLineTable = new PdfPTable(4);
+                orderLineTable.setSpacingBefore(25);
+                orderLineTable.setSpacingAfter(25);
                 orderLineTable.setWidthPercentage(100);
-                orderLineTable.addCell("Tên sản phẩm");
-                orderLineTable.addCell("Số lượng");
-                orderLineTable.addCell("Đơn giá");
-                orderLineTable.addCell("Thành tiền");
 
-                for (OrderLine orderLine : orderLines) {
-                    orderLineTable.addCell(orderLine.getProduct().getName());
-                    orderLineTable.addCell(String.valueOf(orderLine.getQuantity()));
-                    orderLineTable.addCell(String.valueOf(orderLine.getPrice()));
-                    orderLineTable.addCell(String.valueOf(orderLine.getQuantity() * orderLine.getPrice()));
+                orderLineTable.addCell(new PdfPCell(new Phrase("Tên sản phẩm", fontHeaderParagraph)));
+                orderLineTable.addCell(new PdfPCell(new Phrase("Số lượng", fontHeaderParagraph)));
+                orderLineTable.addCell(new PdfPCell(new Phrase("Đơn giá", fontHeaderParagraph)));
+                orderLineTable.addCell(new PdfPCell(new Phrase("Thành tiền", fontHeaderParagraph)));
+
+
+            String nativeQuery = "SELECT p.product_id, p.name, ol.quantity, p.price, ol.price " +
+                    "FROM order_line ol " +
+                    "JOIN product p ON ol.product_id = p.product_id " +
+                    "JOIN Orders o ON ol.order_id = o.order_id " +
+                    "WHERE o.order_id = ?1";  // Use positional parameter
+
+            Query query = entityManager.createNativeQuery(nativeQuery)
+                    .setParameter(1, order.getOrderId());
+
+            List<Object[]> resultList = query.getResultList();
+
+
+                for (Object[] result : resultList) {
+                    orderLineTable.addCell(new PdfPCell(new Phrase((String) result[1], fontParagraph)));
+                    orderLineTable.addCell(new PdfPCell(new Phrase(String.valueOf(Integer.parseInt(result[2].toString())))));
+                    orderLineTable.addCell(new PdfPCell(new Phrase(String.valueOf(Integer.parseInt(result[3].toString())))));
+                    orderLineTable.addCell(new PdfPCell(new Phrase(String.valueOf(Integer.parseInt(result[4].toString())))));
                 }
                 document.add(orderLineTable);
 
             document.close();
 
             System.out.println("PDF file generated successfully.");
+            if (optionalUser.isPresent()) {
+                System.out.println("Email: " + optionalUser.get().getEmail());
+                emailServiceImp.sendEmailWithAttachment(optionalUser.get().getEmail(), "Xác nhận đơn hàng", "Chúc mừng bạn đã đặt đơn hàng thành công, đây là file đính kèm của đơn đặt hàng", "D:\\PDF" + currentDateTime + ".pdf");
+                System.out.println("Tạo email thành công.");
+            } else {
+                System.out.println("Optional<User> is empty.");
+            }
 
         } catch (Exception e){
             e.printStackTrace();
