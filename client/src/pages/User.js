@@ -7,6 +7,9 @@ import UserOrder from '../components/user/UserOrder';
 import {useParams, useSearchParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useAuth} from "../context/AuthContext";
+import UserFavorite from "../components/user/UserFavorite";
+import Page from "../layouts/Page";
+import UserPassword from "../components/user/UserPassword";
 
 const User = () => {
 	let [params, setParams] = useSearchParams();
@@ -14,30 +17,26 @@ const User = () => {
 
 	return (
 		<>
-			<Header></Header>
-			<div class="max-w-4xl mx-auto mt-10">
-				<p class=" text-2xl font-semibold">Tài khoản của bạn</p>
-				<p class="mt-2">{user?.fullname}, {user.username}</p>
-				<Tabs.Group aria-label="Tabs with icons" theme={tabTheme} style="underline">
-					<Tabs.Item active={!params.get('tab')} icon={HiUserCircle} title="Tài khoản">
-						<UserInfo></UserInfo>
-					</Tabs.Item>
-					<Tabs.Item active={params.get('tab') === 'order'} icon={HiShoppingCart} title="Đơn hàng">
-						{/*<UserOrder></UserOrder>*/}
-					</Tabs.Item>
-					<Tabs.Item active={params.get('tab') === 'favorite'} icon={HiClipboardList} title="Yêu thích">
-						<p>
-							Yêu thích
-						</p>
-					</Tabs.Item>
-					<Tabs.Item active={params.get('tab') === 'change-password'} icon={HiAdjustments} title="Đổi mật khẩu">
-						<p>
-							Thay đổi mật khẩu
-						</p>
-					</Tabs.Item>
-				</Tabs.Group>
-			</div>
-			<Footer></Footer>
+			<Page>
+				<div className="max-w-4xl mx-auto mt-10">
+					<p className=" text-2xl font-semibold">Tài khoản của bạn</p>
+					<p className="mt-2">{user?.fullname}, {user.username}</p>
+					<Tabs.Group aria-label="Tabs with icons" theme={tabTheme} style="underline">
+						<Tabs.Item active={!params.get('tab')} icon={HiUserCircle} title="Tài khoản">
+							<UserInfo></UserInfo>
+						</Tabs.Item>
+						<Tabs.Item active={params.get('tab') === 'order'} icon={HiShoppingCart} title="Đơn hàng">
+							<UserOrder/>
+						</Tabs.Item>
+						<Tabs.Item active={params.get('tab') === 'favorite'} icon={HiClipboardList} title="Yêu thích">
+							<UserFavorite/>
+						</Tabs.Item>
+						<Tabs.Item active={params.get('tab') === 'change-password'} icon={HiAdjustments} title="Đổi mật khẩu">
+							<UserPassword/>
+						</Tabs.Item>
+					</Tabs.Group>
+				</div>
+			</Page>
 		</>
 	);
 };

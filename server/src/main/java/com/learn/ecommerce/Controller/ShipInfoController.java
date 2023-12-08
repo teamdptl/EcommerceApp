@@ -63,11 +63,6 @@ public class ShipInfoController {
     @PostMapping("/add")
     public ResponseEntity<?> addShipInfo(@Valid @RequestBody CreateShipInfoRequest createShipInfoRequest, BindingResult result){
         Optional<User> optionalUser = auth.getCurrentUser();
-//        if (optionalUser.isPresent()) {
-//
-//        } else {
-//            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-//        }
 
         if (result.hasErrors())
             return new ResponseEntity<>("Dữ liệu "+result.getFieldError().getField()+" không hợp lệ", HttpStatus.NOT_FOUND);
