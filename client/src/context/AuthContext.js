@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     const storageData = localStorage.getItem('accessToken');
     const userData = storageData ? jwtDecode(storageData) : null;
     const [user, setUser] = useState(userData);
+
     const getUserData = async () => {
         const token = localStorage.getItem("accessToken") ?? null;
         if (token) {
@@ -42,9 +43,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         getUserData().then(data => {
-            if (data === null)
-                setUser(null);
-            else
+            if (data !== null)
                 setUser(
                     {
                         username: data?.username,

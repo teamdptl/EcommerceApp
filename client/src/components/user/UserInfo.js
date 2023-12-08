@@ -1,12 +1,20 @@
 import { Label, TextInput, Alert } from "flowbite-react";
 import UserShipInfo from "./UserShipInfo";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import UserShipInfoForm from "./UserShipInfoForm";
 import {useAuth} from "../../context/AuthContext";
+import useUserInfoFetch from "../../hooks/useUserInfoFetch";
+import {get} from "axios";
 
 const UserInfo = () => {
-	const [display, setDisplay] = useState(false);
 	const { user } = useAuth();
+	const [display, setDisplay] = useState(false);
+	const { listInfo, loading, errorMsg, getInfoList } = useUserInfoFetch();
+
+	useEffect(() => {
+		getInfoList();
+	}, [])
+
 	return (
 		<>
 			<p class="text-xl font-semibold my-3">Thông tin tài khoản</p>
@@ -41,9 +49,16 @@ const UserInfo = () => {
 			) : (
 				<></>
 			)}
-			<p class="mt-4">Bạn chưa có bất kì thông tin nhận hàng nào</p>
+
 			<div class="mt-2 w-full grid grid-cols-1 gap-x-6 gap-y-3">
-				<UserShipInfo></UserShipInfo>
+				{listInfo && listInfo.length > 0 &&
+					listInfo.map(info => (
+						<UserShipInfo info={info}/>
+					))
+				}
+				{!listInfo || listInfo.length === 0 &&
+					<p className="mt-4">Bạn chưa có bất kì thông tin nhận hàng nào</p>
+				}
 			</div>
 		</>
 	);

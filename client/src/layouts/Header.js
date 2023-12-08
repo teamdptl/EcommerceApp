@@ -12,10 +12,6 @@ import UserDropDown from "../components/main/UserDropDown";
 export default function Header() {
 	const {user, setUser} = useAuth();
 
-	useEffect(() => {
-		console.log("user:", user)
-	}, []);
-
 	const handleLogout = () =>{
 		const token = localStorage.getItem('accessToken');
 		fetch(`${baseUrl}/api/v1/auth/logout`, {

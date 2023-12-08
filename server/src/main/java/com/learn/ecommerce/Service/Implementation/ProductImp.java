@@ -1,5 +1,4 @@
 package com.learn.ecommerce.Service.Implementation;
-import com.learn.ecommerce.Entity.Media;
 import com.learn.ecommerce.Entity.Product;
 import com.learn.ecommerce.Repository.ProductQueryAdvanced;
 import com.learn.ecommerce.Repository.ProductRepository;
@@ -102,5 +101,10 @@ public class ProductImp implements ProductService {
     public void saveProductWithMedia(Product product, List<Integer> fileIds, Integer primaryImageIndex) {
         Product saved = reponsitory.save(product);
         mediaImp.saveFiles(fileIds, saved, primaryImageIndex);
+    }
+
+    @Override
+    public Set<Product> getFavoriteProduct(User user) {
+        return user.getProducts();
     }
 }

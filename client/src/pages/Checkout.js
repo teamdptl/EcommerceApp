@@ -43,7 +43,7 @@ const Checkout = () => {
 			.finally(() => setLoading(false))
 	}
 
-	const saveShipInfo = async () => {
+	const saveShipInfo = async (shipInfo) => {
 		return createFetch(baseUrl+'/api/v1/user/shipInfo/add', {
 			method: 'POST',
 			body: JSON.stringify(shipInfo),
@@ -59,7 +59,7 @@ const Checkout = () => {
 			setMsg({...msg, error: 1, text: "Vui lòng điền đầy đủ hoặc chọn thông tin giao hàng", show: true});
 			return;
 		}
-		const { shipId } = await saveShipInfo();
+		const { shipId } = await saveShipInfo(shipInfo);
 		const {error, message} = await createOrder(shipId);
 		setMsg({...msg, error: error, text: message, show: true});
 		clearCart();

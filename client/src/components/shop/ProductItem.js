@@ -5,8 +5,8 @@ import {IoCartOutline, IoHeart} from "react-icons/io5";
 import useCart from "../../hooks/useCart";
 import {useCartContext} from "../../context/CartContext";
 import formatMoney from "../../utils/currency";
-const ProductItem = ({ product, isEnable = true }) => {
-    const ratingArr = Array(parseInt(product.rating, 10)).fill("");
+const ProductItem = ({ product, isEnable = true, isEnableRating = true }) => {
+    const ratingArr = Array(parseInt(product.rating ?? 1, 10)).fill("");
 	const { addItemToCart } = useCartContext();
     return (
 			<>
@@ -28,16 +28,20 @@ const ProductItem = ({ product, isEnable = true }) => {
 							<p className="text-base font-medium text-red-700">{ formatMoney(product.price) }</p>
 							<p className="text-sm line-through text-gray-400">{ formatMoney(product.oldPrice) }</p>
 						</div>
+						{ isEnableRating &&
+							<>
+								{product.rating >= 0 ? (
+									<Rating>
+										{Array(5).fill('').map((value, index) => (index + 1 <= product.rating ? <Rating.Star /> : <Rating.Star filled={false} />))}
+										<p className="ml-2 text-sm font-medium text-gray-900">{product.rating}</p>
+										<p className="ml-2 text-xs font-medium text-gray-900">({product.reviewCount})</p>
+									</Rating>
+								) : (
+									<Rating></Rating>
+								)}
+							</>
+						}
 
-						{product.rating >= 0 ? (
-							<Rating>
-								{Array(5).fill('').map((value, index) => (index + 1 <= product.rating ? <Rating.Star /> : <Rating.Star filled={false} />))}
-								<p className="ml-2 text-sm font-medium text-gray-900">{product.rating}</p>
-								<p className="ml-2 text-xs font-medium text-gray-900">({product.reviewCount})</p>
-							</Rating>
-						) : (
-							<Rating></Rating>
-						)}
 					</div>
 					{isEnable &&
 						<div className={"grid grid-cols-2 gap-2 mt-3"}>

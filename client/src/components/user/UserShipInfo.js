@@ -2,12 +2,14 @@ import { useState } from "react";
 import { FaShippingFast } from "react-icons/fa";
 import UserShipInfoForm from "./UserShipInfoForm";
 
-const UserShipInfo = () => {
-	const [info, setInfo] = useState({
-		receiveName: "Huỳnh Khánh Duy",
-		address: "373 An Dương Vương, Quận 5, TP.Hồ Chí Minh",
-		phone: "012345678",
-	});
+const UserShipInfo = ({info}) => {
+	// const [info, setInfo] = useState({
+	// 	receiveName: "Huỳnh Khánh Duy",
+	// 	address: "373 An Dương Vương, Quận 5, TP.Hồ Chí Minh",
+	// 	phone: "012345678",
+	// });
+
+	const [editInfo, setEditInfo] = useState({receiveName: info.fullName, phone: info.phone});
 
 	const [display, setDisplay] = useState(false);
 
@@ -18,7 +20,7 @@ const UserShipInfo = () => {
 				<div class="flex flex-col ml-7 mr-3">
 					<div class="flex items-center">
 						<p class="text-base font-semibold">
-							{info.receiveName} - ({info.phone})
+							{info.fullName} - ({info.phone})
 						</p>
 					</div>
 					<p>Địa chỉ: {info.address}</p>
@@ -31,7 +33,11 @@ const UserShipInfo = () => {
 					Thay đổi
 				</button>
             </div>
-            {display === true ? <UserShipInfoForm shipInfo={info}  /> : <></>}
+            {display === true ?
+				<UserShipInfoForm shipInfo={{receiveName: info.fullName, phone: info.phone}}
+								  onChange={(data) => setEditInfo(data)}
+								  saveCallback={() => {}}
+			/> : <></>}
 		</>
 	);
 };

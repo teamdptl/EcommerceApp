@@ -7,9 +7,9 @@
  import org.springframework.data.domain.Pageable;
  import org.springframework.stereotype.Service;
  import com.learn.ecommerce.Entity.Product;
- import org.springframework.web.multipart.MultipartFile;
 
  import java.util.List;
+ import java.util.Set;
 
  @Service
  public interface ProductService extends RootService<Product, Integer> {
@@ -27,4 +27,5 @@
      public List<Product> featureProducts(Integer page);
      void saveProductWithMedia(Product product, List<Integer> fileIds, Integer primaryImageIndex);
 
+     Set<Product> getFavoriteProduct(User user);
  }
