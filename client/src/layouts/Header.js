@@ -7,6 +7,7 @@ import "flowbite";
 import {useContext, useEffect, useState} from "react";
 import baseUrl from "../config";
 import {AuthProvider, AuthContext, useAuth} from "../context/AuthContext";
+import UserDropDown from "../components/main/UserDropDown";
 
 export default function Header() {
 	const {user, setUser} = useAuth();
@@ -53,15 +54,9 @@ export default function Header() {
 								</div>
 								{
 									user ?
-										<div class="flex">
-										<label class="text-m text-black-900 mx-auto my-auto mr-4">Hi,{user.fullname}</label>
-										<button
-											onClick={handleLogout}
-											type="button"
-											class="text-white mr-2 bg-blue-700 hidden sm:block hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center md:mr-0">
-											Đăng xuất
-										</button>
-										</div>
+										<>
+											<UserDropDown user={user} logout={handleLogout}></UserDropDown>
+										</>
 										:
 										<Link to="/login">
 										<button

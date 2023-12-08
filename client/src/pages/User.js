@@ -4,27 +4,33 @@ import { Tabs } from "flowbite-react";
 import { HiAdjustments, HiClipboardList, HiUserCircle, HiShoppingCart } from "react-icons/hi";
 import UserInfo from '../components/user/UserInfo';
 import UserOrder from '../components/user/UserOrder';
+import {useParams, useSearchParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useAuth} from "../context/AuthContext";
 
 const User = () => {
+	let [params, setParams] = useSearchParams();
+	const { user } = useAuth();
+
 	return (
 		<>
 			<Header></Header>
 			<div class="max-w-4xl mx-auto mt-10">
 				<p class=" text-2xl font-semibold">Tài khoản của bạn</p>
-				<p class="mt-2">Enrico Cole, ciseco@gmail.com · Los Angeles, CA</p>
+				<p class="mt-2">{user?.fullname}, {user.username}</p>
 				<Tabs.Group aria-label="Tabs with icons" theme={tabTheme} style="underline">
-					<Tabs.Item active icon={HiUserCircle} title="Tài khoản">
+					<Tabs.Item active={!params.get('tab')} icon={HiUserCircle} title="Tài khoản">
 						<UserInfo></UserInfo>
 					</Tabs.Item>
-					<Tabs.Item icon={HiShoppingCart} title="Đơn hàng">
+					<Tabs.Item active={params.get('tab') === 'order'} icon={HiShoppingCart} title="Đơn hàng">
 						{/*<UserOrder></UserOrder>*/}
 					</Tabs.Item>
-					<Tabs.Item icon={HiClipboardList} title="Yêu thích">
+					<Tabs.Item active={params.get('tab') === 'favorite'} icon={HiClipboardList} title="Yêu thích">
 						<p>
 							Yêu thích
 						</p>
 					</Tabs.Item>
-					<Tabs.Item icon={HiAdjustments} title="Đổi mật khẩu">
+					<Tabs.Item active={params.get('tab') === 'change-password'} icon={HiAdjustments} title="Đổi mật khẩu">
 						<p>
 							Thay đổi mật khẩu
 						</p>

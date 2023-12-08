@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
                 if (!res.ok){
                     alert("Không thể lấy được thông tin");
                     localStorage.removeItem('accessToken');
-                    // localStorage.removeItem('refresh_token');
+                    localStorage.removeItem('refresh_token');
                 }
                 return res.json()
             })
@@ -42,13 +42,15 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         getUserData().then(data => {
-            console.log(data);
-            setUser(
-                {
-                    username: data.username,
-                    fullname: data.fullname,
-                    role: data.role
-                })
+            if (data === null)
+                setUser(null);
+            else
+                setUser(
+                    {
+                        username: data?.username,
+                        fullname: data?.fullname,
+                        role: data?.role
+                    })
         })
     }, []);
 

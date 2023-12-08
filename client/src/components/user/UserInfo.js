@@ -1,10 +1,12 @@
 import { Label, TextInput, Alert } from "flowbite-react";
 import UserShipInfo from "./UserShipInfo";
-import { useState } from "react";
+import {useContext, useState} from "react";
 import UserShipInfoForm from "./UserShipInfoForm";
+import {useAuth} from "../../context/AuthContext";
 
 const UserInfo = () => {
 	const [display, setDisplay] = useState(false);
+	const { user } = useAuth();
 	return (
 		<>
 			<p class="text-xl font-semibold my-3">Thông tin tài khoản</p>
@@ -13,13 +15,13 @@ const UserInfo = () => {
 					<div className="mb-2 block">
 						<Label htmlFor="name" value="Họ và tên:" />
 					</div>
-					<TextInput id="name" sizing="md" type="text" disabled />
+					<TextInput id="name" sizing="md" type="text" disabled value={user?.fullname}/>
 				</div>
 				<div>
 					<div className="mb-2 block">
 						<Label htmlFor="email" value="Email:" />
 					</div>
-					<TextInput id="email" sizing="md" type="email" disabled />
+					<TextInput id="email" sizing="md" type="email" disabled value={user?.username}/>
 				</div>
 			</div>
 			<div class="flex mt-6 items-center">
@@ -34,7 +36,7 @@ const UserInfo = () => {
 			</div>
 			{display === true ? (
 				<div class="w-full mt-2">
-					<UserShipInfoForm />
+					<UserShipInfoForm saveCallback={() => console.log("saved")} />
 				</div>
 			) : (
 				<></>
