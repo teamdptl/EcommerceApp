@@ -1,19 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // import { useContext, useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import {NavLink, Link, useNavigate} from "react-router-dom";
 import CartDropDown from "../components/main/CartDropdown"
 import NavMenuDropDown from "../components/main/NavMenuDropDown";
 import "flowbite";
 import {useContext, useEffect, useState} from "react";
 import baseUrl from "../config";
 import {AuthProvider, AuthContext, useAuth} from "../context/AuthContext";
+import UserDropDown from "../components/main/UserDropDown";
 
 export default function Header() {
 	const {user, setUser} = useAuth();
-
-	useEffect(() => {
-		console.log("user:", user)
-	}, []);
+	const navigate = useNavigate();
 
 	const handleLogout = () =>{
 		const token = localStorage.getItem('accessToken');
@@ -29,7 +27,7 @@ export default function Header() {
 				localStorage.removeItem('refresh_token');
 				localStorage.removeItem('cart');
 				setUser(null);
-				window.location.reload();
+				navigate("/login", {replace: true})
 			})
 			.catch(() => {
 				alert("Lỗi không thể đăng xuất");
@@ -53,15 +51,9 @@ export default function Header() {
 								</div>
 								{
 									user ?
-										<div class="flex">
-										<label class="text-m text-black-900 mx-auto my-auto mr-4">Hi,{user.fullname}</label>
-										<button
-											onClick={handleLogout}
-											type="button"
-											class="text-white mr-2 bg-blue-700 hidden sm:block hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center md:mr-0">
-											Đăng xuất
-										</button>
-										</div>
+										<>
+											<UserDropDown user={user} logout={handleLogout}></UserDropDown>
+										</>
 										:
 										<Link to="/login">
 										<button

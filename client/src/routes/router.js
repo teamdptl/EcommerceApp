@@ -24,6 +24,7 @@ import AdminCategoryBrand from "../pages/admin/AdminCategoryBrand";
 import AdminOrder from "../pages/admin/AdminOrder";
 import AdminStatisticTop from "../pages/admin/AdminStatisticTop";
 import AdminStatisticMoney from "../pages/admin/AdminStatisticMoney";
+import ScrollToTop from "./ScrollToTop";
 
 function AuthRoute({children, condition, navigatePage}) {
     const { user } = useAuth();
@@ -69,6 +70,7 @@ const Router = ()  =>  {
     const { isAdmin, isUser } = useAuth();
     return (
         <BrowserRouter>
+            <ScrollToTop />
             <Routes>
                 <Route exact path="/" element={<Home/>} />
                 <Route path="contact" element={<Contact/>} />

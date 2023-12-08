@@ -10,11 +10,7 @@ import com.learn.ecommerce.Repository.ProductQueryAdvanced;
 import com.learn.ecommerce.Repository.BrandRepository;
 import com.learn.ecommerce.Request.CreateProductRequest;
 import com.learn.ecommerce.Request.EditProductRequest;
-import com.learn.ecommerce.Response.ErrorResponse;
-import com.learn.ecommerce.Response.MediaResponse;
-import com.learn.ecommerce.Response.ProductDetailResponse;
-import com.learn.ecommerce.Response.ProductListItemResponse;
-import com.learn.ecommerce.Response.SuccessResponse;
+import com.learn.ecommerce.Response.*;
 import com.learn.ecommerce.Service.Implementation.MediaImp;
 import com.learn.ecommerce.Service.Implementation.ProductImp;
 import com.learn.ecommerce.Ultis.AuthUtils;
@@ -29,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -205,7 +202,23 @@ public class ProductController {
     // Role: User
     @GetMapping("/favorite")
     public ResponseEntity<?> getUserFavorite(){
-        return null;
+        Optional<User> usr = authUtils.getCurrentUser();
+        if (usr.isEmpty())
+            return ResponseEntity.badRequest().build();
+        Set<Product> products = service.getFavoriteProduct(usr.get());
+        List<ProductFavoriteItem> list = ModelMapperUtils.mapAll(products, ProductFavoriteItem.class).stream().map(item -> {
+            Optional<Media> media = mediaImp.getProductPrimaryMedia(item.getProductId());
+            item.setImageUrl(Media.DEFAULT_IMAGE);
+            media.ifPresent(value -> {
+                if (value.isExternalImage())
+                    item.setImageUrl(value.getImageUrl());
+                else {
+                    item.setImageUrl(MainController.url+"/"+Media.mediaPath+value.getImageUrl());
+                }
+            });
+            return item;
+        }).toList();
+        return ResponseEntity.ok(list);
     }
 
     // Role: User

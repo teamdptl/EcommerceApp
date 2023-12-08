@@ -2,27 +2,26 @@ package com.learn.ecommerce.Entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true) // important
 @Entity
 @SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id = ?") // Soft delete
 @Table(name = "_user")
 public class User implements UserDetails {
-
   @Id
+  @EqualsAndHashCode.Include
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   @Column(unique=true)
@@ -38,6 +37,9 @@ public class User implements UserDetails {
 
   @OneToMany(mappedBy = "user")
   private List<Token> tokens;
+
+  @ManyToMany(mappedBy = "users")
+  Set<Product> products;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

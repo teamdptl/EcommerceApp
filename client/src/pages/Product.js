@@ -6,52 +6,50 @@ import ReviewGroup from "../components/shop/ReviewsGroup";
 import baseUrl from "../config";
 import { useEffect, useState } from "react"
 import { AuthProvider } from "../context/AuthContext";
-
-const url = window.location.href
-const urlArr = url.split('/')
-const productId = urlArr[4]
-
-const getReviewData = async () => {
-    
-    let apiStr = baseUrl + '/api/v1/review/all/' + productId
-	
-    return await fetch(apiStr)
-                .then((res) => res.json())
-                .then((json) => {return json})
-                .catch(err => console.error(err))
-    
-}
-
-const getAverageRating = (reviewsData) => {
-    let average = 0
-    reviewsData.forEach((review) => {
-        average += review.rate
-    })
-
-    return (average/reviewsData.length).toFixed(2)
-}
-
-const getProductData = async () => {
-	let apiUrl = baseUrl + '/api/v1/product/get/' + productId
-	let token = localStorage.getItem('accessToken')
-	token = token ? token : "";
-	console.log("Token in get product data: " + token)
-	let bearerToken = "Bearer " + token;
-	console.log("Bearer Token in get product data: " + bearerToken)
-	return await fetch(apiUrl, {
-							method: 'GET',
-							headers: {
-								'Authorization': bearerToken
-							},
-						})
-				.then(res => res.json())
-				.then((json) => {return json})
-				.catch(err => console.error(err))
-}
+import {useParams} from "react-router-dom";
 
 const Product = () => {
 	const [reviewsData, setReviewsData] = useState([]);
 	const [productData, setProductData] = useState();
+	const { productId} = useParams();
+
+	const getReviewData = async () => {
+
+		let apiStr = baseUrl + '/api/v1/review/all/' + productId
+
+		return await fetch(apiStr)
+			.then((res) => res.json())
+			.then((json) => {return json})
+			.catch(err => console.error(err))
+
+	}
+
+	const getAverageRating = (reviewsData) => {
+		let average = 0
+		reviewsData.forEach((review) => {
+			average += review.rate
+		})
+
+		return (average/reviewsData.length).toFixed(2)
+	}
+
+	const getProductData = async () => {
+		let apiUrl = baseUrl + '/api/v1/product/get/' + productId
+		let token = localStorage.getItem('accessToken')
+		token = token ? token : "";
+		console.log("Token in get product data: " + token)
+		let bearerToken = "Bearer " + token;
+		console.log("Bearer Token in get product data: " + bearerToken)
+		return await fetch(apiUrl, {
+			method: 'GET',
+			headers: {
+				'Authorization': bearerToken
+			},
+		})
+			.then(res => res.json())
+			.then((json) => {return json})
+			.catch(err => console.error(err))
+	}
 
 	useEffect(() => {
         getReviewData().then(res => setReviewsData(res))

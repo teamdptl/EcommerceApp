@@ -27,7 +27,6 @@ public class TokenController {
     @GetMapping("/user")
     public ResponseEntity<?> getUserByToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String header) {
         String token = header.replace("Bearer ", "");
-        Optional<User> user = authUtils.getCurrentUser();
         Optional<Token> tokenAccess = tokenRepository.findByToken(token);
         if (tokenAccess.isEmpty()){
             return ResponseEntity.badRequest().body(new ErrorResponse("Token không hợp lệ"));

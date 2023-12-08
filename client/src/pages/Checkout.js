@@ -9,9 +9,10 @@ import {useEffect, useState} from "react";
 import baseUrl from "../config";
 import ScreenLoading from "../components/ScreenLoading";
 import ScreenInfo from "../components/ScreenInfo";
+import createFetch from "../utils/createFetch";
 
 const Checkout = () => {
-	const { cart, getTotalMoney, loadCart } = useCartContext();
+	const { cart, getTotalMoney, loadCart, clearCart } = useCartContext();
 	const [paymentMethod, setPaymentMethod] = useState('Thanh toán khi nhận hàng COD');
 	const [loading, setLoading] = useState(false);
 	const [shipInfo, setShipInfo] = useState(null);
@@ -22,7 +23,7 @@ const Checkout = () => {
 	}, [])
 
 	const createOrder = async (shipId) => {
-		return fetch(baseUrl+'/api/v1/order/place', {
+		return createFetch(baseUrl+'/api/v1/order/place', {
 			method: 'POST',
 			body: JSON.stringify({
 				items: cart.map(item => {
@@ -42,8 +43,8 @@ const Checkout = () => {
 			.finally(() => setLoading(false))
 	}
 
-	const saveShipInfo = async () => {
-		return fetch(baseUrl+'/api/v1/user/shipInfo/add', {
+	const saveShipInfo = async (shipInfo) => {
+		return createFetch(baseUrl+'/api/v1/user/shipInfo/add', {
 			method: 'POST',
 			body: JSON.stringify(shipInfo),
 			headers: {
@@ -58,9 +59,10 @@ const Checkout = () => {
 			setMsg({...msg, error: 1, text: "Vui lòng điền đầy đủ hoặc chọn thông tin giao hàng", show: true});
 			return;
 		}
-		const { shipId } = await saveShipInfo();
+		const { shipId } = await saveShipInfo(shipInfo);
 		const {error, message} = await createOrder(shipId);
 		setMsg({...msg, error: error, text: message, show: true});
+		clearCart();
 	}
 
 	return <Page>

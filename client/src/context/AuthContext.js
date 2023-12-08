@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     const storageData = localStorage.getItem('accessToken');
     const userData = storageData ? jwtDecode(storageData) : null;
     const [user, setUser] = useState(userData);
+
     const getUserData = async () => {
         const token = localStorage.getItem("accessToken") ?? null;
         if (token) {
@@ -18,7 +19,7 @@ export const AuthProvider = ({ children }) => {
                 if (!res.ok){
                     alert("Không thể lấy được thông tin");
                     localStorage.removeItem('accessToken');
-                    // localStorage.removeItem('refresh_token');
+                    localStorage.removeItem('refresh_token');
                 }
                 return res.json()
             })
@@ -42,13 +43,13 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         getUserData().then(data => {
-            console.log(data);
-            setUser(
-                {
-                    username: data.username,
-                    fullname: data.fullname,
-                    role: data.role
-                })
+            if (data !== null)
+                setUser(
+                    {
+                        username: data?.username,
+                        fullname: data?.fullname,
+                        role: data?.role
+                    })
         })
     }, []);
 

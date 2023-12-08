@@ -5,6 +5,8 @@ import com.learn.ecommerce.Entity.User;
 import com.learn.ecommerce.Repository.ChangePasswordRepository;
 import com.learn.ecommerce.Repository.UserRepository;
 import com.learn.ecommerce.Request.ChangePasswordRequest;
+import com.learn.ecommerce.Response.ErrorResponse;
+import com.learn.ecommerce.Response.SuccessResponse;
 import com.learn.ecommerce.Service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +81,14 @@ public class UserService {
 
 
 
+    }
+
+    public ResponseEntity<?> setUserNewPassword(User user, String oldPass, String newPassword){
+        if (passwordEncoder.matches(oldPass, user.getPassword())){
+            user.setPassword(passwordEncoder.encode(newPassword));
+            return ResponseEntity.ok(new SuccessResponse("Thay đổi mật khẩu thành công!"));
+        }
+        return ResponseEntity.ok(new ErrorResponse("Mật khẩu không đúng!"));
     }
 
     public Page<User> findByAllUser(Pageable pageable) {
