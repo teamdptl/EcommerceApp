@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 const UserShipInfoForm = ({shipInfo, saveCallback, onChange}) => {
 	const baseURL = "https://provinces.open-api.vn/api";
 
-	const [fullName, setFullName] = useState('');
-	const [phone, setPhone] = useState('')
 	const [street, setStreet] = useState('');
 	const [listProvince, setListProvince] = useState([]);
 	const [province, setProvince] = useState(null);
@@ -15,7 +13,9 @@ const UserShipInfoForm = ({shipInfo, saveCallback, onChange}) => {
 	const [listWard, setListWard] = useState([]);
     const [ward, setWard] = useState(null);
     
-    const info = shipInfo !== null ? { ...shipInfo } : { receiveName: "", phone: "", address: "" };
+    const info = shipInfo !== null ? { ...shipInfo } : { fullName: "", phone: "", address: "" };
+	const [fullName, setFullName] = useState(info.fullName);
+	const [phone, setPhone] = useState(info.phone);
 
 	const getProvinces = async () => {
 		const provinces = await fetch(`${baseURL}/p`, {
@@ -135,13 +135,13 @@ const UserShipInfoForm = ({shipInfo, saveCallback, onChange}) => {
 					<div className="mb-2 block">
 						<Label htmlFor="name" value="Họ và tên người nhận" />
 					</div>
-					<TextInput id="name" sizing="md" type="text" value={info.receiveName} onChange={e => setFullName(e.target.value)}/>
+					<TextInput id="name" sizing="md" type="text" value={fullName} onChange={e => setFullName(e.target.value)}/>
 				</div>
 				<div>
 					<div className="mb-2 block">
 						<Label htmlFor="name" value="Số điện thoại" />
 					</div>
-					<TextInput id="name" sizing="md" type="text" value={info.phone} onChange={e => setPhone(e.target.value)}/>
+					<TextInput id="name" sizing="md" type="text" value={phone} onChange={e => setPhone(e.target.value)}/>
 				</div>
 				<div>
 					<div>

@@ -5,15 +5,36 @@ import UserShipInfoForm from "./UserShipInfoForm";
 import {useAuth} from "../../context/AuthContext";
 import useUserInfoFetch from "../../hooks/useUserInfoFetch";
 import {get} from "axios";
+import createFetch from "../../utils/createFetch";
+import baseUrl from "../../config";
 
 const UserInfo = () => {
 	const { user } = useAuth();
 	const [display, setDisplay] = useState(false);
 	const { listInfo, loading, errorMsg, getInfoList } = useUserInfoFetch();
+	const [editInfo, setEditInfo] = useState(null);
 
 	useEffect(() => {
 		getInfoList();
 	}, [])
+
+	const saveShipInfo = async (shipInfo) => {
+		if (!shipInfo || !shipInfo.isValid){
+			alert("Vui lòng điền đầy đủ thông tin");
+			return;
+		}
+		return createFetch(baseUrl+'/api/v1/user/shipInfo/add', {
+			method: 'POST',
+			body: JSON.stringify(shipInfo),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(res => {
+			getInfoList();
+			setDisplay(false);
+		})
+			.catch(err => console.log(err))
+	}
 
 	return (
 		<>
@@ -44,7 +65,9 @@ const UserInfo = () => {
 			</div>
 			{display === true ? (
 				<div class="w-full mt-2">
-					<UserShipInfoForm saveCallback={() => console.log("saved")} />
+					<UserShipInfoForm saveCallback={() => {
+						saveShipInfo(editInfo);
+					}} onChange={(editInfo) => setEditInfo(editInfo)}/>
 				</div>
 			) : (
 				<></>
@@ -53,7 +76,7 @@ const UserInfo = () => {
 			<div class="mt-2 w-full grid grid-cols-1 gap-x-6 gap-y-3">
 				{listInfo && listInfo.length > 0 &&
 					listInfo.map(info => (
-						<UserShipInfo info={info}/>
+						<UserShipInfo info={info} onSubmit={getInfoList}/>
 					))
 				}
 				{!listInfo || listInfo.length === 0 &&

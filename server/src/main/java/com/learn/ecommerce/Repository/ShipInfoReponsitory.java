@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
  @Repository   public interface ShipInfoReponsitory extends JpaRepository<ShipInfo,Integer>{
-  @Query("SELECT s FROM ShipInfo s WHERE s.user.id = :userId")
+  @Query("SELECT s FROM ShipInfo s WHERE s.user.id = :userId and s.isDeleted = false")
   List<ShipInfo> findByUserId(@Param("userId") int userId);
+
+  @Query("SELECT s FROM ShipInfo s WHERE s.isDeleted = false")
+  List<ShipInfo> findAll();
  }
