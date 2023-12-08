@@ -5,21 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb0400e4-d946-4fdc-a5ba-0c7ce144132b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client/src/hooks/useUserInfoFetch.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Response/ProductFavoriteItem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Request/NewPasswordRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/shop/ProductItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/shop/ProductItem.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/user/UserFavorite.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/user/UserFavorite.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/user/UserInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/user/UserInfo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/user/UserShipInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/user/UserShipInfo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/context/AuthContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/context/AuthContext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/user/UserPassword.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/user/UserPassword.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/layouts/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/layouts/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/Checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Checkout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Repository/ProductRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/ProductImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/ProductImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/TokenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/TokenController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -88,6 +81,7 @@
       <workItem from="1699945194433" duration="196000" />
       <workItem from="1701958229902" duration="7801000" />
       <workItem from="1702012724724" duration="2081000" />
+      <workItem from="1702042777454" duration="6472000" />
     </task>
     <servers />
   </component>

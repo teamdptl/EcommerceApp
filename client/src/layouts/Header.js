@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // import { useContext, useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import {NavLink, Link, useNavigate} from "react-router-dom";
 import CartDropDown from "../components/main/CartDropdown"
 import NavMenuDropDown from "../components/main/NavMenuDropDown";
 import "flowbite";
@@ -11,6 +11,7 @@ import UserDropDown from "../components/main/UserDropDown";
 
 export default function Header() {
 	const {user, setUser} = useAuth();
+	const navigate = useNavigate();
 
 	const handleLogout = () =>{
 		const token = localStorage.getItem('accessToken');
@@ -26,7 +27,7 @@ export default function Header() {
 				localStorage.removeItem('refresh_token');
 				localStorage.removeItem('cart');
 				setUser(null);
-				window.location.reload();
+				navigate("/login", {replace: true})
 			})
 			.catch(() => {
 				alert("Lỗi không thể đăng xuất");

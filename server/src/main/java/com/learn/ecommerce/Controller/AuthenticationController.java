@@ -1,6 +1,8 @@
 package com.learn.ecommerce.Controller;
 
+import com.learn.ecommerce.Entity.User;
 import com.learn.ecommerce.Request.ChangePasswordRequest;
+import com.learn.ecommerce.Request.NewPasswordRequest;
 import com.learn.ecommerce.Request.RegisterRequest;
 import com.learn.ecommerce.Service.ChangePasswordService;
 import com.learn.ecommerce.Service.LogoutService;
@@ -8,6 +10,7 @@ import com.learn.ecommerce.Request.AuthenticationRequest;
 import com.learn.ecommerce.Response.AuthenticationResponse;
 import com.learn.ecommerce.Service.Implementation.AuthenticationService;
 import com.learn.ecommerce.Service.UserService;
+import com.learn.ecommerce.Ultis.AuthUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -35,6 +39,8 @@ public class AuthenticationController {
   private final AuthenticationService service;
 
   private final LogoutService logoutService;
+
+  private final AuthUtils authUtils;
 
   @PostMapping("/register")
   public ResponseEntity<?> register(
@@ -72,11 +78,10 @@ public class AuthenticationController {
     return changePasswordService.checkExpiration(UUID);
   }
   @PostMapping("/confirm-password")
-  public ResponseEntity<?> changePassword(
-          @RequestBody ChangePasswordRequest request
-  ) throws UnsupportedEncodingException {
+  public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) throws UnsupportedEncodingException {
     return userService.changePassword(request);
   }
+
   @PostMapping("/forget-password")
   public ResponseEntity<Map<String, String>> forgotPassword(
           @RequestBody String email
