@@ -1,9 +1,13 @@
 package com.learn.ecommerce.Service.Implementation;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.learn.ecommerce.DTO.TopBrandDTO;
 import com.learn.ecommerce.DTO.TopProductDTO;
 import com.learn.ecommerce.DTO.TopUserDTO;
-import com.learn.ecommerce.Entity.Order;
+import com.learn.ecommerce.Entity.*;
 import com.learn.ecommerce.Repository.OrderReponsitory;
+import com.learn.ecommerce.Repository.ShipInfoReponsitory;
 import com.learn.ecommerce.Service.OrderService;
 
 import jakarta.persistence.EntityManager;
@@ -14,13 +18,17 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.Date;
-import com.learn.ecommerce.Entity.OrderLine;
-import com.learn.ecommerce.Entity.Product;
+
 import com.learn.ecommerce.Repository.OrderLineReponsitory;
 import com.learn.ecommerce.Request.PlaceOrderItem;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 @Component
@@ -28,13 +36,21 @@ public class OrderImp implements OrderService {
     @PersistenceContext
     private EntityManager entityManager;
     private final OrderReponsitory orderReponsitory;
+
+    private final ShipInfoReponsitory shipInfoReponsitory;
+
+
     private final OrderLineReponsitory orderLineReposiotry;
     private final ProductImp productImp;
 
-    public OrderImp(@Autowired OrderReponsitory orderReponsitory, @Autowired ProductImp productImp, @Autowired OrderLineReponsitory orderLineRepository) {
+    private final ShipInfoImp shipInfoImp;
+
+    public OrderImp(@Autowired OrderReponsitory orderReponsitory, ShipInfoReponsitory shipInfoReponsitory, @Autowired ProductImp productImp, @Autowired OrderLineReponsitory orderLineRepository, ShipInfoImp shipInfoImp) {
         this.orderReponsitory = orderReponsitory;
+        this.shipInfoReponsitory = shipInfoReponsitory;
         this.productImp = productImp;
         this.orderLineReposiotry = orderLineRepository;
+        this.shipInfoImp = shipInfoImp;
     }
 
     @Transactional
@@ -65,6 +81,61 @@ public class OrderImp implements OrderService {
         order.setTotalPrice(total);
         return orderReponsitory.save(order);
     }
+
+    public void generatePdfContent(Order order) throws FileNotFoundException, DocumentException {
+        try {
+            Document document = new Document(PageSize.A4);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String currentDateTime = dateFormat.format(new java.util.Date());
+            String filepath = "D:\\PDF"+currentDateTime+".pdf";
+
+            PdfWriter.getInstance(document, new FileOutputStream(filepath));
+            document.open();
+            Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            fontTitle.setSize(18);
+
+            Paragraph paragraph = new Paragraph("Xác nhận đơn hàng",fontTitle );
+            paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(paragraph);
+
+            if (order.getShipInfo() != null) {
+                ShipInfo shipInfo = order.getShipInfo();
+
+                Paragraph shipInfoParagraph = new Paragraph(
+                        "Thông tin vận chuyển:\n" +
+                                "Họ và tên: " + shipInfo.getFullName() + "\n" +
+                                "Địa chỉ: " + shipInfo.getAddress() + "\n" +
+                                "Số điện thoại: " + shipInfo.getPhone() + "\n"
+                );
+                shipInfoParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                document.add(shipInfoParagraph);
+            }
+
+            List<OrderLine> orderLines = orderLineReposiotry.findAllById(Collections.singleton(order.getOrderId()));
+
+                PdfPTable orderLineTable = new PdfPTable(4);
+                orderLineTable.setWidthPercentage(100);
+                orderLineTable.addCell("Tên sản phẩm");
+                orderLineTable.addCell("Số lượng");
+                orderLineTable.addCell("Đơn giá");
+                orderLineTable.addCell("Thành tiền");
+
+                for (OrderLine orderLine : orderLines) {
+                    orderLineTable.addCell(orderLine.getProduct().getName());
+                    orderLineTable.addCell(String.valueOf(orderLine.getQuantity()));
+                    orderLineTable.addCell(String.valueOf(orderLine.getPrice()));
+                    orderLineTable.addCell(String.valueOf(orderLine.getQuantity() * orderLine.getPrice()));
+                }
+                document.add(orderLineTable);
+
+            document.close();
+
+            System.out.println("PDF file generated successfully.");
+
+        } catch (Exception e){
+            e.printStackTrace();
+    }
+}
 
     protected void checkCondition(List<PlaceOrderItem> items) throws Exception {
         for (PlaceOrderItem item : items) {

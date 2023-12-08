@@ -1,12 +1,15 @@
 package com.learn.ecommerce.Controller;
 
+import com.itextpdf.text.DocumentException;
 import com.learn.ecommerce.Entity.Order;
 import com.learn.ecommerce.Request.PlaceOrderRequest;
 import com.learn.ecommerce.Response.ErrorResponse;
 import com.learn.ecommerce.Response.OrderResponse;
+import com.learn.ecommerce.Service.Implementation.EmailServiceImpl;
 import com.learn.ecommerce.Service.Implementation.OrderImp;
 import com.learn.ecommerce.Ultis.ModelMapperUtils;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.sql.Date;
@@ -33,6 +36,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/v1/order")
@@ -41,6 +45,9 @@ public class OrderController {
     private ShipInfoImp shipInfoImp;
     @Autowired
     private AuthUtils auth;
+
+    @Autowired
+    private EmailServiceImpl emailServiceImp;
 
     private final OrderImp orderImp;
     OrderController( @Autowired OrderImp orderImp ){
@@ -66,11 +73,25 @@ public class OrderController {
         String coupon = "";
         try {
             Order saved = orderImp.placeOrder(Arrays.asList(request.getItems()), order, coupon);
+
+            CompletableFuture.runAsync(() -> {
+                try {
+                    orderImp.generatePdfContent(saved);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (DocumentException e) {
+                    throw new RuntimeException(e);
+                }
+
+//                emailServiceImp.sendEmailAsync(optionalUser.get().getEmail(), "Xác nhận đơn hàng", pdfContent);
+            });
+
             return ResponseEntity.ok(new SuccessResponse("Tạo đơn hàng thành công"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
+
 
     // ROLE: User
     @GetMapping("/user-orders")
