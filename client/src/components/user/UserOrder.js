@@ -8,27 +8,9 @@ const orders = [
 		total: 9000000,
 		payment_status: 0, // Chưa thanh toán
 		items: [
-			{
-				name: "Máy lạnh Daikin Inverter 1 HP FTKY25WMVMV",
-				quantity: 1,
-				price: 3000000,
-				link: "/product/1",
-				imageSrc: "https://dienmaygiakhang.vn/wp-content/uploads/2023/05/gold-2.jpg",
-			},
-			{
-				name: "Tủ lạnh Samsung Inverter 208 lít RT20HAR8DBU/SV",
-				quantity: 1,
-				price: 3000000,
-				link: "/product/2",
-				imageSrc: "https://cdn.tgdd.vn/Products/Images/1943/220320/samsung-rt20har8dbu-sv-1-org.jpg",
-			},
-			{
-				name: "Máy giặt Samsung AI Inverter 9kg WW90TP44DSB/SV",
-				quantity: 1,
-				price: 3000000,
-				link: "/product/3",
-				imageSrc: "https://cdn.tgdd.vn/Products/Images/1944/236158/samsung-9kg-ww90tp44dsb-sv-1-org.jpg",
-			},
+			{"product":{"productId":8,"name":"Tủ lạnh Panasonic 417 lít NR-BX471GPKV","price":17990000,"slugUrl":null,"imageUrl":"https://dienmaygiakhang.vn/wp-content/uploads/2021/03/NR-BX471GPKV-layer-1.jpg","quantity":1000},"buyQuantity":1},
+			{"product":{"productId":8,"name":"Tủ lạnh Panasonic 417 lít NR-BX471GPKV","price":17990000,"slugUrl":null,"imageUrl":"https://dienmaygiakhang.vn/wp-content/uploads/2021/03/NR-BX471GPKV-layer-1.jpg","quantity":1000},"buyQuantity":1},
+			{"product":{"productId":8,"name":"Tủ lạnh Panasonic 417 lít NR-BX471GPKV","price":17990000,"slugUrl":null,"imageUrl":"https://dienmaygiakhang.vn/wp-content/uploads/2021/03/NR-BX471GPKV-layer-1.jpg","quantity":1000},"buyQuantity":1}
 		],
 	},
 	{
@@ -38,27 +20,8 @@ const orders = [
 		total: 9000000,
 		payment_status: 0, // Chưa thanh toán
 		items: [
-			{
-				name: "Máy lạnh Daikin Inverter 1 HP FTKY25WMVMV",
-				quantity: 1,
-				price: 3000000,
-				link: "/product/1",
-				imageSrc: "https://dienmaygiakhang.vn/wp-content/uploads/2023/05/gold-2.jpg",
-			},
-			{
-				name: "Tủ lạnh Samsung Inverter 208 lít RT20HAR8DBU/SV",
-				quantity: 1,
-				price: 3000000,
-				link: "/product/2",
-				imageSrc: "https://cdn.tgdd.vn/Products/Images/1943/220320/samsung-rt20har8dbu-sv-1-org.jpg",
-			},
-			{
-				name: "Máy giặt Samsung AI Inverter 9kg WW90TP44DSB/SV",
-				quantity: 1,
-				price: 3000000,
-				link: "/product/3",
-				imageSrc: "https://cdn.tgdd.vn/Products/Images/1944/236158/samsung-9kg-ww90tp44dsb-sv-1-org.jpg",
-			},
+			{"product":{"productId":8,"name":"Tủ lạnh Panasonic 417 lít NR-BX471GPKV","price":17990000,"slugUrl":null,"imageUrl":"https://dienmaygiakhang.vn/wp-content/uploads/2021/03/NR-BX471GPKV-layer-1.jpg","quantity":1000},"buyQuantity":1},
+			{"product":{"productId":8,"name":"Tủ lạnh Panasonic 417 lít NR-BX471GPKV","price":17990000,"slugUrl":null,"imageUrl":"https://dienmaygiakhang.vn/wp-content/uploads/2021/03/NR-BX471GPKV-layer-1.jpg","quantity":1000},"buyQuantity":1},
 		],
 	},
 	{
@@ -68,27 +31,9 @@ const orders = [
 		total: 9000000,
 		payment_status: 1, // Đã thanh toán
 		items: [
-			{
-				name: "Máy lạnh Daikin Inverter 1 HP FTKY25WMVMV",
-				quantity: 1,
-				price: 3000000,
-				link: "/product/1",
-				imageSrc: "https://dienmaygiakhang.vn/wp-content/uploads/2023/05/gold-2.jpg",
-			},
-			{
-				name: "Tủ lạnh Samsung Inverter 208 lít RT20HAR8DBU/SV",
-				quantity: 1,
-				price: 3000000,
-				link: "/product/2",
-				imageSrc: "https://cdn.tgdd.vn/Products/Images/1943/220320/samsung-rt20har8dbu-sv-1-org.jpg",
-			},
-			{
-				name: "Máy giặt Samsung AI Inverter 9kg WW90TP44DSB/SV",
-				quantity: 1,
-				price: 3000000,
-				link: "/product/3",
-				imageSrc: "https://cdn.tgdd.vn/Products/Images/1944/236158/samsung-9kg-ww90tp44dsb-sv-1-org.jpg",
-			},
+			{"product":{"productId":8,"name":"Tủ lạnh Panasonic 417 lít NR-BX471GPKV","price":17990000,"slugUrl":null,"imageUrl":"https://dienmaygiakhang.vn/wp-content/uploads/2021/03/NR-BX471GPKV-layer-1.jpg","quantity":1000},"buyQuantity":1},
+			{"product":{"productId":8,"name":"Tủ lạnh Panasonic 417 lít NR-BX471GPKV","price":17990000,"slugUrl":null,"imageUrl":"https://dienmaygiakhang.vn/wp-content/uploads/2021/03/NR-BX471GPKV-layer-1.jpg","quantity":1000},"buyQuantity":1},
+			{"product":{"productId":8,"name":"Tủ lạnh Panasonic 417 lít NR-BX471GPKV","price":17990000,"slugUrl":null,"imageUrl":"https://dienmaygiakhang.vn/wp-content/uploads/2021/03/NR-BX471GPKV-layer-1.jpg","quantity":1000},"buyQuantity":1},
 		],
 	},
 ];

@@ -1,43 +1,46 @@
 package com.learn.ecommerce.Controller;
 import com.learn.ecommerce.Entity.Token;
 import com.learn.ecommerce.Repository.TokenRepository;
-import org.apache.commons.beanutils.BeanUtils;
+import com.learn.ecommerce.Response.ErrorResponse;
+import com.learn.ecommerce.Ultis.AuthUtils;
+import com.learn.ecommerce.Ultis.ModelMapperUtils;
 
 import com.learn.ecommerce.DTO.UserDTO;
 import com.learn.ecommerce.Entity.User;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
-@RequestMapping("/api/token")
+@RequestMapping("/api/v1/token")
 @RestController
 public class TokenController {
-    final
-    TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
+    private final AuthUtils authUtils;
 
-    public TokenController(TokenRepository tokenRepository) {
+    public TokenController(TokenRepository tokenRepository, AuthUtils authUtils) {
         this.tokenRepository = tokenRepository;
+        this.authUtils = authUtils;
     }
 
     @GetMapping("/user")
-    public ResponseEntity<UserDTO> getUserByToken(@RequestParam String token) throws InvocationTargetException, IllegalAccessException {
-//        String jwt = token.substring(7);
+    public ResponseEntity<?> getUserByToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String header) {
+        String token = header.replace("Bearer ", "");
         Optional<Token> tokenAccess = tokenRepository.findByToken(token);
-        Boolean isTokenValid = false;
-        if(!tokenAccess.isEmpty()){
-            isTokenValid = tokenAccess
-                    .map(t -> !t.isExpired() && !t.isRevoked())
-                    .orElse(false);
+        if (tokenAccess.isEmpty()){
+            return ResponseEntity.badRequest().body(new ErrorResponse("Token không hợp lệ"));
         }
-        if(isTokenValid){
-            User user = tokenAccess.get().getUser();
-            UserDTO userDTO =  new UserDTO();
-            BeanUtils.copyProperties(userDTO,user);
-            return ResponseEntity.ok().body(userDTO);
+
+        Token acessToken = tokenAccess.get();
+        if (acessToken.isExpired() || acessToken.isRevoked()){
+            return ResponseEntity.badRequest().body(new ErrorResponse("Token đã hết hạn hoặc bị thu hồi"));
         }
-        System.out.println("user");
-        return ResponseEntity.badRequest().body(null);
+
+        Optional<User> userWrapper = authUtils.getCurrentUser();
+        if (userWrapper.isEmpty())
+            return ResponseEntity.badRequest().body(new ErrorResponse("User không tồn tại"));
+
+        return ResponseEntity.ok(ModelMapperUtils.map(userWrapper.get(), UserDTO.class));
     }
 }

@@ -1,19 +1,28 @@
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../config";
+import AdminConfirmModal from "../AdminConfirmModal";
 
-const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
+const AdminCategoryModal = ({
+  isShow,
+  closeModal,
+  editCategory,
+  callCategoryModal,
+}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [confirmModalShow, setConfirmModalShow] = useState(false);
 
   useEffect(() => {
     if (editCategory) {
       setName(editCategory.name);
       setDescription(editCategory.description);
+    } else {
     }
   }, [editCategory]);
 
   const handleAddCategory = () => {
+    setConfirmModalShow(true);
     // Tạo một đối tượng chứa dữ liệu để gửi lên server
     const newData = {
       name: name,
@@ -33,7 +42,9 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
       .then((data) => {
         // Xử lý dữ liệu từ server nếu cần
         console.log("Success:", data);
-        window.location.reload();
+        setName("");
+        setDescription("");
+        callCategoryModal();
       })
       .catch((error) => {
         // Xử lý lỗi nếu có
@@ -42,6 +53,7 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
   };
 
   const handleEditCategory = () => {
+    setConfirmModalShow(true);
     // Tạo một đối tượng chứa dữ liệu để gửi lên server
     const updateData = {
       name: name,
@@ -61,7 +73,7 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
       .then((data) => {
         // Xử lý dữ liệu từ server nếu cần
         console.log("Success:", data);
-        window.location.reload();
+        callCategoryModal();
       })
       .catch((error) => {
         // Xử lý lỗi nếu có
@@ -109,8 +121,9 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
               closeModal();
               if (editCategory && editCategory.categoryId) {
                 handleEditCategory();
-              }else {
-              handleAddCategory();}
+              } else {
+                handleAddCategory();
+              }
             }}
           >
             Lưu
@@ -120,6 +133,12 @@ const AdminCategoryModal = ({ isShow, closeModal, editCategory }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <AdminConfirmModal
+        isShow={confirmModalShow}
+        closeModal={() => setConfirmModalShow(false)}
+        content="Success!"
+        type={"success"}
+      />
     </>
   );
 };

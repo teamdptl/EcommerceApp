@@ -1,38 +1,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // import { useContext, useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import {NavLink, Link, useNavigate} from "react-router-dom";
 import CartDropDown from "../components/main/CartDropdown"
 import NavMenuDropDown from "../components/main/NavMenuDropDown";
 import "flowbite";
 import {useContext, useEffect, useState} from "react";
 import baseUrl from "../config";
-import {AuthProvider, AuthContext} from "../context/AuthContext";
+import {AuthProvider, AuthContext, useAuth} from "../context/AuthContext";
+import UserDropDown from "../components/main/UserDropDown";
 
-export default function Header() {
+export default function Header({isAdmin = false}) {
+	const {user, setUser} = useAuth();
+	const navigate = useNavigate();
 
-	// const [user, setUser] = useState("");
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const UserContext = useContext(AuthContext);
-	const {user, setUser, autoLogin} = UserContext;
-	useEffect(() => {
-		
-		console.log("user:", user)
-		
-		
-		autoLogin().then(data => {
-			
-			
-			if (data){
-				setIsLoggedIn(true);
-				setUser({username:data.username,
-					fullname:data.fullname,
-					role:data.role})
-					console.log("User auto login: ", data.username, data.fullname, data.role)
-			} else setIsLoggedIn(false);
-		})
-		
-		
-	}, []);
 	const handleLogout = () =>{
 		const token = localStorage.getItem('accessToken');
 		fetch(`${baseUrl}/api/v1/auth/logout`, {
@@ -43,34 +23,17 @@ export default function Header() {
 		})
 			.then(() => {
 				localStorage.removeItem('accessToken');
-				window.location.reload();
+				localStorage.removeItem('refreshToken');
+				localStorage.removeItem('refresh_token');
+				localStorage.removeItem('cart');
+				setUser(null);
+				navigate("/login", {replace: true})
 			})
 			.catch(() => {
-
+				alert("Lỗi không thể đăng xuất");
 			});
 	}
-	// const getUserByToken = (token)=>{
-	// 	console.log("getUserByToken")
-	// 	fetch(`${baseUrl}/api/token/user?token=${token}`, {
-	// 		method: 'GET',
-	// 		headers: {
-	// 			'Authorization': `Bearer ${token}`
-	// 		}
-	// 	})
-	// 		.then(response => {
-	// 			if (!response.ok) {
-	// 				throw new Error('Network response was not ok.');
-	// 			}
-	// 			return response.json();
-	// 		})
-	//
-	// 		.then(data => {
-	// 			setUser(data.fullname)
-	// 		})
-	// 		.catch(data => {
-	// 			// setMessage("Tài khoản hoặc mật khẩu không trùng khớp")
-	// 		});
-	// }
+
 	return (
 		<>
 			<header class="bg-white h-[72px]">
@@ -83,20 +46,17 @@ export default function Header() {
 						</div>
 						<div class="flex md:order-2">
 							<div class="flex gap-4">
-								<div class="flex items-center">
-									<CartDropDown></CartDropDown>
-								</div>
+								{!isAdmin &&
+									<div className="flex items-center">
+										<CartDropDown></CartDropDown>
+									</div>
+								}
+
 								{
-									isLoggedIn ?
-										<div class="flex">
-										<label class="text-m font-bold text-gray-900 mx-auto my-auto mr-4">Hi,{user.fullname}</label>
-										<button
-											onClick={handleLogout}
-											type="button"
-											class="text-white mr-2 bg-blue-700 hidden sm:block hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center md:mr-0">
-											Đăng xuất
-										</button>
-										</div>
+									user ?
+										<>
+											<UserDropDown user={user} logout={handleLogout}></UserDropDown>
+										</>
 										:
 										<Link to="/login">
 										<button
@@ -112,60 +72,62 @@ export default function Header() {
 							<NavMenuDropDown/>
 						</div>
 						<div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
-							<ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-								<li>
-									<NavLink
-										exact
-										to="/"
-										className={(navData) =>
-											navData.isActive
-												? "block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-												: "block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0"
-										}>
-										Trang chủ
-									</NavLink>
-								</li>
-								<li>
-									<NavLink
-										to="/shop"
-										className={(navData) =>
-											navData.isActive
-												? "block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-												: "block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0"
-										}>
-										Cửa hàng
-									</NavLink>
-								</li>
-								<li>
-									<NavLink
-										to="/service"
-										className={(navData) =>
-											navData.isActive
-												? "block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-												: "block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0"
-										}>
-										Dịch vụ
-									</NavLink>
-								</li>
-								<li>
-									<NavLink
-										to="/contact"
-										className={(navData) =>
-											navData.isActive
-												? "block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-												: "block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0"
-										}>
-										Liên hệ
-									</NavLink>
-								</li>
-								<li class="mt-2">
-									<button
-										type="button"
-										class="text-white w-full bg-blue-700 block sm:hidden hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center md:mr-0">
-										Đăng nhập
-									</button>
-								</li>
-							</ul>
+							{!isAdmin &&
+								<ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+									<li>
+										<NavLink
+											exact
+											to="/"
+											className={(navData) =>
+												navData.isActive
+													? "block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+													: "block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0"
+											}>
+											Trang chủ
+										</NavLink>
+									</li>
+									<li>
+										<NavLink
+											to="/shop"
+											className={(navData) =>
+												navData.isActive
+													? "block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+													: "block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0"
+											}>
+											Cửa hàng
+										</NavLink>
+									</li>
+									<li>
+										<NavLink
+											to="/service"
+											className={(navData) =>
+												navData.isActive
+													? "block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+													: "block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0"
+											}>
+											Dịch vụ
+										</NavLink>
+									</li>
+									<li>
+										<NavLink
+											to="/contact"
+											className={(navData) =>
+												navData.isActive
+													? "block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+													: "block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0"
+											}>
+											Liên hệ
+										</NavLink>
+									</li>
+									<li className="mt-2">
+										<button
+											type="button"
+											className="text-white w-full bg-blue-700 block sm:hidden hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center md:mr-0">
+											Đăng nhập
+										</button>
+									</li>
+								</ul>
+							}
 						</div>
 					</div>
 				</nav>

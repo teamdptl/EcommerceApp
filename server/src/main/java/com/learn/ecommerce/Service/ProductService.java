@@ -7,26 +7,25 @@
  import org.springframework.data.domain.Pageable;
  import org.springframework.stereotype.Service;
  import com.learn.ecommerce.Entity.Product;
- import org.springframework.web.multipart.MultipartFile;
 
  import java.util.List;
+ import java.util.Set;
 
  @Service
  public interface ProductService extends RootService<Product, Integer> {
 
 //  Page<Product> searchProducts(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page);
 
-  Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page);
+     Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page, int perPage);
 
      List<Product> getProductInList(List<Integer> ids);
 
      public void favoriteProduct(Product product, User user);
 
-  public Page<Product> favoriteList(User user, Pageable pageable);
+     public Page<Product> favoriteList(User user, Pageable pageable);
 
-  public List<Product> featureProducts(Integer page);
+     public List<Product> featureProducts(Integer page);
+     void saveProductWithMedia(Product product, List<Integer> fileIds, Integer primaryImageIndex);
 
-  void saveProductWithMedia(Product product, List<MultipartFile> files, Integer primaryImageIndex);
-
-  void removeProductMedia(Product product, Integer[] mediaIds);
+     Set<Product> getFavoriteProduct(User user);
  }

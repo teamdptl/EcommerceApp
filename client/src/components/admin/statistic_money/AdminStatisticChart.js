@@ -24,35 +24,36 @@ export const options = {
     },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+const AdminStatisticChart = ({chartData}) => {
+    const labels = chartData.map(item => item.dateLabel);
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: 'Số tiền',
+                data: chartData.map(item => item.totalMoney),
+                borderColor: 'rgb(94, 191, 149)',
+                backgroundColor: 'rgba(94, 191, 149, 0.5)',
+            },
+            {
+                label: 'Số đơn hàng',
+                data: chartData.map(item => item.totalOrder),
+                borderColor: 'rgb(53, 162, 235)',
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            },
+            {
+                label: 'Số sản phẩm',
+                data: chartData.map(item => item.totalQuantity),
+                borderColor: 'rgb(239,211,70)',
+                backgroundColor: 'rgba(239,211,70, 0.5)',
+            },
+        ],
+    };
 
-export const data = {
-    labels,
-    datasets: [
-        {
-            label: 'Số sản phẩm',
-            data: labels.map(() => 3),
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-        {
-            label: 'Số đơn hàng',
-            data: labels.map(() => 5),
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        },
-        {
-            label: 'Số tiền',
-            data: labels.map(() => 5),
-            borderColor: 'rgb(94, 191, 149)',
-            backgroundColor: 'rgba(94, 191, 149, 0.5)',
-        },
-    ],
-};
-
-const AdminStatisticChart = () => {
     return <>
-        <Line options={options} data={data} />
+        <div className={"mb-8"}>
+            <Line options={options} data={data} />
+        </div>
     </>
 }
 

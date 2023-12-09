@@ -21,7 +21,8 @@ public interface ProductRepository extends JpaRepository<Product,Integer>{
   @Query("SELECT p FROM Product p WHERE p.productId in :ids")
   List<Product> findProductInList(List<Integer> ids);
 
-  List<Product> findByUsers(User user);
+//  @Query("SELECT p FROM Product p WHERE :user in p.users")
+//  List<Product> findByUser(User user);
 
 //  @Query("SELECT p FROM Product p WHERE (:title = '' or (:title != '' and p.name like %:title%)) and p.price >= :priceMin and p.price <= :priceMax " +
 //          "and ((:categoryId > 0 and p.category.categoryId = :categoryId) or :categoryId = 0) and (:origins is null or (:origins is not null and p.origin in :origins)) " +

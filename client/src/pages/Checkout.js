@@ -4,25 +4,39 @@ import CartItem from "../components/main/CartItem";
 import {Button, Label, Radio, TextInput} from "flowbite-react";
 import {useCartContext} from "../context/CartContext";
 import formatMoney from "../utils/currency";
-import useShipInfoSave from "../hooks/useShipInfoSave";
 import {useEffect, useState} from "react";
 import baseUrl from "../config";
 import ScreenLoading from "../components/ScreenLoading";
 import ScreenInfo from "../components/ScreenInfo";
+import createFetch from "../utils/createFetch";
+import useShipInfoFetch from "../hooks/useShipInfoFetch";
+import UserInfo from "../components/user/UserInfo";
+import UserShipInfo from "../components/user/UserShipInfo";
+import {useAuth} from "../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 const Checkout = () => {
-	const { cart, getTotalMoney, loadCart } = useCartContext();
+	const { cart, getTotalMoney, loadCart, clearCart, getTotalItem } = useCartContext();
 	const [paymentMethod, setPaymentMethod] = useState('Thanh toán khi nhận hàng COD');
-	const [loading, setLoading] = useState(false);
-	const [shipInfo, setShipInfo] = useState(null);
+	const [isLoading, setLoading] = useState(false);
+	const [editShipInfo, setEditShipInfo] = useState(null);
 	const [msg, setMsg] = useState({show: false, text: '', error: 0});
+	const { listInfo, loading, errorMsg, getInfoList } = useShipInfoFetch();
+	const { user } = useAuth();
+	const navigate = useNavigate();
+	const [selectedShipId, setSelectedShipId] = useState(null);
+
 
 	useEffect(() => {
+		if (getTotalItem() === 0)
+			navigate("/cart", {replace: true})
 		loadCart();
+		if (user?.username)
+			getInfoList();
 	}, [])
 
 	const createOrder = async (shipId) => {
-		return fetch(baseUrl+'/api/v1/order/place', {
+		return createFetch(baseUrl+'/api/v1/order/place', {
 			method: 'POST',
 			body: JSON.stringify({
 				items: cart.map(item => {
@@ -42,8 +56,8 @@ const Checkout = () => {
 			.finally(() => setLoading(false))
 	}
 
-	const saveShipInfo = async () => {
-		return fetch(baseUrl+'/api/v1/user/shipInfo/add', {
+	const saveShipInfo = async (shipInfo) => {
+		return createFetch(baseUrl+'/api/v1/user/shipInfo/add', {
 			method: 'POST',
 			body: JSON.stringify(shipInfo),
 			headers: {
@@ -54,12 +68,32 @@ const Checkout = () => {
 	}
 
 	const placeOrder = async() => {
-		if (!shipInfo || !shipInfo.isValid){
-			return;
+		if (selectedShipId === null){
+			if (!editShipInfo || !editShipInfo.isValid){
+				setMsg({...msg, error: 1, text: "Vui lòng điền đầy đủ hoặc chọn thông tin giao hàng", show: true});
+				return;
+			}
+			const { shipId } = await saveShipInfo(editShipInfo);
+			if (!shipId){
+				alert("Địa chỉ không hợp lệ!");
+				return;
+			}
+			const {error, message} = await createOrder(shipId);
+			setMsg({...msg, error: error, text: message, show: true});
+			if (error === 0){
+				clearCart();
+				navigate('/user?tab=order', {replace: true})
+			}
 		}
-		const { shipId } = await saveShipInfo();
-		const {error, message} = await createOrder(shipId);
-		setMsg({...msg, error: error, text: message, show: true});
+		else {
+			const {error, message} = await createOrder(selectedShipId);
+			setMsg({...msg, error: error, text: message, show: true});
+			if (error === 0){
+				clearCart();
+				navigate('/user?tab=order', {replace: true})
+			}
+		}
+
 	}
 
 	return <Page>
@@ -70,11 +104,26 @@ const Checkout = () => {
 			<div className={"grid grid-cols-6 gap-8"}>
 				<div className={"col-span-3"}>
 					<p className={"text-lg mb-3 font-semibold"}>Thông tin giao hàng</p>
-					<UserShipInfoForm onChange={(shipInfo) => setShipInfo(shipInfo)}/>
+					<UserShipInfoForm shipInfo={editShipInfo} onChange={(shipInfo) => setEditShipInfo(shipInfo)}/>
+					{listInfo && listInfo.length > 0 &&
+						<>
+							<p className={"text-lg my-3 font-semibold"}>Chọn thông tin có sẵn</p>
+							<div className={"flex flex-col gap-4"}>
+								{listInfo.map(shipInfo => (
+									<UserShipInfo info={shipInfo} onSelected={() => {
+										if (selectedShipId !== shipInfo.shipId)
+											setSelectedShipId(shipInfo.shipId);
+										else
+											setSelectedShipId(null);
+									}} isSelected={selectedShipId === shipInfo.shipId} ></UserShipInfo>
+								))}
+							</div>
+						</>
+					}
 					<p className={"text-lg mb-3 font-semibold mt-6"}>Phương thức thanh toán</p>
 					<div>
 						<div className="flex items-center gap-2 mb-3">
-							<Radio id="nhanhang" name="paymentMethod" value="Thanh toán khi nhận hàng" defaultChecked onChange={e => setPaymentMethod(e.target.value)}/>
+							<Radio id="nhanhang" name="paymentMethod" value="Thanh toán khi nhận hàng COD" defaultChecked onChange={e => setPaymentMethod(e.target.value)}/>
 							<Label className={"font-normal text-base"} htmlFor="nhanhang">Thanh toán khi nhận hàng (COD)</Label>
 						</div>
 						<div className="flex items-center gap-2">
@@ -129,7 +178,7 @@ const Checkout = () => {
 				</div>
 			</div>
 		</div>
-		<ScreenLoading isShow={loading} />
+		<ScreenLoading isShow={isLoading || loading} />
 		<ScreenInfo isShow={msg.show} message={msg.text} error={msg.error} closeModal={() => setMsg({...msg, show: false})}/>
 	</Page>;
 };

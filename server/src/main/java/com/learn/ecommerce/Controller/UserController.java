@@ -3,15 +3,14 @@ package com.learn.ecommerce.Controller;
 import com.learn.ecommerce.Entity.Role;
 import com.learn.ecommerce.Entity.ShipInfo;
 import com.learn.ecommerce.Entity.User;
-import com.learn.ecommerce.Request.ChangePasswordRequest;
-import com.learn.ecommerce.Request.CreateUserEditRequest;
-import com.learn.ecommerce.Request.CreateUserRequest;
-import com.learn.ecommerce.Request.UpdateUserRequest;
+import com.learn.ecommerce.Request.*;
 import com.learn.ecommerce.Response.CreateUserResponse;
+import com.learn.ecommerce.Response.ErrorResponse;
 import com.learn.ecommerce.Response.PageResponse;
 import com.learn.ecommerce.Response.ShipInfoListResponse;
 import com.learn.ecommerce.Service.ChangePasswordService;
 import com.learn.ecommerce.Service.UserService;
+import com.learn.ecommerce.Ultis.AuthUtils;
 import com.learn.ecommerce.Ultis.ModelMapperUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +37,7 @@ public class UserController {
 
     private final UserService service;
     private final PasswordEncoder passwordEncoder;
+    private final AuthUtils authUtils;
 
 
     // ROLE: Admin
@@ -152,7 +152,15 @@ public class UserController {
         }
 
 
-
+    @PostMapping("/new-password")
+    public ResponseEntity<?> setNewPassword(@RequestBody NewPasswordRequest request){
+        if (request.getNewPassword().length() < 6)
+            return ResponseEntity.ok(new ErrorResponse("Mật khẩu mới ít hơn 6 kí tự"));
+        Optional<User> user = authUtils.getCurrentUser();
+        if (user.isEmpty())
+            ResponseEntity.ok(new ErrorResponse("Không tìm thấy user"));
+        return service.setUserNewPassword(user.get(), request.getOldPassword(), request.getNewPassword());
+    }
 
 }
 

@@ -17,7 +17,6 @@ const useCart = (requireUpdate= false) => {
             isInit.current = false;
             return;
         }
-        console.log(cart);
         storageCart();
     }, [cart]);
 
@@ -56,6 +55,7 @@ const useCart = (requireUpdate= false) => {
 
     const addItemToCart = (product, buyQuantity = 1) => {
         const find = cart.find(item => item.product.productId === product.productId) ?? null;
+        console.log(product);
         if (find) {
             updateQuantity(product.productId, find.buyQuantity + 1)
             return;
@@ -81,6 +81,10 @@ const useCart = (requireUpdate= false) => {
         setCart(newCart);
     }
 
+    const clearCart = () => {
+        setCart([]);
+    }
+
     const getTotalMoney = () => {
         return cart.reduce((temp, item) => {
             return temp + item.buyQuantity * item.product.price;
@@ -100,7 +104,7 @@ const useCart = (requireUpdate= false) => {
         return {productId, name, price, slugUrl, imageUrl, quantity};
     }
 
-    return {cart, loading, errorMsg, addItemToCart, updateQuantity, removeItem, getTotalMoney, getTotalItem, loadCart}
+    return {cart, loading, errorMsg, addItemToCart, updateQuantity, removeItem, getTotalMoney, getTotalItem, loadCart, clearCart}
 }
 
 export default useCart;

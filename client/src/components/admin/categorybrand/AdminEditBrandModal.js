@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import baseUrl from "../../../config";
+import AdminConfirmModal from "../AdminConfirmModal";
 
-const AdminEditBrandModal = ({ isShow, closeModal, editBrand }) => {
+const AdminEditBrandModal = ({ isShow, closeModal, editBrand, callModalBrand, type}) => {
   const [name, setName] = useState("");
+  const [confirmModalShow, setConfirmModalShow] = useState(false);
 
   useEffect(() => {
+
     if (editBrand) {
       setName(editBrand.name || ""); // Set initial value based on editBrand
     }
   }, [editBrand]);
 
   const handleEditBrand = () => {
+    setConfirmModalShow(true);
     const newBrand = {
       name: name,
     };
@@ -26,7 +30,11 @@ const AdminEditBrandModal = ({ isShow, closeModal, editBrand }) => {
     })
       .then((response) => {
         response.json();
-        window.location.reload();
+      })
+      .then((data) => {
+        // Xử lý dữ liệu từ server nếu cần
+        console.log("Success:", data);
+        callModalBrand();
       })
 
       .catch((error) => {
@@ -68,6 +76,12 @@ const AdminEditBrandModal = ({ isShow, closeModal, editBrand }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <AdminConfirmModal
+        isShow={confirmModalShow}
+        closeModal={() => setConfirmModalShow(false)}
+        content="Success!"
+        type={'success'}
+      />
     </>
   );
 };

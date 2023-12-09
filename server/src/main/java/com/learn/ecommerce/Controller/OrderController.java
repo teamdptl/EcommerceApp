@@ -4,29 +4,35 @@ import com.learn.ecommerce.Entity.*;
 import com.learn.ecommerce.Request.PlaceOrderRequest;
 import com.learn.ecommerce.Response.*;
 import com.learn.ecommerce.Service.Implementation.*;
+import com.itextpdf.text.DocumentException;
+import com.learn.ecommerce.Entity.Order;
+import com.learn.ecommerce.Response.ErrorResponse;
+import com.learn.ecommerce.Response.OrderResponse;
+import com.learn.ecommerce.Service.EmailService;
+import com.learn.ecommerce.Service.Implementation.OrderImp;
 import com.learn.ecommerce.Ultis.ModelMapperUtils;
 
+import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
 
 import com.learn.ecommerce.Request.PlaceOrderItem;
-import com.learn.ecommerce.Request.PlaceOrderRequest;
-import com.learn.ecommerce.Response.ErrorResponse;
-import com.learn.ecommerce.Service.Implementation.OrderImp;
 import com.learn.ecommerce.Ultis.AuthUtils;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/v1/order")
@@ -41,6 +47,10 @@ public class OrderController {
     private OrderLineImp orderLineImp;
     @Autowired
     private MediaImp mediaImp;
+
+    @Autowired
+    private EmailService emailServiceImp;
+
     // ROLE: User
     @PostMapping("/place")
     public ResponseEntity<?> placeOrder(@Valid @RequestBody PlaceOrderRequest request, BindingResult result){
@@ -59,12 +69,38 @@ public class OrderController {
         order.setUser(optionalUser.orElse(null));
         String coupon = "";
         try {
+
             Order saved = orderImp.placeOrder(Arrays.asList(request.getItems()), order, coupon);
+
+            CompletableFuture.runAsync(() -> {
+                try {
+
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String currentDateTime = dateFormat.format(new java.util.Date());
+
+                    orderImp.generatePdfContent(saved, currentDateTime, optionalUser);
+
+//                    try {
+//                        System.out.println("Email: " + optionalUser.get().getEmail());
+//                        emailServiceImp.sendEmailWithAttachment(optionalUser.get().getEmail(), "Xác nhận đơn hàng", "Chúc mừng bạn đã đặt đơn hàng thành công, đây là file đính kèm của đơn đặt hàng", "D:\\PDF"+currentDateTime+".pdf");
+//                    } catch (MessagingException e) {
+//                        throw new RuntimeException(e);
+//                    }
+
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (DocumentException e) {
+                    throw new RuntimeException(e);
+                }
+
+            });
+
             return ResponseEntity.ok(new SuccessResponse("Tạo đơn hàng thành công"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
+
 
     // ROLE: User
     @GetMapping("/user-orders")

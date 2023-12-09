@@ -20,9 +20,9 @@ const AdminProduct = () => {
     const [editProductId, setEditProductId] = useState({});
     const [isEdit, setIsEdit] = useState(false);
     const navigate = useNavigate();
+    const [isShowFilter, setShowFilter] = useState(false);
 
     useEffect(() => {
-        console.log('fetch data');
         callback();
     }, []);
 
@@ -50,7 +50,7 @@ const AdminProduct = () => {
             <div className="col-span-6 bg-white rounded-md border-2 border-zinc-100">
                 <ManagerHeader title="Quản lý sản phẩm" addTitle="Thêm sản phẩm" removeTitle="Xóa sản phẩm"
                                placeHolder="Tìm kiếm sản phẩm"
-                               filterCallback={() => console.log('filter form')}
+                               filterCallback={() => setShowFilter(!isShowFilter)}
                                addCallback={() => {
                                    setIsEdit(false);
                                    setEditProductId(0);
@@ -64,7 +64,12 @@ const AdminProduct = () => {
                                }}
                 />
 
-                {/*<FilterBar/>*/}
+                <div className={`mx-4 mt-2 mb-8 ${isShowFilter ? '' : 'hidden'}`}>
+                    <FilterBar onChange={(data) => {
+                        callback({...filter, ...data})
+                        setFilter({...filter, ...data})
+                    }}/>
+                </div>
 
                 <AdminProductList products={products}
                                   deleteIds={deleteIds}

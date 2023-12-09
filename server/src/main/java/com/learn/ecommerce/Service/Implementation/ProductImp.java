@@ -1,5 +1,4 @@
 package com.learn.ecommerce.Service.Implementation;
-import com.learn.ecommerce.Entity.Media;
 import com.learn.ecommerce.Entity.Product;
 import com.learn.ecommerce.Repository.ProductQueryAdvanced;
 import com.learn.ecommerce.Repository.ProductRepository;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,8 +50,7 @@ public class ProductImp implements ProductService {
 //    }
 
     @Override
-    public Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page) {
-        final int perPage = 10;
+    public Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page, int perPage) {
         switch (type){
             // Phổ biến (đặt nhiều)
             case 0 -> {
@@ -100,28 +97,13 @@ public class ProductImp implements ProductService {
     }
 
     @Override
-    public void saveProductWithMedia(Product product, List<MultipartFile> files, Integer primaryImageIndex) {
+    public void saveProductWithMedia(Product product, List<Integer> fileIds, Integer primaryImageIndex) {
         Product saved = reponsitory.save(product);
-        mediaImp.saveFiles(files, saved, primaryImageIndex);
+        mediaImp.saveFiles(fileIds, saved, primaryImageIndex);
     }
 
     @Override
-    public void removeProductMedia(Product product, Integer[] mediaIds){
-        mediaImp.removeMediaFromProduct(product, mediaIds);
-    }
-
-    // Chỉ có 1 ảnh đại diện
-    public void adjustProductMedia(Product product){
-        Set<Media> mediaSet = product.getMedias();
-        int countPrimary = 0;
-        for (Media media : mediaSet){
-            if (media.isPrimary()){
-                if (countPrimary > 1){
-                    media.setPrimary(false);
-                    mediaImp.save(media);
-                }
-                countPrimary ++;
-            }
-        }
+    public Set<Product> getFavoriteProduct(User user) {
+        return user.getProducts();
     }
 }

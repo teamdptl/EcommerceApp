@@ -6,8 +6,7 @@ import baseUrl from "../../../config";
 import AdminConfirmModal from "../AdminConfirmModal";
 import AdminEditBrandModal from "./AdminEditBrandModal";
 
-const AdminBrandList = () => {
-  const [brand, setBrand] = useState([]);
+const AdminBrandList = ({dataFetchBrand, callApiBrand}) => {
   const [isId, setId] = useState(null);
 
   const [confirmModalShow, setConfirmModalShow] = useState(false);
@@ -16,7 +15,6 @@ const AdminBrandList = () => {
   const [editBrand, setEditBrand] = useState({});
 
   const handleShowEditBrand = (isBrand) => {
-    // console.log(isBrand);
     setEditBrand(isBrand);
     setBrandModalShow(true);
   };
@@ -33,7 +31,7 @@ const AdminBrandList = () => {
       })
         .then((response) => {
           console.log(response);
-          window.location.reload();
+          callApiBrand();
         }) // Chuyển response thành JSON
         .catch((error) => {
           // Xử lý lỗi nếu có
@@ -44,18 +42,9 @@ const AdminBrandList = () => {
     }
   };
 
-  const fetchBrand = async () => {
-    try {
-      const response = await fetch(baseUrl + "/api/v1/brand/get");
-      const result = await response.json();
-      setBrand(result);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   useEffect(() => {
-    fetchBrand();
+    callApiBrand();
   }, []);
 
   return (
@@ -67,9 +56,9 @@ const AdminBrandList = () => {
           <Table.HeadCell>Tên hãng</Table.HeadCell>
           <Table.HeadCell>Thao tác</Table.HeadCell>
         </Table.Head>
-        {brand ? (
+        {dataFetchBrand ? (
           <Table.Body className="divide-y">
-            {brand.map((item) => (
+            {dataFetchBrand.map((item) => (
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                 <Table.Cell className="p-4"></Table.Cell>
                 <Table.Cell>{item.brandId}</Table.Cell>
@@ -112,7 +101,8 @@ const AdminBrandList = () => {
         isShow={brandModalShow}
         closeModal={() => setBrandModalShow(false)}
         editBrand={editBrand}
-      />
+        callModalBrand = {() => callApiBrand()}
+          />
     </>
   );
 };

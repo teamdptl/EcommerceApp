@@ -10,11 +10,7 @@ import com.learn.ecommerce.Repository.ProductQueryAdvanced;
 import com.learn.ecommerce.Repository.BrandRepository;
 import com.learn.ecommerce.Request.CreateProductRequest;
 import com.learn.ecommerce.Request.EditProductRequest;
-import com.learn.ecommerce.Response.ErrorResponse;
-import com.learn.ecommerce.Response.MediaResponse;
-import com.learn.ecommerce.Response.ProductDetailResponse;
-import com.learn.ecommerce.Response.ProductListItemResponse;
-import com.learn.ecommerce.Response.SuccessResponse;
+import com.learn.ecommerce.Response.*;
 import com.learn.ecommerce.Service.Implementation.MediaImp;
 import com.learn.ecommerce.Service.Implementation.ProductImp;
 import com.learn.ecommerce.Ultis.AuthUtils;
@@ -29,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -61,12 +58,13 @@ public class ProductController {
                                                  @RequestParam(defaultValue = "", required = false) List<String> origins,
                                                  @RequestParam(defaultValue = "-1", required = false) Integer rating,
                                                  @RequestParam(defaultValue = "0",required = false) int sortType,
-                                                 @RequestParam(defaultValue = "0", required = false) Integer page){
+                                                 @RequestParam(defaultValue = "0", required = false) Integer page,
+                                                 @RequestParam(defaultValue = "10", required = false) Integer perPage){
         if (branchIds.isEmpty())
             branchIds = null;
         if (origins.isEmpty())
             origins = null;
-        Page<ProductQueryAdvanced> products = service.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, sortType, page);
+        Page<ProductQueryAdvanced> products = service.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, sortType, page, perPage);
         return products.map((product) -> {
             ProductListItemResponse item = ModelMapperUtils.map(product.getProduct(), ProductListItemResponse.class);
             if (product.getOrders() != null)
@@ -96,6 +94,13 @@ public class ProductController {
             List<Media> medias = mediaImp.getMediasByProduct(p.get());
             ProductDetailResponse d = ModelMapperUtils.map(p.get(), ProductDetailResponse.class);
             List<MediaResponse> images = ModelMapperUtils.mapAll(medias, MediaResponse.class);
+            List<MediaResponse> mappedImages = images.stream().peek(item -> {
+                if (item.isExternalImage())
+                    item.setImageUrl(item.getImageUrl());
+                else {
+                    item.setImageUrl(MainController.url+"/"+Media.mediaPath+item.getImageUrl());
+                }
+            }).toList();
             if(userOptional.isPresent()){
                 p.get().getUsers().forEach(user -> {
                     System.out.println(user.getId());
@@ -106,8 +111,9 @@ public class ProductController {
 
                 });
             }
-            
-            d.setMedias(images);
+            d.setCategoryId(p.get().getCategory().getCategoryId());
+            d.setBrandId(p.get().getBrand().getBrandId());
+            d.setMedias(mappedImages);
             // TODO: Gắn token vào và check nó có yêu thích sản phẩm này không
             // d.isFavorite = true
             return ResponseEntity.ok(d);
@@ -152,7 +158,7 @@ public class ProductController {
                     .body(new ErrorResponse("Category không tồn tại!"));
         product.setBrand(brand.get());
         product.setCategory(category.get());
-        service.saveProductWithMedia(product, List.of(createData.getFiles()), createData.getPrimaryImageIndex());
+        service.saveProductWithMedia(product, createData.getFileIds(), createData.getPrimaryImageIndex());
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
 
@@ -179,14 +185,7 @@ public class ProductController {
                     .body(new ErrorResponse("Category không tồn tại!"));
         product.setBrand(brand.get());
         product.setCategory(category.get());
-
-        if (editData.getRemoveMediaIds().length > 0)
-            service.removeProductMedia(product, editData.getRemoveMediaIds());
-
-        if (editData.getFiles().length > 0)
-            service.saveProductWithMedia(product, List.of(editData.getFiles()), editData.getPrimaryImageIndex());
-        service.adjustProductMedia(product);
-
+        service.saveProductWithMedia(product, editData.getFileIds(), editData.getPrimaryImageIndex());
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
 
@@ -204,7 +203,23 @@ public class ProductController {
     // Role: User
     @GetMapping("/favorite")
     public ResponseEntity<?> getUserFavorite(){
-        return null;
+        Optional<User> usr = authUtils.getCurrentUser();
+        if (usr.isEmpty())
+            return ResponseEntity.badRequest().build();
+        Set<Product> products = service.getFavoriteProduct(usr.get());
+        List<ProductFavoriteItem> list = ModelMapperUtils.mapAll(products, ProductFavoriteItem.class).stream().map(item -> {
+            Optional<Media> media = mediaImp.getProductPrimaryMedia(item.getProductId());
+            item.setImageUrl(Media.DEFAULT_IMAGE);
+            media.ifPresent(value -> {
+                if (value.isExternalImage())
+                    item.setImageUrl(value.getImageUrl());
+                else {
+                    item.setImageUrl(MainController.url+"/"+Media.mediaPath+value.getImageUrl());
+                }
+            });
+            return item;
+        }).toList();
+        return ResponseEntity.ok(list);
     }
 
     // Role: User

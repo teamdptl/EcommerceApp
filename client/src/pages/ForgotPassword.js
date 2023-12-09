@@ -21,7 +21,7 @@ const ForgotPassword = () => {
 	};
 
 	const submitForm = () => {
-		if(email.length ==0 ){
+		if(email.length == 0 ){
 			setMessage("Vui lòng nhập email của bạn")
 			return;
 		}
@@ -42,7 +42,13 @@ const ForgotPassword = () => {
 				setIsSend(true);
 		  })
 		  .catch((error) =>{
-			  setMessage(error.response.data.message);
+			  	console.log("error consolo log "+ error.response.data.message)
+				  setMessage(error.response.data.message);
+			  // }
+			  // else {
+				//   setMessage("Quá thời gian yêu cầu. Vui lòng thử lại !")
+			  // }
+
 		  })
 		  .finally(() => {
 			  setIsLoading(false);

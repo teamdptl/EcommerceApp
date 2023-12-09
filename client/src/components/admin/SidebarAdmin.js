@@ -18,9 +18,9 @@ export const SidebarAdmin = () => {
 	}
 	return (
 		<>
-			<Sidebar theme={theme} className="top-[62px] left-0 fixed z-50 bg-white" collapsed={isCollapse}>
-				<div className={"pt-2 h-12"}>
-					<img  className={`w-2/3 mx-auto ${isCollapse ? 'invisible' : ''}`} src="/smarthome-logo.webp" alt="Hình shop"/>
+			<Sidebar theme={theme} className="top-[66px] left-0 fixed z-50 bg-white" collapsed={isCollapse}>
+				<div className={`pt-2 h-12 ${isCollapse? 'invisible' : ''}`}>
+					<p className={"font-semibold text-center text-lg"}>Trang quản trị</p>
 				</div>
 				<Sidebar.Items>
 					<Sidebar.ItemGroup>

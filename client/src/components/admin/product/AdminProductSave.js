@@ -10,10 +10,11 @@ import baseUrl from "../../../config";
 import ScreenLoading from "../../ScreenLoading";
 import ScreenInfo from "../../ScreenInfo";
 import {useNavigate} from "react-router-dom";
+import { EditorState, ContentState } from 'draft-js';
+import htmlToDraft from 'html-to-draftjs';
 
 const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
-    const [uploadImages, setUploadImages] = useState([]);
-    const [selectIndex, setSelectIndex] = useState(0);
+    const [files, setFiles] = useState([]);
     const [product, setProduct] = useState({});
     const [tenThongSo, setTenThongSo] = useState('');
     const [giaTriThongSo, setGiaTriThongSo] = useState('');
@@ -23,6 +24,24 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
     const [editorState, setEditorState] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [infoBox, setInfoBox] = useState({show: false, msg: '', icon: 'fail', error: 0});
+
+    const uploadFiles = (uploadFile, event) => {
+        let formData = new FormData();
+        uploadFile.forEach(item => {
+            formData.append("files", item);
+        })
+
+        fetch("http://localhost:8080/api/v1/upload/photo", {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(result => {
+                setFiles([...files, ...result]);
+                event.target.value = ""
+            })
+            .catch(error => console.log('error', error));
+    }
 
     useEffect(() => {
         if (!show) return;
@@ -48,10 +67,21 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
             // Loading product data from db
             fetch(baseUrl + `/api/v1/product/get/${productId}`).then(res => res.json())
                 .then(json => {
-                    setProduct(json);
+                    setProduct({
+                        ...json,
+                        description: '',
+                        medias: [],
+                        attributes: JSON.parse(json.attributes) ?? []
+                    });
+                    setFiles(json.medias);
+                    const blocksFromHtml = htmlToDraft(json.description);
+                    const { contentBlocks, entityMap } = blocksFromHtml;
+                    const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+                    const editorState = EditorState.createWithContent(contentState);
+                    setEditorState(editorState);
                 })
                 .catch((e) => {
-                    console.log(e);
+                    setInfoBox({show: true, msg: e, icon: 'fail', error: 1})
                 })
         }
         else {
@@ -63,32 +93,54 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
                 oldPrice: 0,
                 origin: 'Trung Quốc',
                 warrantyMonths: 12,
-                quantity: 100
+                quantity: 100,
+                medias: []
             });
+            setFiles([]);
         }
     }, [isEdit, productId]);
 
+    useEffect(() => {
+        if (files && files.length > 0){
+            let havePrimary = false;
+            files.forEach(item => {
+                if (item.primary)
+                    havePrimary = true;
+            })
+            if (!havePrimary){
+                const newFiles = [...files];
+                newFiles[0].primary = true;
+                setFiles(newFiles);
+            }
+        }
+    }, [files])
 
     const saveProduct = () => {
-        // setIsLoading(true);
-        const formData = new FormData();
-        for (const [key, value] of Object.entries(product)) {
-            formData.append(key, value);
+        if (!files || files.length === 0){
+            setInfoBox({...infoBox, show: true, msg: 'Vui lòng tải ảnh lên', error: 1 })
+            return;
         }
 
-        uploadImages.forEach((item) => {
-            formData.append("files", item.file)
-        })
+        setIsLoading(true);
+        const formData = new FormData();
+        for (const [key, value] of Object.entries(product)) {
+            if (key === "attributes")
+                formData.append(key, JSON.stringify(product.attributes))
+            else
+                formData.append(key, value);
+        }
 
-        formData.append("primaryImageIndex", selectIndex)
+        formData.append("fileIds", files.map(item => item.imageId))
+        const primaryItem = files.find(item => item.primary);
+        formData.append("primaryImageIndex", primaryItem ? primaryItem.imageId : files[0].imageId)
 
         const rawContentState = editorState ? convertToRaw(editorState.getCurrentContent()) : null;
         const markup = rawContentState ? draftToHtml(rawContentState) : "";
         formData.append("description", markup)
         formData.append('thongSoKiThuat', 'Không có gì ca');
 
-        fetch(baseUrl + '/api/v1/product/add', {
-            method: 'POST',
+        fetch(baseUrl + `${isEdit ? `/api/v1/product/edit/${product.productId}` : '/api/v1/product/add'}`, {
+            method: `${isEdit ? 'PUT':'POST'}`,
             body: formData
         }).then(res => res.json())
             .then(json => {
@@ -108,6 +160,7 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
     useEffect(() => {
         console.log(product);
     }, [product]);
+
 
     return <>
         <div id="productSave" className={`col-span-6 bg-white p-6 rounded-md border-2 border-zinc-100 ${show? '' : 'hidden'}`}>
@@ -198,12 +251,8 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
                                onChange={(even)=>{
                                     const listSrc = [];
                                     for (let i =0; i < even.target.files.length; i++)
-                                        listSrc.push({
-                                            src: URL.createObjectURL(even.target.files[i]),
-                                            file: even.target.files[i]
-                                        })
-                                    setUploadImages([...uploadImages, ...listSrc])
-                                    even.target.value = "";
+                                        listSrc.push(even.target.files[i])
+                                    uploadFiles(listSrc, even);
                     }} />
                 </div>
                 <div className="col-span-4">
@@ -211,15 +260,21 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
                         <Label htmlFor="productSelectedImage" value="Hình ảnh đã chọn" />
                     </div>
                     <div class="flex flex-nowrap gap-3 max-w-full overflow-y-auto p-2">
-                        {uploadImages.map((img, index) => (
-                            <UploadedImageItem key={img.src} img={img} isSelect={index === selectIndex}
+                        {files && files.length > 0 && files.map((img) => (
+                            <UploadedImageItem key={img.imageUrl} img={img} src={img.imageUrl} isSelect={img.primary}
                                                removeCurrent={() => {
-                                                   if (selectIndex === index){
-                                                       setSelectIndex(0);
-                                                   }
-                                                   setUploadImages(uploadImages.filter(file => file.src !== img.src));
+                                                   setFiles(files.filter(file => file.imageId !== img.imageId));
                                                }}
-                                               selectCurrent={() => setSelectIndex(index)}/>
+                                               selectCurrent={() => {
+                                                   const arr = [...files];
+                                                   setFiles(arr.map(item => {
+                                                       if (item.imageId !== img.imageId)
+                                                           item.primary = false;
+                                                       else
+                                                           item.primary = true;
+                                                       return item;
+                                                   }))
+                                               }}/>
                         ))}
                     </div>
                 </div>
@@ -282,7 +337,7 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
                     <div className="mb-2 block">
                         <Label htmlFor="productDescription" value="Mô tả sản phẩm" />
                     </div>
-                    <Editor wrapperClassName="min-h-[300px]" onEditorStateChange={(state) => setEditorState(state)}/>
+                    <Editor wrapperClassName="min-h-[300px]" editorState={editorState} onEditorStateChange={(state) => setEditorState(state)}/>
                 </div>
             </div>
             <div className="flex justify-end gap-4 mt-6">
