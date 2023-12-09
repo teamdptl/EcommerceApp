@@ -31,33 +31,50 @@ export const options = {
     },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-export const data = {
-    labels,
-    datasets: [
-        {
-            label: 'Số sản phẩm',
-            data: labels.map(() => 3),
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-        {
-            label: 'Số đơn hàng',
-            data: labels.map(() => 5),
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        },
-        {
-            label: 'Số tiền',
-            data: labels.map(() => 5),
-            borderColor: 'rgb(294, 191, 149)',
-            backgroundColor: 'rgba(94, 191, 149, 0.5)',
-        },
-    ],
-};
+const AdminStatisticWeekChart = ({weekData}) => {
+    const labels = weekData.map(item => {
+        if (item.dateOfWeek === 0)
+            return "Thứ 2"
+        if (item.dateOfWeek === 1)
+            return "Thứ 3"
+        if (item.dateOfWeek === 2)
+            return "Thứ 4"
+        if (item.dateOfWeek === 3)
+            return "Thứ 5"
+        if (item.dateOfWeek === 4)
+            return "Thứ 6"
+        if (item.dateOfWeek === 5)
+            return "Thứ 7"
+        if (item.dateOfWeek === 6)
+            return "Chủ nhật"
+        return ""
+    });
 
-const AdminStatisticWeekChart = () => {
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: 'Số tiền',
+                data: weekData.map(item => item.totalMoney),
+                borderColor: 'rgb(294, 191, 149)',
+                backgroundColor: 'rgba(94, 191, 149, 0.5)',
+            },
+            {
+                label: 'Số đơn hàng',
+                data: weekData.map(item => item.totalOrder),
+                borderColor: 'rgb(53, 162, 235)',
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            },
+            {
+                label: 'Số sản phẩm',
+                data: weekData.map(item => item.totalQuantity),
+                borderColor: 'rgb(239,211,70)',
+                backgroundColor: 'rgba(239,211,70, 0.5)',
+            },
+        ],
+    };
+
     return <>
         <Bar options={options} data={data} />
     </>

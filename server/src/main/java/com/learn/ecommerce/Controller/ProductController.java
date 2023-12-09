@@ -58,12 +58,13 @@ public class ProductController {
                                                  @RequestParam(defaultValue = "", required = false) List<String> origins,
                                                  @RequestParam(defaultValue = "-1", required = false) Integer rating,
                                                  @RequestParam(defaultValue = "0",required = false) int sortType,
-                                                 @RequestParam(defaultValue = "0", required = false) Integer page){
+                                                 @RequestParam(defaultValue = "0", required = false) Integer page,
+                                                 @RequestParam(defaultValue = "10", required = false) Integer perPage){
         if (branchIds.isEmpty())
             branchIds = null;
         if (origins.isEmpty())
             origins = null;
-        Page<ProductQueryAdvanced> products = service.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, sortType, page);
+        Page<ProductQueryAdvanced> products = service.searchProductsAdvanced(title, priceMin, priceMax, categoryId, branchIds, origins, rating, sortType, page, perPage);
         return products.map((product) -> {
             ProductListItemResponse item = ModelMapperUtils.map(product.getProduct(), ProductListItemResponse.class);
             if (product.getOrders() != null)

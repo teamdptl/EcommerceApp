@@ -5,19 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb0400e4-d946-4fdc-a5ba-0c7ce144132b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/StatisticController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Repository/OrderChartQuery.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Repository/OrderWeekdayQuery.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Repository/StatisticRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/StatisticImp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/StatisticService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/main/CartDropdown.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/main/CartDropdown.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/shop/ProductDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/shop/ProductDetail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/user/UserInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/user/UserInfo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/user/UserShipInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/user/UserShipInfo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/hooks/useCart.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useCart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/hooks/useUserInfoFetch.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useShipInfoFetch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/Cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/Checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Checkout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/Shop.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Shop.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/admin/NavAdminHeader.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/NavAdminHeader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/admin/SidebarAdmin.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/SidebarAdmin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/admin/statistic_money/AdminStatisticChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/statistic_money/AdminStatisticChart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/admin/statistic_money/AdminStatisticWeekChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/statistic_money/AdminStatisticWeekChart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/layouts/AdminPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/layouts/AdminPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/layouts/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/layouts/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/Product.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Product.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminProduct.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminProduct.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminStatisticMoney.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminStatisticMoney.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/routes/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/routes/router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/ProductImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/ProductImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +37,7 @@
       <list>
         <option value="JavaScript File" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -65,6 +74,12 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.learn.ecommerce.Repository" />
+      <recent name="com.learn.ecommerce.Request" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="EcommerceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="ecommerce" />

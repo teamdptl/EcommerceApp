@@ -68,7 +68,7 @@ const Product = () => {
 			<AuthProvider>
 				<Header />
 				<div class="">
-					<main class="container mt-5 lg:mt-11 mx-auto">
+					<main class="max-w-7xl mt-5 lg:mt-11 mx-auto">
 						{productData === undefined || productData === null ? 
 							<div class="font-extrabold self-center">Opps! Không thể tải sản phẩm</div>:
 							<ProductDetail data={productData} listReview={(reviewsData !== undefined) && (reviewsData.error === undefined) ? reviewsData : []}/>

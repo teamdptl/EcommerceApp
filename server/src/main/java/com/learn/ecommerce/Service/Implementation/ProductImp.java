@@ -50,8 +50,7 @@ public class ProductImp implements ProductService {
 //    }
 
     @Override
-    public Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page) {
-        final int perPage = 10;
+    public Page<ProductQueryAdvanced> searchProductsAdvanced(String title, Long priceMin, Long priceMax, Integer categoryId, List<Integer> branchIds, List<String> origins, Integer rating, int type, int page, int perPage) {
         switch (type){
             // Phổ biến (đặt nhiều)
             case 0 -> {
