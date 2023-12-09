@@ -297,7 +297,7 @@ public class OrderImp implements OrderService {
 
     @Override
     public Optional<Order> findById(Integer id) {
-        return Optional.empty();
+        return orderReponsitory.findById(id);
     }
 
     @Override
@@ -305,9 +305,19 @@ public class OrderImp implements OrderService {
         return orderReponsitory.findAll();
     }
 
-
-    public List<Order> getFilterOrders(Date time_start, Date time_end, Integer status, Integer isAllStatus) {
-        return orderReponsitory.getFilterOrders(time_start, time_end, status, isAllStatus);
+    public List<Order> getFilterOrders(String text, Date time_start, Date time_end, Integer status, Integer isAllStatus) {
+        if(!text.equals("")){
+            try{
+                Integer number = Integer.parseInt(text);
+                if(number < 10000){
+                    return orderReponsitory.getFilterOrders(number, time_start, time_end, status, isAllStatus);
+                }
+                return orderReponsitory.getFilterOrders(text, time_start, time_end, status, isAllStatus);
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }
+        return orderReponsitory.getFilterOrders(text, time_start, time_end, status, isAllStatus);
     }
     @Override
     public void save(Order T) {

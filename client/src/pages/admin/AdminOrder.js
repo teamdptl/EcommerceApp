@@ -2,6 +2,7 @@ import ManagerHeader from "../../components/admin/ManagerHeader";
 import AdminOrderItem from "../../components/admin/order/AdminOrderItem";
 import AdminOrderTitle from "../../components/admin/order/AdminOrderTitle";
 import AdminOrderStatusModal from "../../components/admin/order/AdminOrderStatusModal";
+import AdminConfirmModal from "../../components/admin/AdminConfirmModal"
 import React, {useEffect, useState} from "react";
 import AdminOrderInfo from "../../components/admin/order/AdminOrderInfo";
 import AdminOrderConfirmCash from "../../components/admin/order/AdminOrderConfirmCash";
@@ -13,13 +14,13 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 
 
-const getISOSStringDate = (date) => {
-    return date.toISOString().split('T')[0]
+const getISOStringDate = (date) => {
+    let stringDate = date.toISOString().split('T')[0];
+    console.log("String date: ", stringDate)
+    return stringDate
 }
-
-const currentDate = new Date();
-
 const AdminOrder = () => {
+
     // Trạng thái đơn hàng
     const [showOrderStatus, setShowOrderStatus] = useState(false);
     // Thông tin nhận hàng
@@ -31,89 +32,197 @@ const AdminOrder = () => {
     const [showFilter, setShowFilter] = useState(false);
 
     const [listOrder, setListOrder] = useState([]);
+    
+    const currentDate = new Date();
     currentDate.setMonth(currentDate.getMonth() - 1)
-    const [startDate, setStartDate] = useState(currentDate)
+    console.log(currentDate)
     const [endDate, setEndDate] = useState(new Date())
+    const [startDate, setStartDate] = useState(currentDate)
+    const [orderStatus, setOrderStatus] = useState(0)
+    const [currentOrderSelect, setCurrentOrderSelect] = useState([])
 
-    const getListOrder = (isFilter, searchText) => {
+
+    //Announ Modal
+    const [showAnnounce, setShowAnnounce] = useState(false)
+    const [content , setContent] = useState()
+    const [type, setType] = useState('')
+
+
+    const getListOrder = (isExport) => {
         const fileName = 'testExportExcel'
         const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileExtension = ".xlsx";
         let url = '';
-        if(isFilter){
-            url = baseUrl + '/api/v1/order/all?'
-        }
-        url = baseUrl + '/api/v1/order/all'
+        let start = getISOStringDate(startDate);
+        let end = getISOStringDate(endDate);
+        if(isExport){
+            url = baseUrl + '/api/v1/order/all?start=' + start + "&end=" + end + '&status=' + orderStatus;
+        }else{url = baseUrl + '/api/v1/order/all'}
+        
+        console.log(url)
         fetch(url)
         .then(data => data.json())
         .then((res) => {
             console.log(res)
-            const ws = XLSX.utils.json_to_sheet(res);
-            const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-            const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-            const data = new Blob([excelBuffer], { type: fileType });
-            FileSaver.saveAs(data, fileName + fileExtension);
+            if(res.error === 1){
+                setListOrder(undefined)
+            }else{
+                if(isExport){
+                    const ws = XLSX.utils.json_to_sheet(res);
+                    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+                    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+                    const data = new Blob([excelBuffer], { type: fileType });
+                    FileSaver.saveAs(data, fileName + fileExtension);
+                }else{
+                    setListOrder(res)
+                }
+            }
+            
         })
+        .catch(err => console.error(err))
     }
 
-    const openOrderStatus = (e, orderId) => {
+    const filterOrder = (searchText) => {
+        let start = getISOStringDate(startDate);
+        let end = getISOStringDate(endDate);
+        let url = baseUrl + '/api/v1/order/all?text=' + searchText + '&start=' + start + "&end=" + end + '&status=' + orderStatus;
+        console.log(url)
+        fetch(url)
+        .then(data => data.json())
+        .then((res) => {
+            console.log(res)
+            if(res.error === 1){
+                setListOrder(undefined)
+            }else{
+                setListOrder(res)
+            }
+             
+        })
+        .catch(err => console.error(err))
+    }
+    const openOrderStatus = (e, order) => {
         e.stopPropagation();
-        console.log(orderId);
-        // Code here
+        console.log(order);
+        setCurrentOrderSelect(order)
         setShowOrderStatus(true);
     }
 
-    const openOrderInfo = (e, orderId) => {
+    const openOrderInfo = (e, order) => {
         e.stopPropagation();
-        // Code here
+        console.log(order);
+        setCurrentOrderSelect(order)
         setShowOrderInfo(true);
     }
 
-    const openConfirm = (e, orderId) => {
+    const openConfirm = (e, order) => {
         e.stopPropagation();
-        // Code here
+        console.log(order);
+        setCurrentOrderSelect(order)
         setShowConfirm(true);
     }
 
     useEffect(() => {
-        console.log(startDate)
-    }, [startDate]);
+        console.log(orderStatus)
+        getListOrder(false)
+    },[])
+
+    const loadOrderTable = () => {
+        let listComponent = []
+        listOrder.forEach(element => {
+            listComponent.push(<AdminOrderItem openInfo={openOrderInfo} openStatus={openOrderStatus} openConfirm={openConfirm} order={element}/>)
+        });
+        return listComponent
+    }
+
+    const saveStatus = (orderId, status) => {
+        console.log("Save status function")
+        let url = baseUrl + '/api/v1/order/update/status?order=' + orderId + '&status=' + status;
+        setShowOrderStatus(false);
+        fetch(url).then(data => data.json())
+                    .then(res => {
+                        if(res.error === 0){
+                            listOrder.map(item => {
+                                if(item.orderId === orderId) {
+                                    item.orderStatus = status;
+                                }
+                            })
+                            setListOrder(listOrder);
+                            setContent(res.message)
+                            setType('success')
+                            setShowAnnounce(true);
+                        }else{
+                            setContent(res.message)
+                            setType('fail')
+                            setShowAnnounce(true)
+                        }
+                    })
+                    .catch(err => console.error(err))
+    }
+
+    const confirmPayment = (orderId) => {
+
+        let url = baseUrl + '/api/v1/order/update/payment?order=' + orderId + '&payment=true';
+        setShowConfirm(false)
+        fetch(url).then(data => data.json())
+                    .then(res => {
+                        if(res.error === 0){
+                            listOrder.map(item => {
+                                if(item.orderId === orderId) {
+                                    item.paymentStatus = true;
+                                }
+                            })
+                            setListOrder(listOrder);
+                            setContent(res.message)
+                            setType('success')
+                            setShowAnnounce(true);
+                        }else{
+                            setContent(res.message)
+                            setType('fail')
+                            setShowAnnounce(true)
+                        }
+                    })
+                    .catch(err => console.error(err))
+        
+    }
 
     return (
         <AdminPage>
             <div className="col-span-6 bg-white rounded-md border-2 border-zinc-100">
                 <ManagerHeader title="Thông tin đơn hàng"
-                               searchCallBack={() => console.log("tim kiem")}
+                               searchCallBack={filterOrder}
                                placeHolder="Mã đơn, sdt, người mua"
                                filterCallback={() => setShowFilter(!showFilter)}
-                               exportCallback={() => getListOrder()}
+                               exportCallback={() => getListOrder(true)}
                 />
                 {showFilter &&
                     <div className={`flex mb-4 gap-4 mx-4 items-center justify-center`}>
                         <Label value="Từ ngày" />
-                        <Datepicker language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()} onSelectedDateChanged={(value) => setStartDate(value)}/>
+                        <Datepicker language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()} value={startDate} onSelectedDateChanged={(value) => setStartDate(value)}/>
                         <Label value="Đến ngày" />
                         <Datepicker language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()} onSelectedDateChanged={(value) => setEndDate(value)}/>
                         <Label value="Trạng thái" />
-                        <Select id="countries" required>
-                            <option>Tất cả</option>
-                            <option>Đang tiếp nhận</option>
-                            <option>Đang giao hàng</option>
-                            <option>Đã hoàn thành</option>
-                            <option>Đã hủy</option>
+                        <Select id="countries" 
+                            value={orderStatus} 
+                            onChange={val => setOrderStatus(val.target.value)}
+                            required>
+                            <option value={0}>Tất cả</option>
+                            <option value={1}>Đang tiếp nhận</option>
+                            <option value={2}>Đang giao hàng</option>
+                            <option value={3}>Đã hoàn thành</option>
+                            <option value={4}>Đã hủy</option>
                         </Select>
                     </div>
                 }
 
                 <div className="px-4">
                     <AdminOrderTitle/>
-                    <AdminOrderItem openInfo={openOrderInfo} openStatus={openOrderStatus} openConfirm={openConfirm}/>
-                    <AdminOrderItem openInfo={openOrderInfo} openStatus={openOrderStatus} openConfirm={openConfirm}/>
+                    {listOrder === undefined ? (<div>Error when loading data!</div>) : ((listOrder.lenght === 0) ? <div>Load load đồ đó</div> : loadOrderTable())}
                 </div>
             </div>
-            <AdminOrderStatusModal showModal={showOrderStatus} closeModal={() => setShowOrderStatus(false)}/>
-            <AdminOrderInfo showModal={showOrderInfo} closeModal={() => setShowOrderInfo(false)}/>
-            <AdminOrderConfirmCash showModal={showConfirm} closeModal={() => setShowConfirm(false)}/>
+            <AdminOrderStatusModal order={currentOrderSelect} showModal={showOrderStatus} closeModal={() => setShowOrderStatus(false)} saveStatus={saveStatus}/>
+            <AdminOrderInfo order={currentOrderSelect} showModal={showOrderInfo} closeModal={() => setShowOrderInfo(false)}/>
+            <AdminOrderConfirmCash order={currentOrderSelect} showModal={showConfirm} closeModal={() => setShowConfirm(false)} handleConfirm={confirmPayment}/>
+            <AdminConfirmModal isShow={showAnnounce} closeModal={() => setShowAnnounce(false)} content={content} type={type}></AdminConfirmModal>
         </AdminPage>
     )
 }
