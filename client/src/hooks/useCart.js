@@ -55,6 +55,7 @@ const useCart = (requireUpdate= false) => {
 
     const addItemToCart = (product, buyQuantity = 1) => {
         const find = cart.find(item => item.product.productId === product.productId) ?? null;
+        console.log(product);
         if (find) {
             updateQuantity(product.productId, find.buyQuantity + 1)
             return;

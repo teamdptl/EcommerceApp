@@ -21,13 +21,23 @@ export default function CustomTriggerDropdown() {
 			<p className="text-lg font-medium text-gray-900 mt-3 px-12 pb-3">Giỏ hàng</p>
 			<hr className={"mx-12"}/>
 			<div className="mt-3 px-8 max-h-96 overflow-y-auto pb-4">
-				<div className="flow-root w-1">
-					<ul role="list" className="-my-6 divide-y divide-gray-200" >
-						{cart.map((item) => (
-							<CartItem key={item.product.productId} item={item} isPopup={true}/>
-						))}
-					</ul>
-				</div>
+				{cart.length > 0 &&
+					<div className="flow-root w-1">
+						<ul role="list" className="-my-6 divide-y divide-gray-200" >
+							{cart.map((item) => (
+								<CartItem key={item.product.productId} item={item} isPopup={true}/>
+							))}
+						</ul>
+					</div>
+				}
+
+				{cart.length === 0 &&
+					<div className={"flex justify-center items-center flex-col"}>
+						<img src={"/empty-cart.svg"} className={"w-48 h-48"}/>
+						<p className={"text-slate-800 font-semibold"}>Giỏ hàng trống, vui lòng thêm sản phẩm</p>
+					</div>
+				}
+
 			</div>
 			{/* Tổng tiền và các nút thanh toán */}
 			<div className="border-t border-gray-200 px-4 py-6 sm:px-6 mt-5">

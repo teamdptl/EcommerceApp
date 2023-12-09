@@ -2,7 +2,7 @@ import {useCallback, useState} from "react";
 import createFetch from "../utils/createFetch";
 import baseUrl from "../config";
 
-const UseUserInfoFetch = () => {
+const UseShipInfoFetch = () => {
     const [listInfo, setListInfo] = useState([]);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState();
@@ -18,4 +18,4 @@ const UseUserInfoFetch = () => {
     return { listInfo, loading, errorMsg, getInfoList }
 }
 
-export default UseUserInfoFetch;
+export default UseShipInfoFetch;

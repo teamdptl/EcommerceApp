@@ -10,11 +10,23 @@ export function CartList({ className, cart }) {
 	return (
 		<>
 			<div class={className}>
-				<ul role="list" class="-my-6 divide-y divide-gray-200 mr-3">
-					{cart.map((item) => (
-						<CartItem key={item.key} item={item} />
-					))}
-				</ul>
+				{cart.length === 0 &&
+					<div className={"flex justify-center items-center flex-col"}>
+						<img src={"/empty-cart.svg"} className={"w-72 h-72"}/>
+						<p className={"text-slate-800 font-semibold"}>Giỏ hàng trống, vui lòng thêm sản phẩm</p>
+					</div>
+				}
+
+				{cart.length > 0 &&
+					<>
+						<ul role="list" className="-my-6 divide-y divide-gray-200 mr-3">
+							{cart.map((item) => (
+								<CartItem key={item.key} item={item} />
+							))}
+						</ul>
+					</>
+				}
+
 			</div>
 		</>
 	)

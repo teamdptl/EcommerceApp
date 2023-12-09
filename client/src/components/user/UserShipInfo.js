@@ -4,7 +4,7 @@ import UserShipInfoForm from "./UserShipInfoForm";
 import createFetch from "../../utils/createFetch";
 import baseUrl from "../../config";
 
-const UserShipInfo = ({info, onSubmit}) => {
+const UserShipInfo = ({info, onSubmit, onSelected, isSelected = false}) => {
 	// const [info, setInfo] = useState({
 	// 	receiveName: "Huỳnh Khánh Duy",
 	// 	address: "373 An Dương Vương, Quận 5, TP.Hồ Chí Minh",
@@ -74,7 +74,7 @@ const UserShipInfo = ({info, onSubmit}) => {
 
 	return (
 		<>
-			<div class="flex w-full items-center border border-slate-200 py-4 px-5 rounded-md">
+			<div class={`flex w-full items-center ${isSelected ? 'border-2 border-sky-600' :'border border-slate-200'}  py-4 px-5 rounded-md`}>
 				<FaShippingFast size={20}></FaShippingFast>
 				<div class="flex flex-col ml-7 mr-3">
 					<div class="flex items-center">
@@ -85,20 +85,35 @@ const UserShipInfo = ({info, onSubmit}) => {
 					<p>Địa chỉ: {info.address}</p>
 				</div>
 				<div className={"ml-auto gap-2 flex items-center"}>
-					<button
-						onClick={() => {
-							setDisplay(!display);
-						}}
-						className="text-white bg-blue-700 px-4 py-2 rounded-lg cursor whitespace-nowrap">
-						Thay đổi
-					</button>
-					<button
-						onClick={() => {
-							removeShipInfo();
-						}}
-						className="text-white bg-red-600 px-4 py-2 rounded-lg cursor whitespace-nowrap">
-						Xóa
-					</button>
+					{!onSelected &&
+						<>
+							<button
+								onClick={() => {
+									setDisplay(!display);
+								}}
+								className="text-white bg-blue-700 px-4 py-2 rounded-lg cursor whitespace-nowrap">
+								Thay đổi
+							</button>
+							<button
+								onClick={() => {
+									removeShipInfo();
+								}}
+								className="text-white bg-red-600 px-4 py-2 rounded-lg cursor whitespace-nowrap">
+								Xóa
+							</button>
+						</>
+					}
+					{onSelected &&
+						<>
+							<button
+								onClick={() => {
+									onSelected();
+								}}
+								className="text-white bg-blue-700 px-4 py-2 rounded-lg cursor whitespace-nowrap">
+								{ isSelected ? 'Bỏ chọn' : 'Chọn'}
+							</button>
+						</>
+					}
 				</div>
             </div>
             {display === true ?

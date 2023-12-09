@@ -3,15 +3,16 @@ import UserShipInfo from "./UserShipInfo";
 import {useContext, useEffect, useState} from "react";
 import UserShipInfoForm from "./UserShipInfoForm";
 import {useAuth} from "../../context/AuthContext";
-import useUserInfoFetch from "../../hooks/useUserInfoFetch";
+import useUserInfoFetch from "../../hooks/useShipInfoFetch";
 import {get} from "axios";
 import createFetch from "../../utils/createFetch";
 import baseUrl from "../../config";
+import useShipInfoFetch from "../../hooks/useShipInfoFetch";
 
 const UserInfo = () => {
 	const { user } = useAuth();
 	const [display, setDisplay] = useState(false);
-	const { listInfo, loading, errorMsg, getInfoList } = useUserInfoFetch();
+	const { listInfo, loading, errorMsg, getInfoList } = useShipInfoFetch();
 	const [editInfo, setEditInfo] = useState(null);
 
 	useEffect(() => {

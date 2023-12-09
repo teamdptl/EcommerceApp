@@ -4,14 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-
     <list default="true" id="cb0400e4-d946-4fdc-a5ba-0c7ce144132b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/main/CartDropdown.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/main/CartDropdown.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/shop/ProductDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/shop/ProductDetail.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/user/UserInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/user/UserInfo.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/user/UserShipInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/user/UserShipInfo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/user/UserShipInfoForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/user/UserShipInfoForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Repository/ShipInfoReponsitory.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Repository/ShipInfoReponsitory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/hooks/useCart.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useCart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/hooks/useUserInfoFetch.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useShipInfoFetch.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/Cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Cart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/Checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/Shop.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Shop.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/routes/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/routes/router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +46,6 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
@@ -81,6 +86,7 @@
       <workItem from="1701958229902" duration="7801000" />
       <workItem from="1702012724724" duration="2081000" />
       <workItem from="1702042777454" duration="11868000" />
+      <workItem from="1702094065079" duration="6179000" />
     </task>
     <servers />
   </component>

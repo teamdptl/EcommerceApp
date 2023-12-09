@@ -86,6 +86,7 @@ public class UserService {
     public ResponseEntity<?> setUserNewPassword(User user, String oldPass, String newPassword){
         if (passwordEncoder.matches(oldPass, user.getPassword())){
             user.setPassword(passwordEncoder.encode(newPassword));
+            repository.save(user);
             return ResponseEntity.ok(new SuccessResponse("Thay đổi mật khẩu thành công!"));
         }
         return ResponseEntity.ok(new ErrorResponse("Mật khẩu không đúng!"));
