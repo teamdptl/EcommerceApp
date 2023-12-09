@@ -28,9 +28,11 @@ const Shop = () => {
 			<SearchBar onChange={(searchData) => {
 				setFilter({ ...filter, ...searchData})
 			}}></SearchBar>
-			<FilterBar onChange={(filterData) => {
-				setFilter({ ...filter, ...filterData});
-			}} ></FilterBar>
+			<div className="flex flex-col mx-auto relative mb-4 w-screen max-w-screen-xl">
+				<FilterBar onChange={(filterData) => {
+					setFilter({ ...filter, ...filterData});
+				}} ></FilterBar>
+			</div>
 			<div className="bg-white">
 				<div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8">
 					<div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:gap-x-4">

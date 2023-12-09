@@ -196,7 +196,7 @@ const FilterBar = ({ onChange }) => {
 
 
     return (
-        <div class="flex flex-col mx-auto relative mb-4 w-screen max-w-screen-xl">
+        <>
             <div class="flex flex-col lg:flex-row lg:items-center justify-between space-y-6 lg:space-y-0 lg:space-x-2 ">
                 <nav class=" relative flex w-full overflow-x-auto text-sm md:text-base hiddenScrollbar" >
                     <ul class="flex sm:space-x-2" >
@@ -227,7 +227,7 @@ const FilterBar = ({ onChange }) => {
                 </nav>
                 <span class="block flex-shrink-0 text-right">
                     <button class=" relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium pl-4 py-2.5 sm:pl-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl w-auto !pr-16 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
-                        onClick={(e) => setIsActive(!isActive)} >
+                            onClick={(e) => setIsActive(!isActive)} >
                         <svg class="w-4 h-4 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none">
                             <path d="M14.3201 19.07C14.3201 19.68 13.92 20.48 13.41 20.79L12.0001 21.7C10.6901 22.51 8.87006 21.6 8.87006 19.98V14.63C8.87006 13.92 8.47006 13.01 8.06006 12.51L4.22003 8.47C3.71003 7.96 3.31006 7.06001 3.31006 6.45001V4.13C3.31006 2.92 4.22008 2.01001 5.33008 2.01001H18.67C19.78 2.01001 20.6901 2.92 20.6901 4.03V6.25C20.6901 7.06 20.1801 8.07001 19.6801 8.57001" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
                             <path d="M16.07 16.52C17.8373 16.52 19.27 15.0873 19.27 13.32C19.27 11.5527 17.8373 10.12 16.07 10.12C14.3027 10.12 12.87 11.5527 12.87 13.32C12.87 15.0873 14.3027 16.52 16.07 16.52Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -348,8 +348,8 @@ const FilterBar = ({ onChange }) => {
 
                             <div class="relative ">
                                 <Select id="countries" required value={selectedOption}
-                                    onChange={handleSelectChange}
-                                    class="bg-white h-9 rounded-full border-slate-300 hover:bg-sky-50 ">
+                                        onChange={handleSelectChange}
+                                        class="bg-white h-9 rounded-full border-slate-300 hover:bg-sky-50 ">
                                     <option value="-1">Đánh giá</option>
                                     <option value="1">1 Sao</option>
                                     <option value="2">2 Sao</option>
@@ -367,10 +367,10 @@ const FilterBar = ({ onChange }) => {
                                         // onChange={handleSelect}
                                         // value={products}
 
-                                        value={selectedValue}
-                                        onChange={handleSelect}
-                                        required
-                                        class="bg-white h-9 rounded-full border-slate-300 w-screen max-w-xs  hover:bg-sky-50">
+                                            value={selectedValue}
+                                            onChange={handleSelect}
+                                            required
+                                            class="bg-white h-9 rounded-full border-slate-300 w-screen max-w-xs  hover:bg-sky-50">
                                         <option value="0">Sắp xếp theo phổ biến</option>
                                         <option value="1">Sắp xếp theo đánh giá cao</option>
                                         <option value="2">Giá từ thấp đến cao</option>
@@ -385,9 +385,7 @@ const FilterBar = ({ onChange }) => {
                 </div>
             )
             }
-        </div >
-
-
+        </>
     )
 }
 
