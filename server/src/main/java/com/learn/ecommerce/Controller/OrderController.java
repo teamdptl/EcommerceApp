@@ -1,10 +1,9 @@
 package com.learn.ecommerce.Controller;
 
-import com.learn.ecommerce.Entity.Order;
+import com.learn.ecommerce.Entity.*;
 import com.learn.ecommerce.Request.PlaceOrderRequest;
-import com.learn.ecommerce.Response.ErrorResponse;
-import com.learn.ecommerce.Response.OrderResponse;
-import com.learn.ecommerce.Service.Implementation.OrderImp;
+import com.learn.ecommerce.Response.*;
+import com.learn.ecommerce.Service.Implementation.*;
 import com.learn.ecommerce.Ultis.ModelMapperUtils;
 
 import java.time.LocalDate;
@@ -12,15 +11,10 @@ import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
 
-import com.learn.ecommerce.Entity.Product;
-import com.learn.ecommerce.Entity.ShipInfo;
-import com.learn.ecommerce.Entity.User;
 import com.learn.ecommerce.Request.PlaceOrderItem;
 import com.learn.ecommerce.Request.PlaceOrderRequest;
 import com.learn.ecommerce.Response.ErrorResponse;
-import com.learn.ecommerce.Response.SuccessResponse;
 import com.learn.ecommerce.Service.Implementation.OrderImp;
-import com.learn.ecommerce.Service.Implementation.ShipInfoImp;
 import com.learn.ecommerce.Ultis.AuthUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +35,12 @@ public class OrderController {
     private ShipInfoImp shipInfoImp;
     @Autowired
     private AuthUtils auth;
-
-    private final OrderImp orderImp;
-    OrderController( @Autowired OrderImp orderImp ){
-        this.orderImp = orderImp;
-    }
-
+    @Autowired
+    private OrderImp orderImp;
+    @Autowired
+    private OrderLineImp orderLineImp;
+    @Autowired
+    private MediaImp mediaImp;
     // ROLE: User
     @PostMapping("/place")
     public ResponseEntity<?> placeOrder(@Valid @RequestBody PlaceOrderRequest request, BindingResult result){
@@ -78,6 +72,7 @@ public class OrderController {
         return ResponseEntity.ok("ok");
     }
 
+
     // ROLE: Admin
    @GetMapping("/all")
    public ResponseEntity<?> getAllOrders(@RequestParam(value = "text", required = false, defaultValue = "") String text,
@@ -87,7 +82,7 @@ public class OrderController {
         Date start = time_start.equals("") ? Date.valueOf("1970-01-01") : Date.valueOf(time_start);
         Date end = time_end.equals("") ? Date.valueOf(LocalDate.now()) : Date.valueOf(time_end);
         Integer isAllStatus = 0;
-        if(status == null){
+        if(status == null || status == 0){
             status = 0;
             isAllStatus = 1;
         }
@@ -96,16 +91,68 @@ public class OrderController {
         System.out.println(start);
         System.out.println(end);
         System.out.println(status);
+        System.out.println(isAllStatus);
 
-        List<Order> listOrders = orderImp.getFilterOrders(start, end, status, isAllStatus);
+        List<Order> listOrders = orderImp.getFilterOrders(text, start, end, status, isAllStatus);
         if(!listOrders.isEmpty()){
             List<OrderResponse> listResult = new ArrayList<>();
+            List<OrderLineResponse> listProduct = new ArrayList<>();
+            OrderResponse orderResponse;
+            OrderLineResponse orderLineResponse;
+            MediaResponse mediaResponse;
             for (Order order : listOrders) {
-                listResult.add(ModelMapperUtils.map(order, OrderResponse.class));
+                List<OrderLine> listOrderLine = orderLineImp.getAllOrderLines(order.getOrderId());
+                System.out.println("Tìm thấy danh sách đơn hàng!");
+                if(!listOrderLine.isEmpty()){
+                    System.out.println("Tìm thấy danh sách sản phẩm của đơn hàng!");
+                    for (OrderLine orderLine : listOrderLine) {
+                        orderLineResponse = ModelMapperUtils.map(orderLine, OrderLineResponse.class);
+                        Optional<Media> media = mediaImp.getProductPrimaryMedia(orderLine.getProduct().getProductId());
+                        mediaResponse = ModelMapperUtils.map(media.orElse(null), MediaResponse.class);
+                        orderLineResponse.setProductMedia(mediaResponse);
+                        listProduct.add(orderLineResponse);
+
+                    }
+                }else{
+//                    return ResponseEntity.ok(new ErrorResponse("Không tìm thấy dữ liệu!"));
+                }
+                System.out.println(listProduct.size());
+                orderResponse = ModelMapperUtils.map(order, OrderResponse.class);
+                orderResponse.setOrderLineResponse(listProduct.stream().toList());
+                listResult.add(orderResponse);
+                listProduct.clear();
             }
             return ResponseEntity.ok(listResult);
         }
         return ResponseEntity.ok(new ErrorResponse("Không tìm thấy dữ liệu!"));
+   }
+
+   @GetMapping("/update/status")
+   public ResponseEntity<?> updateOrderStatus(@RequestParam(name = "order") Integer orderId,
+                                              @RequestParam(name = "status") Integer orderStatus){
+       System.out.println(orderId);
+       System.out.println(orderStatus);
+        Optional<Order> orderOptional = orderImp.findById(orderId);
+        if(orderOptional.isEmpty())
+            return ResponseEntity.ok(new ErrorResponse("Không tìm thấy sản phẩm hợp lệ"));
+        Order order = orderOptional.get();
+        order.setOrderStatus(orderStatus);
+        orderImp.save(order);
+        return ResponseEntity.ok(new SuccessResponse("Cập nhật trạng thái thành công"));
+   }
+
+   @GetMapping("/update/payment")
+    public ResponseEntity<?> updatePaymentStatus(@RequestParam(name = "order") Integer orderId,
+                                                 @RequestParam(name = "payment") Boolean paymentStatus){
+       System.out.println(orderId);
+       System.out.println(paymentStatus);
+       Optional<Order> orderOptional = orderImp.findById(orderId);
+       if(orderOptional.isEmpty())
+           return ResponseEntity.ok(new ErrorResponse("Không tìm thấy hóa đơn hợp lệ"));
+       Order order = orderOptional.get();
+       order.setPaymentStatus(paymentStatus);
+       orderImp.save(order);
+       return ResponseEntity.ok(new SuccessResponse("Cập nhật trạng thái thành công"));
    }
 
 

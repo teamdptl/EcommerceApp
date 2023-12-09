@@ -11,7 +11,7 @@ const AdminConfirmModal = ({isShow, closeModal, content, confirmCallback, type})
         confirmCallback()
     }
     return <>
-        <Modal show={isShow} size="md" onClose={closeModal} popup>
+        <Modal dismissible show={isShow} size="md" onClose={closeModal} popup>
             <Modal.Header />
             <Modal.Body>
                 <div className="text-center">

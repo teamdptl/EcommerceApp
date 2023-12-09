@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Timestamp;
 
 @Entity
