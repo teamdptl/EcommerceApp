@@ -1,17 +1,49 @@
+import { useEffect, useState } from "react";
+import ProductItem from "../shop/ProductItem";
+
 const FeaturedProducts = () => {
+
+	const [popularProducts, setPopularProducts] = useState([]);
+  const [highRatedProducts, setHighRatedProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchPopularProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/product/search?sortType=0&perPage=4');
+        const data = await response.json();
+        setPopularProducts(data.content);
+      } catch (error) {
+        console.error('Error fetching popular products:', error);
+      }
+    };
+
+    const fetchHighRatedProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/product/search?sortType=1&perPage=4');
+        const data = await response.json();
+        setHighRatedProducts(data.content);
+      } catch (error) {
+        console.error('Error fetching high-rated products:', error);
+      }
+    };
+
+    fetchPopularProducts();
+    fetchHighRatedProducts();
+  }, []);
+
     return (
 			<>
 				<section class="py-12 bg-white sm:py-16 lg:py-20">
 					<div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
 						<div class="max-w-md mx-auto text-center">
-							<h2 class="text-2xl font-bold text-gray-900 sm:text-3xl">Our featured items</h2>
-							<p class="mt-4 text-base font-normal leading-7 text-gray-600">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus faucibus massa dignissim tempus.
+							<h2 class="text-2xl font-bold text-gray-900 sm:text-3xl">Danh mục các sản phẩm</h2>
+							<p class="mt-4 text-xl font-bold text-gray-900 leading-7 ">
+								Các sản phẩm được mua nhiều nhất
 							</p>
 						</div>
 
 						<div class="grid grid-cols-2 gap-6 mt-10 lg:mt-16 lg:gap-4 lg:grid-cols-4">
-							<div class="relative group">
+							{/* <div class="relative group">
 								<div class="overflow-hidden aspect-w-1 aspect-h-1">
 									<img
 										class="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
@@ -217,7 +249,7 @@ const FeaturedProducts = () => {
 									<div>
 										<h3 class="text-xs font-bold text-gray-900 sm:text-sm md:text-base">
 											<a href="#" title="">
-												Martino 75 Bluetooth
+												Martino 75 Bluetooth	
 												<span class="absolute inset-0" aria-hidden="true"></span>
 											</a>
 										</h3>
@@ -264,7 +296,23 @@ const FeaturedProducts = () => {
 										<p class="text-xs font-bold text-gray-900 sm:text-sm md:text-base">$79.00</p>
 									</div>
 								</div>
-							</div>
+							</div> */}
+							 {popularProducts.map((product) => (
+							<ProductItem key={product.id} product={product}></ProductItem>
+    						  ))}
+						</div>
+					</div>
+					<div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+						<div class="max-w-md mx-auto text-center">
+						<p class="mt-4 text-xl font-bold text-gray-900 leading-7 ">
+								Các sản phẩm được đánh giá cao nhất
+							</p>
+						</div>
+
+						<div class="grid grid-cols-2 gap-6 mt-10 lg:mt-16 lg:gap-4 lg:grid-cols-4">
+							 {highRatedProducts.map((product) => (
+							<ProductItem key={product.id} product={product}></ProductItem>
+    						  ))}
 						</div>
 					</div>
 				</section>
