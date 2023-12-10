@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Entity
+// Đã bị loại bỏ sử dụng localStorage nha
+//@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
