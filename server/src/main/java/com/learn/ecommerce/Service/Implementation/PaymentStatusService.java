@@ -34,8 +34,10 @@ public class PaymentStatusService {
     private final Long timeExpire = 10*60*1000L;
     private final Long sleepTime = 20000L;
     private final String tokenFilePath = "token.txt";
-    private final String bankCode = "TIMO-9017041010715";
-    private final String bankAccount = "Huynh Khanh Duy";
+    private final String bankName = "TIMO";
+    private final String bankNumber = "9017041010715";
+    private final String bankCode = bankName+"-"+bankNumber;
+    private final String bankUser = "Huynh Khanh Duy";
     private final String tk = "";
     private final String mk = "";
     private final String quickLinkTemplate = "https://img.vietqr.io/image/%s-print.png?amount=%s&addInfo=%s&accountName=%s";
@@ -43,7 +45,7 @@ public class PaymentStatusService {
     public PaymentStatus generatePayment(Order order){
         PaymentStatus payment = new PaymentStatus();
         payment.setExpiredAt(System.currentTimeMillis() + timeExpire);
-        payment.setCode(getAlphaNumericString(5));
+        payment.setCode(getAlphaNumericString(6));
         payment.setTimeReceived(-1L);
         payment.setOrder(order);
         return repo.save(payment);
@@ -56,8 +58,12 @@ public class PaymentStatusService {
 
     public ResponseEntity<?> getPaymentData(PaymentStatus status){
         PaymentDetailResponse response = new PaymentDetailResponse();
-        String qrLink = String.format(quickLinkTemplate, bankCode, status.getOrder().getTotalPrice(), status.getCode(), bankAccount);
+        String qrLink = String.format(quickLinkTemplate, bankCode, status.getOrder().getTotalPrice(), status.getCode(), bankUser);
         response.setPaymentQr(qrLink);
+        response.setBankNumber(bankNumber);
+        response.setBankName(bankName);
+        response.setReceiveName(bankUser);
+        response.setMoney(status.getOrder().getTotalPrice());
         response.setCode(status.getCode());
         response.setExpiredAt(status.getExpiredAt());
         response.setNeedPay(true);

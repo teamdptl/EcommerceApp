@@ -11,7 +11,6 @@ import {TbReportMoney} from "react-icons/tb";
 import {Link} from "react-router-dom";
 
 const UserDropDown = ({user, logout}) => {
-    console.log(user);
     return <>
         {user?.role?.toLowerCase() === 'admin' &&
             <Dropdown

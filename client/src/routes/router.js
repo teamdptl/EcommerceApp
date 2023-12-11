@@ -84,7 +84,7 @@ const Router = ()  =>  {
                 <Route path="product/:productId" element={<Product/>} />
                 <Route path="cart" element={<Cart/>} />
                 <Route path="checkout" element={<Checkout/>} />
-                <Route path="payment" element={<Payment/>} />
+                <Route path="payment/:code" element={<Payment/>} />
                 <Route path="user" element={
                     <AuthRoute
                         condition={isUser}

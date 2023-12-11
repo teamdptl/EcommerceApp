@@ -63,11 +63,14 @@ public class OrderController {
         Optional<ShipInfo> shipInfo = shipInfoImp.findShipInfoById(request.getShipId());
         if (!shipInfo.isPresent())
             return ResponseEntity.badRequest().body(new ErrorResponse("Thông tin nhận hàng không tồn tại!"));
+        if (!request.getPaymentType().equals(Order.Method_Banking) && !request.getPaymentType().equals(Order.Method_COD))
+            return ResponseEntity.badRequest().body(new ErrorResponse("Phương thức thanh toán không hợp lệ!"));
 
         // Kiểm tra xem paymentMethod có hợp lệ hay không
         Optional<User> optionalUser = auth.getCurrentUser();
         Order order = new Order();
         order.setPaymentMethod(request.getPaymentType());
+        order.setOrderStatus(1);
         order.setCreateAt(new Timestamp(System.currentTimeMillis()));
         order.setShipInfo(shipInfo.get());
         order.setUser(optionalUser.orElse(null));
@@ -75,6 +78,7 @@ public class OrderController {
         try {
 
             Order saved = orderImp.placeOrder(Arrays.asList(request.getItems()), order, coupon);
+
             CompletableFuture.runAsync(() -> {
                 try {
 
@@ -98,19 +102,28 @@ public class OrderController {
 
             });
 
+            if (order.getPaymentMethod().equals(Order.Method_Banking)){
+                PaymentStatus status = paymentStatusService.generatePayment(saved);
+                return ResponseEntity.ok(new OrderCreatedResponse("Vui lòng thực hiện chuyển khoản!", status.getCode()));
+            }
             return ResponseEntity.ok(new SuccessResponse("Tạo đơn hàng thành công"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
 
-    @GetMapping("/payment-info")
-    public ResponseEntity<?> getPaymentInfo(){
-        return paymentStatusService.getPaymentData(paymentStatusService.findPaymentByCode("duy1"));
+    @GetMapping("/payment/{code}")
+    public ResponseEntity<?> getPaymentInfo(@PathVariable String code){
+        PaymentStatus status = paymentStatusService.findPaymentByCode(code);
+        if (status == null)
+            return ResponseEntity.badRequest().build();
+        if (status.getExpiredAt() <= System.currentTimeMillis())
+            return ResponseEntity.badRequest().build();
+        return paymentStatusService.getPaymentData(status);
     }
 
-
     // ROLE: User
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/user-orders")
     public ResponseEntity<?> getUserOrders(){
         return ResponseEntity.ok("ok");

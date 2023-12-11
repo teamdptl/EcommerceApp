@@ -19,7 +19,6 @@ public class PaymentStatus {
     private Long expiredAt = 0L;
 
     @ManyToOne
-    @MapsId("orderId")
     @JoinColumn(name = "order_id")
     private Order order;
 }

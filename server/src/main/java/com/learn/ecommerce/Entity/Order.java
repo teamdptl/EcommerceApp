@@ -36,5 +36,5 @@ public class Order {
     private boolean isDeleted = false;
 
     public static final String Method_Banking = "Chuyển khoản";
-    public static final String Method_COD = "Thanh toán khi nhận hàng";
+    public static final String Method_COD = "Thanh toán khi nhận hàng COD";
 }

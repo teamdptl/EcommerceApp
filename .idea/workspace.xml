@@ -5,32 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb0400e4-d946-4fdc-a5ba-0c7ce144132b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Response/OrderCreatedResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/admin/categorybrand/AdminBrandList.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/categorybrand/AdminBrandList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/admin/categorybrand/AdminBrandModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/categorybrand/AdminBrandModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/admin/categorybrand/AdminCategoryList.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/categorybrand/AdminCategoryList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/admin/categorybrand/AdminCategoryModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/categorybrand/AdminCategoryModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/admin/categorybrand/AdminEditBrandModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/categorybrand/AdminEditBrandModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/admin/product/AdminProductSave.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/product/AdminProductSave.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/home/FeaturedProducts.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/FeaturedProducts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/admin/statistic_money/AdminStatisticWeekChart.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/statistic_money/AdminStatisticWeekChart.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/main/UserDropDown.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/main/UserDropDown.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/shop/FilterBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/shop/FilterBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/hooks/useBrandFetch.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useBrandFetch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/hooks/useCreateUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useCreateUser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/hooks/useEditUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useEditUser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/hooks/useGetUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useGetUser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/hooks/useProductsFetch.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useProductsFetch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/hooks/useShipInfoSave.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useShipInfoSave.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/hooks/useUsersFetch.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useUsersFetch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/NoPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/NoPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/Signup.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Signup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminCategoryBrand.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminCategoryBrand.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminOrder.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminOrder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminProduct.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminProduct.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminStatisticTop.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminStatisticTop.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/Checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/Payment.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Payment.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/routes/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/routes/router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/TokenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/TokenController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Entity/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Entity/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Entity/PaymentStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Entity/PaymentStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Response/PaymentDetailResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Response/PaymentDetailResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/PaymentStatusService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/PaymentStatusService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,8 +29,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -60,25 +48,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/IntelliJ IDEA 2023.2.2/J2EE/SocketChat/chat-app&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "D:/IntelliJ IDEA 2023.2.2/J2EE/SocketChat",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.learn.ecommerce.Repository" />
@@ -111,7 +99,8 @@
       <workItem from="1702183461424" duration="2187000" />
       <workItem from="1702190161693" duration="708000" />
       <workItem from="1702296138218" duration="3826000" />
-      <workItem from="1702300845977" duration="1366000" />
+      <workItem from="1702300845977" duration="2095000" />
+      <workItem from="1702303005566" duration="13504000" />
     </task>
     <servers />
   </component>
