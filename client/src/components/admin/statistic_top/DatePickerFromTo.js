@@ -22,7 +22,8 @@ const DatePickerFromTo = (props) => {
                     <div className="mb-2 block">
                         <Label value="Từ ngày" />
                     </div>
-                    <Datepicker  onSelectedDateChanged={(date)=>{handleChangeDateFrom(date)}} language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()}/>
+                    <Datepicker     excludeDates={[new Date()]}
+                                    onSelectedDateChanged={(date)=>{handleChangeDateFrom(date)}} language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()}/>
                 </div>
                 <div>
                     <div className="mb-2 block">
