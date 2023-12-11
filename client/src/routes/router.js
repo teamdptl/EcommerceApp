@@ -25,6 +25,7 @@ import AdminOrder from "../pages/admin/AdminOrder";
 import AdminStatisticTop from "../pages/admin/AdminStatisticTop";
 import AdminStatisticMoney from "../pages/admin/AdminStatisticMoney";
 import ScrollToTop from "./ScrollToTop";
+import Payment from "../pages/Payment";
 
 function AuthRoute({children, condition, navigatePage}) {
     const { user } = useAuth();
@@ -83,6 +84,7 @@ const Router = ()  =>  {
                 <Route path="product/:productId" element={<Product/>} />
                 <Route path="cart" element={<Cart/>} />
                 <Route path="checkout" element={<Checkout/>} />
+                <Route path="payment" element={<Payment/>} />
                 <Route path="user" element={
                     <AuthRoute
                         condition={isUser}

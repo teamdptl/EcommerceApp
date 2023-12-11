@@ -5,13 +5,13 @@ import com.learn.ecommerce.Entity.PaymentStatus;
 import com.learn.ecommerce.Repository.OrderReponsitory;
 import com.learn.ecommerce.Repository.PaymentStatusRepository;
 import com.learn.ecommerce.Response.ErrorResponse;
+import com.learn.ecommerce.Response.PaymentDetailResponse;
 import com.learn.ecommerce.Response.PaymentResponse;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -34,8 +34,12 @@ public class PaymentStatusService {
     private final Long timeExpire = 10*60*1000L;
     private final Long sleepTime = 20000L;
     private final String tokenFilePath = "token.txt";
+    private final String bankCode = "TIMO-9017041010715";
+    private final String bankAccount = "Huynh Khanh Duy";
     private final String tk = "";
     private final String mk = "";
+    private final String quickLinkTemplate = "https://img.vietqr.io/image/%s-print.png?amount=%s&addInfo=%s&accountName=%s";
+
     public PaymentStatus generatePayment(Order order){
         PaymentStatus payment = new PaymentStatus();
         payment.setExpiredAt(System.currentTimeMillis() + timeExpire);
@@ -48,6 +52,18 @@ public class PaymentStatusService {
     public PaymentStatus findPaymentByCode(String code){
         Optional<PaymentStatus> p =  repo.findByCode(code);
         return p.orElse(null);
+    }
+
+    public ResponseEntity<?> getPaymentData(PaymentStatus status){
+        PaymentDetailResponse response = new PaymentDetailResponse();
+        String qrLink = String.format(quickLinkTemplate, bankCode, status.getOrder().getTotalPrice(), status.getCode(), bankAccount);
+        response.setPaymentQr(qrLink);
+        response.setCode(status.getCode());
+        response.setExpiredAt(status.getExpiredAt());
+        response.setNeedPay(true);
+        response.setOrderId(status.getOrder().getOrderId());
+        response.setMessage("Vui lòng thanh toán đơn hàng");
+        return ResponseEntity.ok(response);
     }
 
     public PaymentResponse checkPayment(PaymentStatus payment){
@@ -79,10 +95,10 @@ public class PaymentStatusService {
             try {
                 String token = getToken();
                 System.out.println("Token: "+token);
-//                boolean isSuccess = checkInLoop(token, money, description);
-                if (false)
+                boolean isSuccess = checkInLoop(token, money, description);
+                if (isSuccess)
                     return true;
-                Thread.sleep(20000L);
+                Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 return false;
             }
@@ -120,7 +136,8 @@ public class PaymentStatusService {
                     long transferMoney = object.getLong("txnAmount");
                     String description = object.getString("txnDesc");
                     // Kiểm tra số tiền và nội dung mô tả có đúng hay khong
-                    if (transferMoney >= requiredMoney && description.contains(requireDescription)){
+//                    System.out.println(description + " "+requireDescription);
+                    if (transferMoney >= requiredMoney && description.trim().contains(requireDescription)){
                         return true;
                     }
                 }

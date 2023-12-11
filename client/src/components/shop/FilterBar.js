@@ -26,6 +26,7 @@ const FilterBar = ({ onChange }) => {
         console.log(`User clicked category with ID: ${categoryId}`);
         onChange({
             categoryId: categoryId,
+            page: 0,
         });
     };
 
@@ -45,7 +46,7 @@ const FilterBar = ({ onChange }) => {
 
     // Hàm xử lý khi người dùng nhấn nút "Apply"
     const handleApplyFilter = () => {
-        onChange({ priceMin: isPrice[0], priceMax: isPrice[1] })
+        onChange({ priceMin: isPrice[0], priceMax: isPrice[1], page: 0 })
     };
 
     //------------hãng------------
@@ -61,7 +62,7 @@ const FilterBar = ({ onChange }) => {
     };
     const handleApplyButton = () => {
         // hiển thị sản phẩm 
-        onChange({ branchIds: selectedBrands })
+        onChange({ branchIds: selectedBrands, page: 0 })
     };
 
 
@@ -80,7 +81,7 @@ const FilterBar = ({ onChange }) => {
     const handleApplyOrigin = () => {
 
         console.log("xuất xứ vừa chọn:", isOrigin);
-        onChange({ origins: isOrigin })
+        onChange({ origins: isOrigin, page: 0 })
     };
 
     //-------------- đánh giá-----------------
@@ -91,7 +92,7 @@ const FilterBar = ({ onChange }) => {
         setSelectedOption(event.target.value);
         // console.log(event.target.value);
         // Xử lý logic dựa trên option được chọn
-        onChange({ rating: event.target.value })
+        onChange({ rating: event.target.value, page: 0 })
     };
 
 
@@ -102,7 +103,7 @@ const FilterBar = ({ onChange }) => {
         setSelectedValue(event.target.value);
         console.log(event.target.value);
         // Xử lý logic dựa trên option được chọn
-        onChange({ sortType: event.target.value })
+        onChange({ sortType: event.target.value, page: 0 })
     };
     //---------1
     // const [optionSearch, setoptionSearch] = useState("");

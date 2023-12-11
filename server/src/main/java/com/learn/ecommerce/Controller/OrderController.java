@@ -50,6 +50,9 @@ public class OrderController {
     private MediaImp mediaImp;
 
     @Autowired
+    private PaymentStatusService paymentStatusService;
+
+    @Autowired
     private EmailService emailServiceImp;
 
     @PostMapping("/place")
@@ -61,6 +64,7 @@ public class OrderController {
         if (!shipInfo.isPresent())
             return ResponseEntity.badRequest().body(new ErrorResponse("Thông tin nhận hàng không tồn tại!"));
 
+        // Kiểm tra xem paymentMethod có hợp lệ hay không
         Optional<User> optionalUser = auth.getCurrentUser();
         Order order = new Order();
         order.setPaymentMethod(request.getPaymentType());
@@ -71,7 +75,6 @@ public class OrderController {
         try {
 
             Order saved = orderImp.placeOrder(Arrays.asList(request.getItems()), order, coupon);
-
             CompletableFuture.runAsync(() -> {
                 try {
 
@@ -101,7 +104,13 @@ public class OrderController {
         }
     }
 
-    @PreAuthorize("hasRole('USER')")// ROLE: User
+    @GetMapping("/payment-info")
+    public ResponseEntity<?> getPaymentInfo(){
+        return paymentStatusService.getPaymentData(paymentStatusService.findPaymentByCode("duy1"));
+    }
+
+
+    // ROLE: User
     @GetMapping("/user-orders")
     public ResponseEntity<?> getUserOrders(){
         return ResponseEntity.ok("ok");
