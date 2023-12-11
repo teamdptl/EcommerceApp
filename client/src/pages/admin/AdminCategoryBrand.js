@@ -11,6 +11,7 @@ import AdminPage from "../../layouts/AdminPage";
 import AdminBrandList from "../../components/admin/categorybrand/AdminBrandList";
 import AdminCategoryList from "../../components/admin/categorybrand/AdminCategoryList";
 import baseUrl from "../../config";
+import createFetch from "../../utils/createFetch";
 
 const AdminCategoryBrand = () => {
   const [brand, setBrand] = useState([]);
@@ -20,7 +21,7 @@ const AdminCategoryBrand = () => {
  
   const fetchData = async () => {
     try {
-      const response = await fetch(baseUrl + "/api/v1/category/get");
+      const response = await createFetch(baseUrl + "/api/v1/category/get");
       const result = await response.json();
       setData(result);
     } catch (error) {
@@ -30,7 +31,7 @@ const AdminCategoryBrand = () => {
 
   const fetchBrand = async () => {
     try {
-      const response = await fetch(baseUrl + "/api/v1/brand/get");
+      const response = await createFetch(baseUrl + "/api/v1/brand/get");
       const result = await response.json();
       setBrand(result);
     } catch (error) {

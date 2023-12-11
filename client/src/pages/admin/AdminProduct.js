@@ -9,6 +9,7 @@ import FilterBar from "../../components/shop/FilterBar";
 import baseUrl from "../../config";
 import AdminConfirmModal from "../../components/admin/AdminConfirmModal";
 import {useNavigate} from "react-router-dom";
+import createFetch from "../../utils/createFetch";
 
 const AdminProduct = () => {
     const [displayForm, setDisplayForm] = useState(false);
@@ -37,7 +38,7 @@ const AdminProduct = () => {
 
     const removeProduct = async () => {
         const promises = deleteIds.map(id => {
-            return fetch(baseUrl + `/api/v1/product/delete/${id}`, {
+            return createFetch(baseUrl + `/api/v1/product/delete/${id}`, {
                 method: 'DELETE',
             }).then(res => res.json())
         })

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
 import baseUrl from "../../../config";
 import AdminConfirmModal from "../AdminConfirmModal";
+import createFetch from "../../../utils/createFetch";
 
 const AdminEditBrandModal = ({ isShow, closeModal, editBrand, callModalBrand, type}) => {
   const [name, setName] = useState("");
@@ -20,7 +21,7 @@ const AdminEditBrandModal = ({ isShow, closeModal, editBrand, callModalBrand, ty
       name: name,
     };
     console.log(newBrand);
-    fetch(baseUrl + `/api/v1/brand/update/${editBrand.brandId}`, {
+    createFetch(baseUrl + `/api/v1/brand/update/${editBrand.brandId}`, {
       method: "PUT",
       headers: {
         Accept: "*/*",

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import baseUrl from "../../../config";
 import AdminConfirmModal from "../AdminConfirmModal";
 import AdminCategoryModal from "./AdminCategoryModal";
+import createFetch from "../../../utils/createFetch";
 
 const AdminCategoryList = ({dataFetch,callApi}) => {
   const [isId, setId] = useState(null);
@@ -28,7 +29,7 @@ const AdminCategoryList = ({dataFetch,callApi}) => {
   const handleDeleteCategory = async () => {
     // Sử dụng itemId trong URL hoặc body của yêu cầu DELETE
     if (isId !== null) {
-      fetch(baseUrl + `/api/v1/category/delete/${isId}`, {
+      createFetch(baseUrl + `/api/v1/category/delete/${isId}`, {
         method: "DELETE",
       })
         .then((response) => {

@@ -3,6 +3,7 @@ import DatePickerFromTo from "../../components/admin/statistic_top/DatePickerFro
 import AdminPage from "../../layouts/AdminPage";
 import {useEffect, useState} from "react";
 import baseUrl from "../../config";
+import createFetch from "../../utils/createFetch";
 
 
 
@@ -116,7 +117,7 @@ const AdminStatisticTop = () => {
             console.log(data)
             requestOptions.body = JSON.stringify(data);
         }
-        fetch(`${baseUrl}/api/v1/admin/statistic-product`, requestOptions)
+        createFetch(`${baseUrl}/api/v1/admin/statistic-product`, requestOptions)
        .then(response =>{
             return response.json()
         }).then(data =>{
@@ -146,7 +147,7 @@ const AdminStatisticTop = () => {
             requestOptions.body = JSON.stringify(data);
         }
 
-        fetch(`${baseUrl}/api/v1/admin/statistic-brand`,requestOptions)
+        createFetch(`${baseUrl}/api/v1/admin/statistic-brand`,requestOptions)
             .then(response =>{
             return response.json()
         }).then(data =>{
@@ -175,7 +176,7 @@ const AdminStatisticTop = () => {
             requestOptions.body = JSON.stringify(data);
         }
 
-        fetch(`${baseUrl}/api/v1/admin/statistic-user`,requestOptions)
+        createFetch(`${baseUrl}/api/v1/admin/statistic-user`,requestOptions)
             .then(response =>{
             return response.json()
         }).then(data =>{

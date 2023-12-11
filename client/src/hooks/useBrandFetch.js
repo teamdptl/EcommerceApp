@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import baseUrl from "../config";
+import createFetch from "../utils/createFetch";
 
 
 const useBrandFetch = () => {
@@ -8,6 +9,6 @@ const useBrandFetch = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetch(baseUrl+'/api/v1/brand')
+        createFetch(baseUrl+'/api/v1/brand')
     }, []);
 }

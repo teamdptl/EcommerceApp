@@ -8,6 +8,7 @@ import {useAuth} from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import {Button, Modal} from "flowbite-react";
 import {HiOutlineExclamationCircle} from "react-icons/hi";
+import createFetch from "../utils/createFetch";
 
 
 const Login = () => {
@@ -24,7 +25,7 @@ const Login = () => {
 			password: password,
 			email: email
 		};
-		fetch(`${baseUrl}/api/v1/auth/authenticate`, {
+		createFetch(`${baseUrl}/api/v1/auth/authenticate`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

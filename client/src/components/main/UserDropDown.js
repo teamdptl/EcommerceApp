@@ -25,12 +25,24 @@ const UserDropDown = ({user, logout}) => {
                     <span className="block text-sm">{user.fullname}</span>
                     <span className="block truncate text-sm font-medium">{user.username}</span>
                 </Dropdown.Header>
-                <Dropdown.Item icon={BsBoxSeam}>Quản lý sản phẩm</Dropdown.Item>
-                <Dropdown.Item icon={FaRegUser}>Quản lý người dùng</Dropdown.Item>
-                <Dropdown.Item icon={BiCategory}>Quản lý hãng, thể loại</Dropdown.Item>
-                <Dropdown.Item icon={IoCartOutline}>Quản lý đơn hàng</Dropdown.Item>
-                <Dropdown.Item icon={HiOutlineDocumentReport}>Thống kê top</Dropdown.Item>
-                <Dropdown.Item icon={TbReportMoney}>Thống kê doanh thu</Dropdown.Item>
+                <Link to={"/admin/product"}>
+                    <Dropdown.Item icon={BsBoxSeam}>Quản lý sản phẩm</Dropdown.Item>
+                </Link>
+                <Link to={"/admin/user"}>
+                    <Dropdown.Item icon={FaRegUser}>Quản lý người dùng</Dropdown.Item>
+                </Link>
+                <Link to={"/admin/catebrand"}>
+                    <Dropdown.Item icon={BiCategory}>Quản lý hãng, thể loại</Dropdown.Item>
+                </Link>
+                <Link to={"/admin/order"}>
+                    <Dropdown.Item icon={IoCartOutline}>Quản lý đơn hàng</Dropdown.Item>
+                </Link>
+                <Link to={"/admin/top"}>
+                    <Dropdown.Item icon={HiOutlineDocumentReport}>Thống kê top</Dropdown.Item>
+                </Link>
+                <Link to={"/admin/money"}>
+                    <Dropdown.Item icon={TbReportMoney}>Thống kê doanh thu</Dropdown.Item>
+                </Link>
                 <Dropdown.Divider />
                 <Dropdown.Item icon={HiLogout} onClick={logout}>Đăng xuất</Dropdown.Item>
             </Dropdown>

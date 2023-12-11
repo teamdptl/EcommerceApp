@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ProductItem from "../shop/ProductItem";
 import {Button} from "flowbite-react";
 import {useNavigate} from "react-router-dom";
+import createFetch from "../../utils/createFetch";
 
 const FeaturedProducts = () => {
     const [popularProducts, setPopularProducts] = useState([]);
@@ -11,7 +12,7 @@ const FeaturedProducts = () => {
   useEffect(() => {
     const fetchPopularProducts = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/v1/product/search?sortType=0&perPage=4');
+        const response = await createFetch('http://localhost:8080/api/v1/product/search?sortType=0&perPage=4');
         const data = await response.json();
         setPopularProducts(data.content);
       } catch (error) {
@@ -21,7 +22,7 @@ const FeaturedProducts = () => {
 
     const fetchHighRatedProducts = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/v1/product/search?sortType=1&perPage=4');
+        const response = await createFetch('http://localhost:8080/api/v1/product/search?sortType=1&perPage=4');
         const data = await response.json();
         setHighRatedProducts(data.content);
       } catch (error) {

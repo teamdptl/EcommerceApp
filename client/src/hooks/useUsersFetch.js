@@ -2,6 +2,7 @@
 
 import baseUrl from "../config";
 import { useState, useEffect } from "react";
+import createFetch from "../utils/createFetch";
 
 const useUsersFetch = (lastModified, pageSize = 5, searchData) => {
   const [users, setUsers] = useState([]);
@@ -23,7 +24,7 @@ const useUsersFetch = (lastModified, pageSize = 5, searchData) => {
         isDeleted: searchData.isDeleted || "",
       }).toString();
 
-      const response = await fetch(`${baseUrl}/api/v1/users/search?${queryString}`);
+      const response = await createFetch(`${baseUrl}/api/v1/users/search?${queryString}`);
       const data = await response.json();
 
       setUsers(data.content);

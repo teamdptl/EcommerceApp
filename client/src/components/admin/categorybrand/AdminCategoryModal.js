@@ -2,6 +2,7 @@ import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../config";
 import AdminConfirmModal from "../AdminConfirmModal";
+import createFetch from "../../../utils/createFetch";
 
 const AdminCategoryModal = ({
   isShow,
@@ -30,7 +31,7 @@ const AdminCategoryModal = ({
     };
     console.log(newData);
     // Gửi request đến API
-    fetch(baseUrl + "/api/v1/category/add", {
+    createFetch(baseUrl + "/api/v1/category/add", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -61,7 +62,7 @@ const AdminCategoryModal = ({
     };
     console.log(updateData);
     // Gửi request đến API
-    fetch(baseUrl + `/api/v1/category/update/${editCategory.categoryId}`, {
+    createFetch(baseUrl + `/api/v1/category/update/${editCategory.categoryId}`, {
       method: "PUT",
       headers: {
         Accept: "application/json",

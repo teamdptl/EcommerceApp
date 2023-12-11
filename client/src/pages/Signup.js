@@ -7,6 +7,7 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
 import baseUrl from "../config";
 import {useAuth} from "../context/AuthContext";
 import {jwtDecode} from "jwt-decode";
+import createFetch from "../utils/createFetch";
 
 const Signup = () => {
 	const [message, setMessage] = useState('');
@@ -40,7 +41,7 @@ const Signup = () => {
 			fullname: fullname
 		};
 
-		fetch(`${baseUrl}/api/v1/auth/register`, {
+		createFetch(`${baseUrl}/api/v1/auth/register`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

@@ -36,8 +36,8 @@ function AuthRoute({children, condition, navigatePage}) {
             navigate(navigatePage)
     }, [user]);
 
-    return true ? children : <NoPage/>
-    // return condition() ? children : <NoPage/>
+    // return true ? children : <NoPage/>
+    return condition() ? children : <NoPage/>
 }
 
 const adminPath = [

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import baseUrl from "../../../config";
 import AdminConfirmModal from "../AdminConfirmModal";
 import AdminEditBrandModal from "./AdminEditBrandModal";
+import createFetch from "../../../utils/createFetch";
 
 const AdminBrandList = ({dataFetchBrand, callApiBrand}) => {
   const [isId, setId] = useState(null);
@@ -26,7 +27,7 @@ const AdminBrandList = ({dataFetchBrand, callApiBrand}) => {
   const handleDeleteBrand = async () => {
     // Sử dụng itemId trong URL hoặc body của yêu cầu DELETE
     if (isId !== null) {
-      fetch(baseUrl + `/api/v1/brand/delete/${isId}`, {
+      createFetch(baseUrl + `/api/v1/brand/delete/${isId}`, {
         method: "DELETE",
       })
         .then((response) => {
