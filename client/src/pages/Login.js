@@ -15,7 +15,7 @@ const Login = () => {
 		const [message, setMessage] = useState('');
 		const [email, setEmail] = useState('');
 		const [password, setPassword] = useState('');
-		const {user,setUser} = useAuth();
+		const {user, setUser} = useAuth();
 
 
 	const submitForm = (e) => {
@@ -39,7 +39,7 @@ const Login = () => {
 			})
 			.then(data => {
 				console.log(data);
-				var accessToken = data.access_token
+				let accessToken = data.access_token
 				localStorage.setItem('accessToken', accessToken);
 				localStorage.setItem('refresh_token', data.refresh_token);
 				const decoded = jwtDecode(accessToken);

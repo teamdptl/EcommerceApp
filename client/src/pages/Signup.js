@@ -5,12 +5,15 @@ import React, { useState } from "react";
 import { Button, Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import baseUrl from "../config";
+import {useAuth} from "../context/AuthContext";
+import {jwtDecode} from "jwt-decode";
 
 const Signup = () => {
 	const [message, setMessage] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [fullname, setFullname] = useState('');
+	const { setUser } = useAuth();
 	const navigate = useNavigate();
 	const validateEmail = (email) => {
 		const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -55,9 +58,14 @@ const Signup = () => {
 			.then(data => {
 				console.log(data)
 				let { access_token, refresh_token, message } = data;
-				console.log(access_token)
 				localStorage.setItem('accessToken',access_token);
 				localStorage.setItem("refreshToken",refresh_token);
+				const decoded = jwtDecode(access_token);
+				setUser({
+					username: decoded.username,
+					fullname: decoded.fullname,
+					role: decoded.role
+				})
 				navigate("/", { replace: true });
 				// window.location.href = "/";
 			})

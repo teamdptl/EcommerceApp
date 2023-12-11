@@ -1,5 +1,9 @@
 package com.learn.ecommerce;
 
+import com.learn.ecommerce.Entity.Role;
+import com.learn.ecommerce.Entity.User;
+import com.learn.ecommerce.Repository.UserRepository;
+import com.learn.ecommerce.Request.RegisterRequest;
 import com.learn.ecommerce.Service.Implementation.ProductImp;
 import com.learn.ecommerce.Service.Implementation.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +11,22 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Optional;
+
+import static com.learn.ecommerce.Entity.Permission.ADMIN;
 
 @SpringBootApplication
 public class EcommerceApplication {
 	@Autowired
 	private ProductImp productService;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private UserRepository repo;
 	public static void main(String[] args) {
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
@@ -23,7 +38,6 @@ public class EcommerceApplication {
 		return args -> {
 
 //			var admin = RegisterRequest.builder()
-//					.username("username")
 //					.email("admin@mail.com")
 //					.password("username")
 //					.role(ADMIN)
@@ -66,7 +80,17 @@ public class EcommerceApplication {
 //				public String Val2;
 //			}
 
-
+			Optional<User> admin = repo.findByEmail("admin@gmail.com");
+			if (admin.isEmpty()){
+				User user = new User();
+				user.setEmail("admin@gmail.com");
+				user.setFullname("Admin");
+				user.setLocate("vn");
+				user.setRole(Role.ADMIN);
+				user.setPassword(passwordEncoder.encode("admin"));
+				user.setUsername("admin@gmail.com");
+				repo.save(user);
+			}
 		};
 
 
