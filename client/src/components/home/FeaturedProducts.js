@@ -36,11 +36,12 @@ const FeaturedProducts = () => {
 				<section class="py-12 bg-white sm:py-16 lg:py-20">
 					<div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
 						<div class="max-w-md mx-auto text-center">
-							<h2 class="text-2xl font-bold text-gray-900 sm:text-3xl">Danh mục các sản phẩm</h2>
+							{/* <h2 class="text-2xl font-bold text-gray-900 sm:text-3xl">Danh mục các sản phẩm</h2> */}
+							</div>
+
 							<p class="mt-4 text-xl font-bold text-gray-900 leading-7 ">
 								Các sản phẩm được mua nhiều nhất
 							</p>
-						</div>
 
 						<div class="grid grid-cols-2 gap-6 mt-10 lg:mt-16 lg:gap-4 lg:grid-cols-4">
 							{/* <div class="relative group">
@@ -303,11 +304,9 @@ const FeaturedProducts = () => {
 						</div>
 					</div>
 					<div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-						<div class="max-w-md mx-auto text-center">
 						<p class="mt-4 text-xl font-bold text-gray-900 leading-7 ">
 								Các sản phẩm được đánh giá cao nhất
 							</p>
-						</div>
 
 						<div class="grid grid-cols-2 gap-6 mt-10 lg:mt-16 lg:gap-4 lg:grid-cols-4">
 							 {highRatedProducts.map((product) => (
