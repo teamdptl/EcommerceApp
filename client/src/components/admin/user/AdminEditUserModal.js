@@ -121,7 +121,7 @@ const AdminEditUserModal = ({ isShow, closeModal, refreshTable, dataUser, userEd
                             <Select id="role" required value={formData.role}  onChange={(e) => handleInputChange("role", e.target.value)}>
                                 <option value="USER">User</option>
                                 <option value="ADMIN">Admin</option>
-                                <option value="MANAGER">Manager</option>
+                                {/* <option value="MANAGER">Manager</option> */}
                             </Select>
                         </div>
                         <div>
