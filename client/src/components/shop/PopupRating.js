@@ -1,7 +1,7 @@
 import { Button, Modal, Rating, Textarea } from "flowbite-react"
 import { useEffect, useState } from "react"
 
-const PopupRating = ({showModal, setOpen, content, setContent, start, setStart, listReview, setListReview, reviewId, add}) => {
+const PopupRating = ({showModal, setOpen, content, setContent, start, setStart, listReview, setListReview, reviewId, add, setOpenConfirm, setContentConfirm, setTypeConfirm}) => {
     const [status, setStatus] = useState(start)
     const lsStatus = ['Rất tệ', 'Tệ', 'Bình thường', 'Tốt', 'Tuyệt vời']
     const [textReview, setTextReview] = useState(content)
@@ -18,7 +18,7 @@ const PopupRating = ({showModal, setOpen, content, setContent, start, setStart, 
         let authStr
         if(accessToken === 'null')
             authStr = ""
-        authStr = "Bearer " + accessToken.split("\"")[1]
+        else authStr = "Bearer " + accessToken.split("\"")[1]
         return await fetch(apiStr, {
                                         method: 'POST',
                                         headers: {
@@ -33,14 +33,19 @@ const PopupRating = ({showModal, setOpen, content, setContent, start, setStart, 
                                     })
                                     .then(res => res.json())
                                     .then(json => {
+                                        console.log(json)
                                         setOpen(false)
                                         if(json.error === undefined){
                                             let tempList = listReview
                                             tempList.push(json)
                                             setListReview(tempList)
-                                            alert("Đánh giá thành công! Xin chân thành cảm ơn!")
+                                            setTypeConfirm("success")
+                                            setContentConfirm("Đánh giá thành công! Xin chân thành cảm ơn!")
+                                            setOpenConfirm(true)
                                         }else{
-                                            alert(json.message)
+                                            setTypeConfirm("fail")
+                                            setContentConfirm(json.message)
+                                            setOpenConfirm(true)
                                         }
                                         
                                     })
@@ -68,7 +73,7 @@ const PopupRating = ({showModal, setOpen, content, setContent, start, setStart, 
                             })
                         }).then(res => res.json())
                         .then(json => {
-                            // console.log(json)
+                            console.log(json)
                             setOpen(false)
                             if(json.error === undefined){
                                 setContent(textReview)
@@ -83,9 +88,13 @@ const PopupRating = ({showModal, setOpen, content, setContent, start, setStart, 
                                 }) 
 
                                 setListReview(tempList)
-                                alert("Cập nhật thành công!")
+                                setTypeConfirm("success")
+                                setContentConfirm("Cập nhật thành công!")
+                                setOpenConfirm(true)
                             }else{
-                                alert(json.message)
+                                setTypeConfirm("fail")
+                                setContentConfirm(json.message)
+                                setOpenConfirm(true)
                             }
                         })
                         .catch(err => console.error(err))
