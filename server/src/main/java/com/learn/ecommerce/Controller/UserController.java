@@ -115,6 +115,7 @@ public class UserController {
 
 
     // ROLE: Admin
+
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable String userId) {
 
@@ -123,6 +124,7 @@ public class UserController {
 
     // ROLE: Admin và chính bản thân user
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUsers(@PathVariable int id, @RequestBody @Valid CreateUserEditRequest request, BindingResult result) {
         if (result.hasErrors()) {
@@ -154,9 +156,9 @@ public class UserController {
 
 
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }
+    }
 
-
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/new-password")
     public ResponseEntity<?> setNewPassword(@RequestBody NewPasswordRequest request){
         if (request.getNewPassword().length() < 6)

@@ -6,13 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="cb0400e4-d946-4fdc-a5ba-0c7ce144132b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/layouts/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/layouts/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/Signup.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Signup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/EcommerceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/EcommerceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/AuthenticationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/MediaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/MediaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/ReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/ReviewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/ShipInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/ShipInfoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/StatisticController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/StatisticController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/UserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

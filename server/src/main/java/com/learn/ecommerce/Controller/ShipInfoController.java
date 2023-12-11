@@ -59,9 +59,6 @@ public class ShipInfoController {
 
     }
 
-    //Role: User
-
-    @PreAuthorize("hasRole('USER')")// Role: User
     @PostMapping("/add")
     public ResponseEntity<?> addShipInfo(@Valid @RequestBody CreateShipInfoRequest createShipInfoRequest, BindingResult result){
         Optional<User> optionalUser = auth.getCurrentUser();
