@@ -22,7 +22,7 @@ insert into brand(brand_id, is_deleted, name) values
 
 # username là duy, pass là 123
 insert into _user(id, is_deleted, avatar, email, fullname, locate, password, role, username) values
-                      (1, 0, null, "duy@gmail.com", "Duy Huynh", "vn", "$2a$10$xuIwJ5FPAot8JfNeJNeKOejQPvgTLRWwbUFE9EXPlCrufG13pMGrO", "USER", "duy");
+                      (1, 0, null, "duy@gmail.com", "Duy Huynh", "vn", "$2a$10$xuIwJ5FPAot8JfNeJNeKOejQPvgTLRWwbUFE9EXPlCrufG13pMGrO", "ADMIN", "duy");
 
 # 15 Sản phẩm
 INSERT INTO `product` (`brand_id`, `category_id`, `is_deleted`, `product_id`, `quantity`, `warranty_months`, `old_price`, `price`, `attributes`, `name`, `origin`, `slug_url`, `description`, `thong_so_ki_thuat`) VALUES

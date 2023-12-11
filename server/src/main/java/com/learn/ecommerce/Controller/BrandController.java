@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.learn.ecommerce.Entity.Brand;
@@ -18,6 +19,8 @@ import com.learn.ecommerce.Service.BrandService;
 
 @RestController
 @RequestMapping("/api/v1/brand")
+
+
 public class BrandController {
 
     @Autowired
@@ -44,6 +47,7 @@ public class BrandController {
 
     // ROLE: Manager
     // Thêm brand
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<?> addBrand(@RequestBody CreateBrandRequest brandRequest) {
         Brand brand = new Brand();
@@ -69,6 +73,7 @@ public class BrandController {
     }
 
     // ROLE: Manager
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{brandId}")
     public ResponseEntity<?> updateBrand(@PathVariable int brandId, @RequestBody CreateBrandRequest brandRequest) {
         // Kiểm tra xem brandId có tồn tại hay không
@@ -102,6 +107,7 @@ public class BrandController {
     }
 
     // ROLE: Manager
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{brandId}")
     public ResponseEntity<?> deleteBrand(@PathVariable int brandId) {
 

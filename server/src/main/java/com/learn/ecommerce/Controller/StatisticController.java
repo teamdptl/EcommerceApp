@@ -5,6 +5,7 @@ import com.learn.ecommerce.Repository.OrderWeekdayQuery;
 import com.learn.ecommerce.Service.Implementation.StatisticImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -12,6 +13,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/statistic")
+@PreAuthorize("hasRole('ADMIN')")
+
 public class StatisticController {
     @Autowired
     private StatisticImp services;

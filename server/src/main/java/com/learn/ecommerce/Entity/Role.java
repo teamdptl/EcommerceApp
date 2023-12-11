@@ -17,23 +17,17 @@ import static com.learn.ecommerce.Entity.Permission.*;
 @RequiredArgsConstructor
 public enum Role {
 
-  USER(Collections.emptySet()),
-  ADMIN(
+  USER(
           Set.of(
-                  ADMIN_READ,
-                  ADMIN_UPDATE,
-                  ADMIN_DELETE,
-                  ADMIN_CREATE
+          Permission.USER
           )
   ),
-  MANAGER(
+  ADMIN(
           Set.of(
-                  MANAGER_READ,
-                  MANAGER_UPDATE,
-                  MANAGER_DELETE,
-                  MANAGER_CREATE
+               Permission.ADMIN
           )
-  )
+  ),
+
 
   ;
 

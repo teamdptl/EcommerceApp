@@ -26,7 +26,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/admin")
-
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
     @Data
     @AllArgsConstructor

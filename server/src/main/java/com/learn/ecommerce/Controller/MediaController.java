@@ -4,17 +4,15 @@ import com.learn.ecommerce.Entity.Media;
 import com.learn.ecommerce.Response.MediaResponse;
 import com.learn.ecommerce.Service.Implementation.MediaImp;
 import com.learn.ecommerce.Ultis.ModelMapperUtils;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +24,8 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/v1/upload")
+
+
 public class MediaController {
     private final MediaImp mediaImp;
     public MediaController(@Autowired MediaImp mediaImp) {

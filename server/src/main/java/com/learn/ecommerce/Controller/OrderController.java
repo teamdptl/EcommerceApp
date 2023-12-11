@@ -26,6 +26,7 @@ import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +53,7 @@ public class OrderController {
     private EmailService emailServiceImp;
 
     // ROLE: User
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/place")
     public ResponseEntity<?> placeOrder(@Valid @RequestBody PlaceOrderRequest request, BindingResult result){
         if (result.hasErrors()){
@@ -101,15 +103,14 @@ public class OrderController {
         }
     }
 
-
-    // ROLE: User
+    @PreAuthorize("hasRole('USER')")// ROLE: User
     @GetMapping("/user-orders")
     public ResponseEntity<?> getUserOrders(){
         return ResponseEntity.ok("ok");
     }
 
 
-    // ROLE: Admin
+    @PreAuthorize("hasRole('ADMIN')")// ROLE: Admin
    @GetMapping("/all")
    public ResponseEntity<?> getAllOrders(@RequestParam(value = "text", required = false, defaultValue = "") String text,
                                             @RequestParam(value = "start", required = false, defaultValue = "") String time_start, 

@@ -14,6 +14,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ import java.util.Optional;
 @Getter
 @RestController
 @RequestMapping("/api/v1/user/shipInfo")
+@PreAuthorize("hasRole('USER')")
 public class ShipInfoController {
     // Role: User
 
@@ -40,7 +42,7 @@ public class ShipInfoController {
         this.auth = auth;
     }
 
-    // Role: User
+    @PreAuthorize("hasRole('USER')")// Role: User
     @GetMapping("/get")
     public ResponseEntity<?> getAllShipInfo(){
         // Trả về tất cả địa chỉ giao hàng của user
@@ -59,7 +61,7 @@ public class ShipInfoController {
 
     //Role: User
 
-    // Role: User
+    @PreAuthorize("hasRole('USER')")// Role: User
     @PostMapping("/add")
     public ResponseEntity<?> addShipInfo(@Valid @RequestBody CreateShipInfoRequest createShipInfoRequest, BindingResult result){
         Optional<User> optionalUser = auth.getCurrentUser();
@@ -78,6 +80,7 @@ public class ShipInfoController {
     }
 
     // Role: User
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/edit/{shipId}")
     public ResponseEntity<?> updateShipInfo(@PathVariable int shipId, @RequestBody EditShipInfoRequest editShipInfoRequest){
         Optional<User> optionalUser = auth.getCurrentUser();
@@ -112,6 +115,7 @@ public class ShipInfoController {
     }
 
     // Role: User, người sở hữu shipInfo
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/delete/{shipId}")
     public ResponseEntity<?> deleteShipInfo(@PathVariable int shipId){
         Optional<User> optionalUser = auth.getCurrentUser();

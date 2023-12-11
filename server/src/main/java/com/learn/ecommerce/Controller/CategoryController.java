@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/category")
+@PreAuthorize("hasRole('ADMIN')")
 public class CategoryController {
     @Autowired
     private CategoryImp categoryImp;
@@ -40,6 +42,7 @@ public class CategoryController {
     }
 
     // ROLE: Manager
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<?> addCategory(@RequestBody CreateCategoryRequest data) {
 
@@ -67,6 +70,7 @@ public class CategoryController {
     }
 
     // ROLE: ManagercategoryId
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{categoryId}")
     public ResponseEntity<?> editCategory(@PathVariable("categoryId") int categoryId,
             @RequestBody CreateCategoryRequest update) {
@@ -108,6 +112,7 @@ public class CategoryController {
     }
 
     // ROLE: Manager
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{categoryId}")
     public ResponseEntity<?> deleteCategory(@PathVariable("categoryId") int categoryId) {
 

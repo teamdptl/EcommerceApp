@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -121,7 +122,7 @@ public class ProductController {
         return ResponseEntity.badRequest().body(new ErrorResponse("Không tìm thấy sản phẩm"));
     }
 
-    // Role: User
+    @PreAuthorize("hasRole('USER')") // Role: User
     @GetMapping("/getList")
     public List<ProductListItemResponse> getListProductDetail(@RequestParam(required = true) List<Integer> listId){
         List<Product> products = service.getProductInList(listId);
@@ -140,8 +141,7 @@ public class ProductController {
         return listItem;
     }
 
-    // Role: Manager
-    // Hàm dùng để thêm sản phẩm
+    @PreAuthorize("hasRole('ADMIN')")// Role: Manager // Hàm dùng để thêm sản phẩm
     @PostMapping("/add")
     public ResponseEntity<?> addProduct(@ModelAttribute @Valid CreateProductRequest createData, BindingResult result){
         if (result.hasErrors()){
@@ -161,8 +161,7 @@ public class ProductController {
         service.saveProductWithMedia(product, createData.getFileIds(), createData.getPrimaryImageIndex());
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
-
-    // Role: Manager
+    @PreAuthorize("hasRole('ADMIN')")// Role: Manager
     @PutMapping("/edit/{id}")
     public ResponseEntity<?> editProduct(@PathVariable("id") int id, @ModelAttribute @Valid EditProductRequest editData, BindingResult result){
         if (result.hasErrors()){
@@ -189,7 +188,7 @@ public class ProductController {
         return ResponseEntity.ok(new SuccessResponse("Tạo thành công"));
     }
 
-    // Role: Manager
+    @PreAuthorize("hasRole('ADMIN')")// Role: Manager
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable int id){
         Optional<Product> p = service.findById(id);
@@ -200,7 +199,7 @@ public class ProductController {
         return ResponseEntity.badRequest().body(new ErrorResponse("Không tồn tại sản phẩm có id là "+id));
     }
 
-    // Role: User
+    @PreAuthorize("hasRole('USER')")// Role: User
     @GetMapping("/favorite")
     public ResponseEntity<?> getUserFavorite(){
         Optional<User> usr = authUtils.getCurrentUser();
@@ -222,7 +221,7 @@ public class ProductController {
         return ResponseEntity.ok(list);
     }
 
-    // Role: User
+    @PreAuthorize("hasRole('USER')")// Role: User
     @GetMapping("/add-favorite/{productID}")
     public ResponseEntity<?> addUserFavorite(@PathVariable Integer productID){
         Optional<User> userOptional = authUtils.getCurrentUser();

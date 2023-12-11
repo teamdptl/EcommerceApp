@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,7 @@ public class UserController {
 
 
     // ROLE: Admin
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/search")
     public ResponseEntity<?> getUsers(
             @RequestParam(defaultValue = "", required = false) String keyword,
@@ -57,6 +59,7 @@ public class UserController {
     }
 
     // ROLE: Admin
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<?> addUser(@Valid @RequestBody CreateUserRequest createUserRequest, BindingResult result) {
         if (result.hasErrors()) {
@@ -85,6 +88,7 @@ public class UserController {
     }
 
     // ROLE: Admin
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get")
     public ResponseEntity<?> getAllUser(@RequestParam(name = "page", defaultValue = "0") int page,
                                         @RequestParam(name = "size", defaultValue = "5") int size){
@@ -95,6 +99,7 @@ public class UserController {
     }
 
     // ROLE: Admin và User
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/get/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable int userId){
         Optional<User> optionalUser = service.findById(userId);
