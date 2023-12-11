@@ -48,7 +48,8 @@ public class OrderController {
     private OrderLineImp orderLineImp;
     @Autowired
     private MediaImp mediaImp;
-
+    @Autowired
+    private PaymentStatusService paymentStatusService;
     @Autowired
     private EmailService emailServiceImp;
 
