@@ -9,15 +9,6 @@ import baseUrl from "../../config";
 
 
 const AdminStatisticTop = () => {
-
-    const [productList,setProductList] = useState([]);
-    const [brandList,setBrandList] = useState([]);
-    const [userList,setUserList] = useState([]);
-
-    const [dateFrom , setDateFrom] = useState(["","",""]);
-    const [dateTo , setDateTo] = useState(["","",""]);
-    const [isLoading, setIsLoading] = useState(["false", "false", "false"]);
-    // cai ten noi len tat ca
     const formatDate =(date)=>{
         const originalDate = new Date(date);
         const year = originalDate.getFullYear(); // Lấy năm
@@ -26,6 +17,22 @@ const AdminStatisticTop = () => {
         const formattedDate = `${year}-${month}-${day}`;
         return formattedDate;
     }
+    const currentDate = formatDate(new Date((new Date()).valueOf() + 1000*3600*24))
+    const minDate = "2023-01-01"
+
+    const [productList,setProductList] = useState([]);
+    const [brandList,setBrandList] = useState([]);
+    const [userList,setUserList] = useState([]);
+
+    const [dateFrom , setDateFrom] = useState([minDate,minDate,minDate]);
+    const [dateTo , setDateTo] = useState([currentDate,currentDate,currentDate]);
+    const [isLoading, setIsLoading] = useState(["false", "false", "false"]);
+    // cai ten noi len tat ca
+    useEffect(()=>{
+        console.log(dateFrom[0])
+        console.log(dateTo[0])
+    },[])
+
 
     const handleChangeDateFrom= (text,type)=> {
         const currentDate = formatDate(new Date());
