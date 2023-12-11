@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 import Review from "./Review"
 import { Rating, Button } from "flowbite-react"
 import PopupRating from "./PopupRating"
+import AdminConfirmModal from "../admin/AdminConfirmModal"
+import { useNavigate } from "react-router-dom"
 
 const getAverageRating = (reviewsData) => {
     if(reviewsData.length <= 0)
@@ -56,14 +58,17 @@ const calcPercentStart = (reviewsData) => {
 const ReviewGroup = ({reviewsData, setReviewData}) => {
     
     const [showModal, setShowModal] = useState(false)
-
+    const [showConfirm, setShowConfirm] = useState(false)
+    const [content, setContent] = useState("")
+    const [type, setType] = useState()
+    const navigate = useNavigate()
     let averageRating = getAverageRating(reviewsData)
     let percentOfStarts = calcPercentStart(reviewsData)
 
 
     return(
         
-            <div class="mt-10">
+            <div id="reviews" class="mt-10">
                 <h2 class="text-2xl font-semibold flex items-center">
                     <Rating size="lg">
                         <Rating.Star />
@@ -93,6 +98,8 @@ const ReviewGroup = ({reviewsData, setReviewData}) => {
                 
                 </div>
                 <div class="mt-10">
+                    {(reviewsData.length <= 0) ? <div>Chưa có đánh giá cho sản phẩm</div> :
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-28 overflow-auto max-h-96 border-t-2 pt-5">
                         {reviewsData.map((review) => {
                             return <Review listReview={reviewsData} review={review} setListReview={setReviewData}></Review>  
@@ -100,12 +107,13 @@ const ReviewGroup = ({reviewsData, setReviewData}) => {
                         }
                            
                     </div>
+                    }
                     <Button gradientDuoTone="tealToLime" pill size="xl" className="mt-10" onClick={() => {setShowModal(true)}}>
                         Đánh giá
                         
                     </Button>
-                    <PopupRating showModal={showModal} setOpen={setShowModal} content="" start={5} listReview={reviewsData} setListReview={setReviewData} add={true}></PopupRating>
-                    
+                    <PopupRating showModal={showModal} setOpen={setShowModal} content="" start={5} listReview={reviewsData} setListReview={setReviewData} setOpenConfirm={setShowConfirm} setContentConfirm={setContent} setTypeConfirm={setType} add={true}></PopupRating>
+                    <AdminConfirmModal isShow={showConfirm} closeModal={() => setShowConfirm(false)} confirmCallback={() => navigate('/login')} content={content} type={type}></AdminConfirmModal>
                 </div>
             </div>
         

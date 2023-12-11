@@ -50,9 +50,6 @@ public class OrderController {
     private MediaImp mediaImp;
 
     @Autowired
-    private PaymentStatusService paymentStatusService;
-
-    @Autowired
     private EmailService emailServiceImp;
 
     @PostMapping("/place")
@@ -126,7 +123,16 @@ public class OrderController {
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/user-orders")
     public ResponseEntity<?> getUserOrders(){
-        return ResponseEntity.ok("ok");
+        Optional<User> optionalUser = auth.getCurrentUser();
+        if(optionalUser.isEmpty())
+            return ResponseEntity.ok(new ErrorResponse("Đăng nhập để xem đơn hàng của bạn"));
+        List<Order> listOrders = orderImp.getByUser(optionalUser.get());
+        if(!listOrders.isEmpty()){
+            List<OrderResponse> orderResponseList = getDetailListOrder(listOrders);
+            return ResponseEntity.ok(orderResponseList);
+        }
+        return ResponseEntity.ok("Không tìm thấy dữ liệu!");
+
     }
 
 
@@ -152,36 +158,42 @@ public class OrderController {
 
         List<Order> listOrders = orderImp.getFilterOrders(text, start, end, status, isAllStatus);
         if(!listOrders.isEmpty()){
-            List<OrderResponse> listResult = new ArrayList<>();
-            List<OrderLineResponse> listProduct = new ArrayList<>();
-            OrderResponse orderResponse;
-            OrderLineResponse orderLineResponse;
-            MediaResponse mediaResponse;
-            for (Order order : listOrders) {
-                List<OrderLine> listOrderLine = orderLineImp.getAllOrderLines(order.getOrderId());
-                System.out.println("Tìm thấy danh sách đơn hàng!");
-                if(!listOrderLine.isEmpty()){
-                    System.out.println("Tìm thấy danh sách sản phẩm của đơn hàng!");
-                    for (OrderLine orderLine : listOrderLine) {
-                        orderLineResponse = ModelMapperUtils.map(orderLine, OrderLineResponse.class);
-                        Optional<Media> media = mediaImp.getProductPrimaryMedia(orderLine.getProduct().getProductId());
-                        mediaResponse = ModelMapperUtils.map(media.orElse(null), MediaResponse.class);
-                        orderLineResponse.setProductMedia(mediaResponse);
-                        listProduct.add(orderLineResponse);
-
-                    }
-                }else{
-//                    return ResponseEntity.ok(new ErrorResponse("Không tìm thấy dữ liệu!"));
-                }
-                System.out.println(listProduct.size());
-                orderResponse = ModelMapperUtils.map(order, OrderResponse.class);
-                orderResponse.setOrderLineResponse(listProduct.stream().toList());
-                listResult.add(orderResponse);
-                listProduct.clear();
-            }
-            return ResponseEntity.ok(listResult);
+            List<OrderResponse> orderResponseList = getDetailListOrder(listOrders);
+            return ResponseEntity.ok(orderResponseList);
         }
         return ResponseEntity.ok(new ErrorResponse("Không tìm thấy dữ liệu!"));
+   }
+
+   private List<OrderResponse> getDetailListOrder(List<Order> listOrders){
+
+           List<OrderResponse> listResult = new ArrayList<>();
+           List<OrderLineResponse> listProduct = new ArrayList<>();
+           OrderResponse orderResponse;
+           OrderLineResponse orderLineResponse;
+           MediaResponse mediaResponse;
+           for (Order order : listOrders) {
+               List<OrderLine> listOrderLine = orderLineImp.getAllOrderLines(order.getOrderId());
+               System.out.println("Tìm thấy danh sách đơn hàng!");
+               if(!listOrderLine.isEmpty()){
+                   System.out.println("Tìm thấy danh sách sản phẩm của đơn hàng!");
+                   for (OrderLine orderLine : listOrderLine) {
+                       orderLineResponse = ModelMapperUtils.map(orderLine, OrderLineResponse.class);
+                       Optional<Media> media = mediaImp.getProductPrimaryMedia(orderLine.getProduct().getProductId());
+                       mediaResponse = ModelMapperUtils.map(media.orElse(null), MediaResponse.class);
+                       orderLineResponse.setProductMedia(mediaResponse);
+                       listProduct.add(orderLineResponse);
+
+                   }
+               }else{
+//                    return ResponseEntity.ok(new ErrorResponse("Không tìm thấy dữ liệu!"));
+               }
+               System.out.println(listProduct.size());
+               orderResponse = ModelMapperUtils.map(order, OrderResponse.class);
+               orderResponse.setOrderLineResponse(listProduct.stream().toList());
+               listResult.add(orderResponse);
+               listProduct.clear();
+           }
+           return listResult;
    }
 
     @PreAuthorize("hasRole('ADMIN')")

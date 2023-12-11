@@ -1,7 +1,6 @@
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import ProductDetail from "../components/shop/ProductDetail";
-import SupportService from "../components/shop/SupportSevice";
 import ReviewGroup from "../components/shop/ReviewsGroup";
 import baseUrl from "../config";
 import { useEffect, useState } from "react"
@@ -74,9 +73,8 @@ const Product = () => {
 							<ProductDetail data={productData} listReview={(reviewsData !== undefined) && (reviewsData.error === undefined) ? reviewsData : []}/>
 						}
 						
-						<SupportService></SupportService>
-						<hr class="border-slate-200 dark:border-slate-700 mt-20"></hr>
-						{(reviewsData === undefined || reviewsData.error !== undefined) ? (<div>Lỗi! Không thể tải đánh giá cho sản phẩm này</div>) : ((reviewsData.length <= 0) ? <div>Chưa có đánh giá cho sản phẩm</div> : <ReviewGroup reviewsData={reviewsData} setReviewData={setReviewsData}></ReviewGroup>)}
+						
+						{(reviewsData === undefined || reviewsData.error !== undefined) ? (<div>Lỗi! Không thể tải đánh giá cho sản phẩm này</div>) : <ReviewGroup reviewsData={reviewsData} setReviewData={setReviewsData}></ReviewGroup>}
 						<hr class="border-slate-200 dark:border-slate-700 mt-20"></hr>
 					</main>
 				</div>
