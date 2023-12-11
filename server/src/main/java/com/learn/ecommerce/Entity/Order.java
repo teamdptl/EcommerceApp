@@ -34,4 +34,7 @@ public class Order {
     private ShipInfo shipInfo;
 
     private boolean isDeleted = false;
+
+    public static final String Method_Banking = "Chuyển khoản";
+    public static final String Method_COD = "Thanh toán khi nhận hàng";
 }

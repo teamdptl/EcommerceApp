@@ -24,8 +24,6 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/v1/upload")
-
-
 public class MediaController {
     private final MediaImp mediaImp;
     public MediaController(@Autowired MediaImp mediaImp) {

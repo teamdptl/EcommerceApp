@@ -122,7 +122,6 @@ public class ProductController {
         return ResponseEntity.badRequest().body(new ErrorResponse("Không tìm thấy sản phẩm"));
     }
 
-    @PreAuthorize("hasRole('USER')") // Role: User
     @GetMapping("/getList")
     public List<ProductListItemResponse> getListProductDetail(@RequestParam(required = true) List<Integer> listId){
         List<Product> products = service.getProductInList(listId);
@@ -141,7 +140,7 @@ public class ProductController {
         return listItem;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")// Role: Manager // Hàm dùng để thêm sản phẩm
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<?> addProduct(@ModelAttribute @Valid CreateProductRequest createData, BindingResult result){
         if (result.hasErrors()){
@@ -237,6 +236,7 @@ public class ProductController {
         return ResponseEntity.badRequest().body("Vui lòng tải lại trang!");
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/delete-favorite/{productID}")
     public ResponseEntity<?> deleteFavorite(@PathVariable Integer productID){
 

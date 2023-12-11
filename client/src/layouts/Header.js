@@ -10,7 +10,7 @@ import {AuthProvider, AuthContext, useAuth} from "../context/AuthContext";
 import UserDropDown from "../components/main/UserDropDown";
 
 export default function Header({isAdmin = false}) {
-	const {user, setUser} = useAuth();
+	const {user, setUser, isUser} = useAuth();
 	const navigate = useNavigate();
 
 	const handleLogout = () =>{
@@ -46,7 +46,7 @@ export default function Header({isAdmin = false}) {
 						</div>
 						<div class="flex md:order-2">
 							<div class="flex gap-4">
-								{!isAdmin &&
+								{ !isAdmin && isUser() &&
 									<div className="flex items-center">
 										<CartDropDown></CartDropDown>
 									</div>

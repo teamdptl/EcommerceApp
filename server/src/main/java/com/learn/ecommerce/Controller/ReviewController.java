@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.learn.ecommerce.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.learn.ecommerce.Entity.Product;
@@ -36,8 +37,9 @@ public class ReviewController {
     }
     
    // Get all reviews of a particular product
-    
 
+
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/add/{productId}")
     public ResponseEntity<?> addReview(@PathVariable Integer productId,
                                        @RequestBody CreateReviewRequest data){
@@ -87,6 +89,7 @@ public class ReviewController {
         return ResponseEntity.ok(listResponses);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/delete/{reviewId}")
     public ResponseEntity<?> deleteReview(@PathVariable Integer reviewId){
         System.out.println("trong delete nè");
@@ -117,6 +120,7 @@ public class ReviewController {
         return ResponseEntity.ok(error);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/update/{reviewId}")
     public ResponseEntity<?> updateReview(@PathVariable Integer reviewId, @RequestBody CreateReviewRequest data){
         System.out.println(data);

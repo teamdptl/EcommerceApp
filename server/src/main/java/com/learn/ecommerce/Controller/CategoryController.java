@@ -24,7 +24,6 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/category")
-@PreAuthorize("hasRole('ADMIN')")
 public class CategoryController {
     @Autowired
     private CategoryImp categoryImp;

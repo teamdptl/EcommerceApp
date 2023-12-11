@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import baseUrl from "../config";
+import createFetch from "../utils/createFetch";
 
 /*Mục đích dùng để lấy 1 user */
 
@@ -10,7 +11,7 @@ const useGetUser = () => {
 
     const callGetUser = useCallback(async (userId) => {
         setLoading(true);
-        fetch(`${baseUrl}/api/v1/users/get/${userId}`)
+        createFetch(`${baseUrl}/api/v1/users/get/${userId}`)
         .then(res => res.json())
         .then(json => {
             setDataUser(json);

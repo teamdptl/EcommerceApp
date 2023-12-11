@@ -1,11 +1,12 @@
 import {useState} from "react";
 import baseUrl from "../config";
+import createFetch from "../utils/createFetch";
 
 const useShipInfoSave = () => {
     const [saveId, setSaveId] = useState(null);
 
     const callback = (data) => {
-        fetch(baseUrl+'/api/v1/user/shipInfo/add', {
+        createFetch(baseUrl+'/api/v1/user/shipInfo/add', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {

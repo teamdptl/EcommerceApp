@@ -9,6 +9,7 @@ import { Label, Select } from 'flowbite-react';
 import baseUrl from "../../config";
 import formatMoney from "../../utils/currency";
 import useProductsFetch from "../../hooks/useProductsFetch";
+import createFetch from "../../utils/createFetch";
 
 
 
@@ -26,6 +27,7 @@ const FilterBar = ({ onChange }) => {
         console.log(`User clicked category with ID: ${categoryId}`);
         onChange({
             categoryId: categoryId,
+            page: 0,
         });
     };
 
@@ -45,7 +47,7 @@ const FilterBar = ({ onChange }) => {
 
     // Hàm xử lý khi người dùng nhấn nút "Apply"
     const handleApplyFilter = () => {
-        onChange({ priceMin: isPrice[0], priceMax: isPrice[1] })
+        onChange({ priceMin: isPrice[0], priceMax: isPrice[1], page: 0 })
     };
 
     //------------hãng------------
@@ -61,7 +63,7 @@ const FilterBar = ({ onChange }) => {
     };
     const handleApplyButton = () => {
         // hiển thị sản phẩm 
-        onChange({ branchIds: selectedBrands })
+        onChange({ branchIds: selectedBrands, page: 0 })
     };
 
 
@@ -80,7 +82,7 @@ const FilterBar = ({ onChange }) => {
     const handleApplyOrigin = () => {
 
         console.log("xuất xứ vừa chọn:", isOrigin);
-        onChange({ origins: isOrigin })
+        onChange({ origins: isOrigin, page: 0 })
     };
 
     //-------------- đánh giá-----------------
@@ -91,7 +93,7 @@ const FilterBar = ({ onChange }) => {
         setSelectedOption(event.target.value);
         // console.log(event.target.value);
         // Xử lý logic dựa trên option được chọn
-        onChange({ rating: event.target.value })
+        onChange({ rating: event.target.value, page: 0 })
     };
 
 
@@ -102,7 +104,7 @@ const FilterBar = ({ onChange }) => {
         setSelectedValue(event.target.value);
         console.log(event.target.value);
         // Xử lý logic dựa trên option được chọn
-        onChange({ sortType: event.target.value })
+        onChange({ sortType: event.target.value, page: 0 })
     };
     //---------1
     // const [optionSearch, setoptionSearch] = useState("");
@@ -164,7 +166,7 @@ const FilterBar = ({ onChange }) => {
     //---------gọi API---------------------
     const [isCategory, setCategory] = useState([]);
     useEffect(() => {
-        fetch(baseUrl + '/api/v1/category/get')
+        createFetch(baseUrl + '/api/v1/category/get')
             .then(response => response.json())
             .then(json => {
                 setCategory(json);
@@ -175,7 +177,7 @@ const FilterBar = ({ onChange }) => {
     }, [])
 
     useEffect(() => {
-        fetch(baseUrl + '/api/v1/brand/get')
+        createFetch(baseUrl + '/api/v1/brand/get')
             .then(response => response.json())
             .then(json => {
                 setBrand(json);

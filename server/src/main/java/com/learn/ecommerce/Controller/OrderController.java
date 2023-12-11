@@ -50,10 +50,11 @@ public class OrderController {
     private MediaImp mediaImp;
 
     @Autowired
+    private PaymentStatusService paymentStatusService;
+
+    @Autowired
     private EmailService emailServiceImp;
 
-    // ROLE: User
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/place")
     public ResponseEntity<?> placeOrder(@Valid @RequestBody PlaceOrderRequest request, BindingResult result){
         if (result.hasErrors()){
@@ -63,6 +64,7 @@ public class OrderController {
         if (!shipInfo.isPresent())
             return ResponseEntity.badRequest().body(new ErrorResponse("Thông tin nhận hàng không tồn tại!"));
 
+        // Kiểm tra xem paymentMethod có hợp lệ hay không
         Optional<User> optionalUser = auth.getCurrentUser();
         Order order = new Order();
         order.setPaymentMethod(request.getPaymentType());
@@ -73,7 +75,6 @@ public class OrderController {
         try {
 
             Order saved = orderImp.placeOrder(Arrays.asList(request.getItems()), order, coupon);
-
             CompletableFuture.runAsync(() -> {
                 try {
 
@@ -103,7 +104,13 @@ public class OrderController {
         }
     }
 
-    @PreAuthorize("hasRole('USER')")// ROLE: User
+    @GetMapping("/payment-info")
+    public ResponseEntity<?> getPaymentInfo(){
+        return paymentStatusService.getPaymentData(paymentStatusService.findPaymentByCode("duy1"));
+    }
+
+
+    // ROLE: User
     @GetMapping("/user-orders")
     public ResponseEntity<?> getUserOrders(){
         return ResponseEntity.ok("ok");
@@ -124,11 +131,11 @@ public class OrderController {
             isAllStatus = 1;
         }
 
-        System.out.println(text);        
-        System.out.println(start);
-        System.out.println(end);
-        System.out.println(status);
-        System.out.println(isAllStatus);
+//        System.out.println(text);
+//        System.out.println(start);
+//        System.out.println(end);
+//        System.out.println(status);
+//        System.out.println(isAllStatus);
 
         List<Order> listOrders = orderImp.getFilterOrders(text, start, end, status, isAllStatus);
         if(!listOrders.isEmpty()){
@@ -164,6 +171,7 @@ public class OrderController {
         return ResponseEntity.ok(new ErrorResponse("Không tìm thấy dữ liệu!"));
    }
 
+    @PreAuthorize("hasRole('ADMIN')")
    @GetMapping("/update/status")
    public ResponseEntity<?> updateOrderStatus(@RequestParam(name = "order") Integer orderId,
                                               @RequestParam(name = "status") Integer orderStatus){
@@ -178,7 +186,8 @@ public class OrderController {
         return ResponseEntity.ok(new SuccessResponse("Cập nhật trạng thái thành công"));
    }
 
-   @GetMapping("/update/payment")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/update/payment")
     public ResponseEntity<?> updatePaymentStatus(@RequestParam(name = "order") Integer orderId,
                                                  @RequestParam(name = "payment") Boolean paymentStatus){
        System.out.println(orderId);
