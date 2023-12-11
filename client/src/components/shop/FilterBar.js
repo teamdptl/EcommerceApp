@@ -9,6 +9,7 @@ import { Label, Select } from 'flowbite-react';
 import baseUrl from "../../config";
 import formatMoney from "../../utils/currency";
 import useProductsFetch from "../../hooks/useProductsFetch";
+import createFetch from "../../utils/createFetch";
 
 
 
@@ -165,7 +166,7 @@ const FilterBar = ({ onChange }) => {
     //---------gọi API---------------------
     const [isCategory, setCategory] = useState([]);
     useEffect(() => {
-        fetch(baseUrl + '/api/v1/category/get')
+        createFetch(baseUrl + '/api/v1/category/get')
             .then(response => response.json())
             .then(json => {
                 setCategory(json);
@@ -176,7 +177,7 @@ const FilterBar = ({ onChange }) => {
     }, [])
 
     useEffect(() => {
-        fetch(baseUrl + '/api/v1/brand/get')
+        createFetch(baseUrl + '/api/v1/brand/get')
             .then(response => response.json())
             .then(json => {
                 setBrand(json);

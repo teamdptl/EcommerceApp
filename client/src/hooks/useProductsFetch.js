@@ -1,5 +1,6 @@
 import {useState} from "react";
 import baseUrl from "../config";
+import createFetch from "../utils/createFetch";
 
 const useProductsFetch = () => {
     const [products, setProducts] = useState([]);
@@ -11,7 +12,7 @@ const useProductsFetch = () => {
 
     const callback = (filterData = {}) => {
         setLoading(true);
-        fetch(baseUrl + '/api/v1/product/search?' + new URLSearchParams({...filterData}).toString())
+        createFetch(baseUrl + '/api/v1/product/search?' + new URLSearchParams({...filterData}).toString())
             .then(res => res.json())
             .then(json => {
                 setProducts(json.content)

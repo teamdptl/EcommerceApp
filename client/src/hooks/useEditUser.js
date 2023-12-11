@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import baseUrl from "../config";
+import createFetch from "../utils/createFetch";
 
 const useEditUser = () => {
     const [loadingCreateUser, setLoading] = useState(false);
@@ -20,7 +21,7 @@ const useEditUser = () => {
             body: JSON.stringify(userData),
         };
 
-        fetch(`${baseUrl}/api/v1/users/update/${userId}`, requestOptions)
+        createFetch(`${baseUrl}/api/v1/users/update/${userId}`, requestOptions)
             .then((res) => {
                 if (res.ok) {
                     return res.json();

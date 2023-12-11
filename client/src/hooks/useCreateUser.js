@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import baseUrl from "../config";
+import createFetch from "../utils/createFetch";
 
 const useCreateUser = () => {
     const [loadingCreateUser, setLoading] = useState(false);
@@ -22,7 +23,7 @@ const useCreateUser = () => {
             body: JSON.stringify(userData),
         };
 
-        fetch(`${baseUrl}/api/v1/users/add`, requestOptions)
+        createFetch(`${baseUrl}/api/v1/users/add`, requestOptions)
             .then((res) => {
                 if (res.ok) {
                     return res.json();

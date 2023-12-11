@@ -12,6 +12,7 @@ import AdminPage from "../../layouts/AdminPage";
 import baseUrl from '../../config'
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import createFetch from "../../utils/createFetch";
 
 
 const getISOStringDate = (date) => {
@@ -60,7 +61,7 @@ const AdminOrder = () => {
         }else{url = baseUrl + '/api/v1/order/all'}
         
         console.log(url)
-        fetch(url)
+        createFetch(url)
         .then(data => data.json())
         .then((res) => {
             console.log(res)
@@ -87,7 +88,7 @@ const AdminOrder = () => {
         let end = getISOStringDate(endDate);
         let url = baseUrl + '/api/v1/order/all?text=' + searchText + '&start=' + start + "&end=" + end + '&status=' + orderStatus;
         console.log(url)
-        fetch(url)
+        createFetch(url)
         .then(data => data.json())
         .then((res) => {
             console.log(res)
@@ -138,7 +139,7 @@ const AdminOrder = () => {
         console.log("Save status function")
         let url = baseUrl + '/api/v1/order/update/status?order=' + orderId + '&status=' + status;
         setShowOrderStatus(false);
-        fetch(url).then(data => data.json())
+        createFetch(url).then(data => data.json())
                     .then(res => {
                         if(res.error === 0){
                             listOrder.map(item => {
@@ -163,7 +164,7 @@ const AdminOrder = () => {
 
         let url = baseUrl + '/api/v1/order/update/payment?order=' + orderId + '&payment=true';
         setShowConfirm(false)
-        fetch(url).then(data => data.json())
+        createFetch(url).then(data => data.json())
                     .then(res => {
                         if(res.error === 0){
                             listOrder.map(item => {

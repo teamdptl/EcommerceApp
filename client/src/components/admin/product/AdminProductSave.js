@@ -12,6 +12,7 @@ import ScreenInfo from "../../ScreenInfo";
 import {useNavigate} from "react-router-dom";
 import { EditorState, ContentState } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
+import createFetch from "../../../utils/createFetch";
 
 const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
     const [files, setFiles] = useState([]);
@@ -31,7 +32,7 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
             formData.append("files", item);
         })
 
-        fetch("http://localhost:8080/api/v1/upload/photo", {
+        createFetch("http://localhost:8080/api/v1/upload/photo", {
             method: 'POST',
             body: formData
         })
@@ -45,7 +46,7 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
 
     useEffect(() => {
         if (!show) return;
-        fetch(baseUrl + '/api/v1/category/get').then(res => res.json())
+        createFetch(baseUrl + '/api/v1/category/get').then(res => res.json())
             .then(json => {
                 setCategories(json);
             })
@@ -53,7 +54,7 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
                 console.log(e);
             })
 
-        fetch(baseUrl + '/api/v1/brand/get').then(res => res.json())
+        createFetch(baseUrl + '/api/v1/brand/get').then(res => res.json())
             .then(json => {
                 setBrands(json);
             })
@@ -65,7 +66,7 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
     useEffect(() => {
         if (productId && isEdit){
             // Loading product data from db
-            fetch(baseUrl + `/api/v1/product/get/${productId}`).then(res => res.json())
+            createFetch(baseUrl + `/api/v1/product/get/${productId}`).then(res => res.json())
                 .then(json => {
                     setProduct({
                         ...json,
@@ -139,7 +140,7 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
         formData.append("description", markup)
         formData.append('thongSoKiThuat', 'Không có gì ca');
 
-        fetch(baseUrl + `${isEdit ? `/api/v1/product/edit/${product.productId}` : '/api/v1/product/add'}`, {
+        createFetch(baseUrl + `${isEdit ? `/api/v1/product/edit/${product.productId}` : '/api/v1/product/add'}`, {
             method: `${isEdit ? 'PUT':'POST'}`,
             body: formData
         }).then(res => res.json())
