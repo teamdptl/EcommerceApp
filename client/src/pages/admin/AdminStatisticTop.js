@@ -17,7 +17,7 @@ const AdminStatisticTop = () => {
     const [dateFrom , setDateFrom] = useState(["","",""]);
     const [dateTo , setDateTo] = useState(["","",""]);
     const [isLoading, setIsLoading] = useState(["false", "false", "false"]);
-
+    // cai ten noi len tat ca
     const formatDate =(date)=>{
         const originalDate = new Date(date);
         const year = originalDate.getFullYear(); // Lấy năm
@@ -26,51 +26,71 @@ const AdminStatisticTop = () => {
         const formattedDate = `${year}-${month}-${day}`;
         return formattedDate;
     }
+
     const handleChangeDateFrom= (text,type)=> {
+        const currentDate = formatDate(new Date());
         const updatedState = [...dateFrom];
         const date  = formatDate(text);
         switch (type){
             case "product":
-                updatedState[0]=date
-                setDateFrom(updatedState);
+                handleChangeDateFromWithType(0,text)
                 break;
             case "brand":
-                updatedState[1]=date
-                setDateFrom(updatedState);
+                handleChangeDateFromWithType(1,text)
                 break;
             case "user":
-                updatedState[2]=date
-                setDateFrom(updatedState);
+                handleChangeDateFromWithType(2,text)
                 break;
         }
     }
-
-    const handleChangeDateTo= (text,type)=> {
+    // nay de update cai gia tri cua date picker
+    const handleChangeDateFromWithType = (index,text)=>{
+        const currentDate = formatDate(new Date())
+        const date  = formatDate(text);
+        //Tranh truong hop chi pick 1 date
+        if(dateTo[index]==""){
+            const updatedState = [...dateTo];
+            updatedState[index]=currentDate
+            setDateTo(updatedState);
+            console.log(updatedState[index])
+        }
+        const updatedState = [...dateFrom];
+        updatedState[index]=date
+        console.log(updatedState[index])
+        setDateFrom(updatedState);
+    }
+    const handleChangeDateToWithType = (index,text) => {
+        const currentDate = formatDate(new Date());
         const updatedState = [...dateTo];
         const date  = formatDate(text);
+        if(dateFrom[index] == ""){
+            const updatedState = [...dateFrom];
+            updatedState[index]=currentDate
+            setDateFrom(updatedState);
+        }
+        updatedState[index]=date
+        setDateTo(updatedState);
+    }
+    //Nay de coi no chon date picker nao
+    const handleChangeDateTo= (text,type)=> {
         switch (type){
             case "product":
-                updatedState[0]=date
-                setDateTo(updatedState);
+                handleChangeDateToWithType(0,text)
                 break;
             case "brand":
-                updatedState[1]=date
-                setDateTo(updatedState);
+                handleChangeDateToWithType(1,text)
                 break;
             case "user":
-                updatedState[2]=date
-                setDateTo(updatedState);
+                handleChangeDateToWithType(2,text)
                 break;
         }
     }
-
+    // Goi api cua Prodcut ne
     const fetchTopProduct =()=>{
         let data = null;
-
         const updateLoading =[...isLoading];
         updateLoading[0] = true
         setIsLoading(updateLoading)
-
         if(dateFrom[0] || dateTo[0])
         {
             data = {
@@ -84,6 +104,7 @@ const AdminStatisticTop = () => {
                 'Content-Type': 'application/json'
             }
         };
+        //Khong null thi gui data
         if (data !== null) {
             console.log(data)
             requestOptions.body = JSON.stringify(data);
@@ -97,7 +118,7 @@ const AdminStatisticTop = () => {
         })
 
     }
-
+    // goi API cua Brand ne
     const fetchTopBrand =()=>{
         let data = null;
         if(dateFrom[1] || dateTo[1])
