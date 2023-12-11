@@ -1,4 +1,4 @@
-package group.ql_chdm.Ultis;
+package com.learn.ecommerce.Ultis;
 
 import java.io.File;
 import java.io.FileWriter;

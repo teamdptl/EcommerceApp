@@ -1,7 +1,6 @@
 import { Carousel } from "flowbite-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { StaticImage } from "gatsby-plugin-image";
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper/modules';
 import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
