@@ -22,14 +22,14 @@ const DatePickerFromTo = (props) => {
                     <div className="mb-2 block">
                         <Label value="Từ ngày" />
                     </div>
-                    <Datepicker     excludeDates={[new Date()]}
-                                    onSelectedDateChanged={(date)=>{handleChangeDateFrom(date)}} language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()}/>
+                    <Datepicker   defaultDate={new Date("2023/01/01")}
+                                  onSelectedDateChanged={(date)=>{handleChangeDateFrom(date)}} language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()}/>
                 </div>
                 <div>
                     <div className="mb-2 block">
                         <Label value="Đến ngày" />
                     </div>
-                    <Datepicker onSelectedDateChanged={(date)=>{handleChangeDateTo(date)}} language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()}/>
+                    <Datepicker defaultDate={new Date((new Date()).valueOf() + 1000*3600*24)} onSelectedDateChanged={(date)=>{handleChangeDateTo(date)}} language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date((new Date()).valueOf() + 1000*3600*24)}/>
                 </div>
                 <Button onClick={search} className="mb-1" color="gray"><IoIosSearch/></Button>
             </div>

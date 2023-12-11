@@ -24,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class EmailService {
 
-    @Value("864000")
+    @Value("86400")
     private int expTime;
     private String host = "http://localhost:3000";
     @Autowired

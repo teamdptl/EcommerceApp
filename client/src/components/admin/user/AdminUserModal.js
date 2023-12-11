@@ -125,7 +125,7 @@ const AdminUserModal = ({ isShow, closeModal, refreshTable  }) => {
                             <Select id="role" required value={formData.role}  onChange={(e) => handleInputChange("role", e.target.value)}>
                                 <option>User</option>
                                 <option>Admin</option>
-                                <option>Manager</option>
+                                {/* <option>Manager</option> */}
                             </Select>
                         </div>
                         <div>
