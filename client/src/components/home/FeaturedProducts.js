@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import ProductItem from "../shop/ProductItem";
+import {Button} from "flowbite-react";
+import {useNavigate} from "react-router-dom";
 
 const FeaturedProducts = () => {
-
-	const [popularProducts, setPopularProducts] = useState([]);
-  const [highRatedProducts, setHighRatedProducts] = useState([]);
+    const [popularProducts, setPopularProducts] = useState([]);
+    const [highRatedProducts, setHighRatedProducts] = useState([]);
+    const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPopularProducts = async () => {
@@ -33,17 +35,17 @@ const FeaturedProducts = () => {
 
     return (
 			<>
-				<section class="py-12 bg-white sm:py-16 lg:py-20">
-					<div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+				<section class="py-4 bg-white sm:py-6 lg:py-6">
+					<div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl mb-8">
 						<div class="max-w-md mx-auto text-center">
 							{/* <h2 class="text-2xl font-bold text-gray-900 sm:text-3xl">Danh mục các sản phẩm</h2> */}
 							</div>
 
-							<p class="mt-4 text-xl font-bold text-gray-900 leading-7 ">
-								Các sản phẩm được mua nhiều nhất
+							<p class="mt-4 text-xl font-semibold text-slate-800 leading-7 ">
+								Sản phẩm mua nhiều nhất
 							</p>
 
-						<div class="grid grid-cols-2 gap-6 mt-10 lg:mt-16 lg:gap-4 lg:grid-cols-4">
+						<div class="grid grid-cols-2 gap-6 mb-4 lg:mt-4 lg:gap-4 lg:grid-cols-4">
 							{/* <div class="relative group">
 								<div class="overflow-hidden aspect-w-1 aspect-h-1">
 									<img
@@ -303,17 +305,23 @@ const FeaturedProducts = () => {
     						  ))}
 						</div>
 					</div>
-					<div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-						<p class="mt-4 text-xl font-bold text-gray-900 leading-7 ">
-								Các sản phẩm được đánh giá cao nhất
+					<div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl mb-4">
+						<p class="mt-4 text-xl font-semibold text-slate-800 leading-7 ">
+								Sản phẩm đánh giá cao nhất
 							</p>
 
-						<div class="grid grid-cols-2 gap-6 mt-10 lg:mt-16 lg:gap-4 lg:grid-cols-4">
+						<div class="grid grid-cols-2 gap-6 mt-4 lg:mt-4 lg:gap-4 lg:grid-cols-4">
 							 {highRatedProducts.map((product) => (
 							<ProductItem key={product.id} product={product}></ProductItem>
     						  ))}
 						</div>
 					</div>
+                    <div className={"mt-8 justify-center flex"}>
+                        <Button onClick={() => {
+                            navigate('/shop');
+                        }}>Xem thêm</Button>
+                    </div>
+
 				</section>
 			</>
 		);

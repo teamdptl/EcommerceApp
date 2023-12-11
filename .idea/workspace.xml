@@ -5,16 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb0400e4-d946-4fdc-a5ba-0c7ce144132b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client/src/pages/Payment.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Response/PaymentDetailResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/shop/FilterBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/shop/FilterBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/routes/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/routes/router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/PaymentSocketController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/PaymentSocketController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Entity/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Entity/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/PaymentStatusService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/PaymentStatusService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/home/FeaturedProducts.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/home/FeaturedProducts.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +86,7 @@
       <workItem from="1702179869749" duration="6000" />
       <workItem from="1702183461424" duration="2187000" />
       <workItem from="1702190161693" duration="708000" />
-      <workItem from="1702296138218" duration="298000" />
+      <workItem from="1702296138218" duration="1593000" />
     </task>
     <servers />
   </component>
