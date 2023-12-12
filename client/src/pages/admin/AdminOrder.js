@@ -55,10 +55,12 @@ const AdminOrder = () => {
         const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileExtension = ".xlsx";
         let url = '';
+        let endStringDate = endDate;
+        endStringDate.setMonth(endDate.getMonth() + 1)
         let start = getISOStringDate(startDate);
-        let end = getISOStringDate(endDate);
+        let end = getISOStringDate(endStringDate);
         if(isExport){
-            url = baseUrl + '/api/v1/order/all?start=' + start + "&end=" + end + '&status=' + orderStatus;
+            url = baseUrl + '/api/v1/order/all?start=' + start + "&end=" + end;
         }else{url = baseUrl + '/api/v1/order/all'}
         
         console.log(url)
@@ -85,8 +87,10 @@ const AdminOrder = () => {
     }
 
     const filterOrder = (searchText) => {
+        let endStringDate = endDate;
+        endStringDate.setMonth(endDate.getMonth() + 1)
         let start = getISOStringDate(startDate);
-        let end = getISOStringDate(endDate);
+        let end = getISOStringDate(endStringDate);
         let url = baseUrl + '/api/v1/order/all?text=' + searchText + '&start=' + start + "&end=" + end + '&status=' + orderStatus;
         console.log(url)
         createFetch(url)
