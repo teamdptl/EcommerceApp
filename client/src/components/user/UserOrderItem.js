@@ -19,7 +19,7 @@ const UserOrderItem = ({order}) => {
                 <div className={"bg-slate-100 p-4 rounded-lg flex justify-between items-center"}>
                     <div>
                         <p className={"text-base font-semibold mb-2"}>Đơn hàng {order.orderId}</p>
-                        <p className={"text-sm text-zinc-500"}>{formatDateTime(order.createAt)} - <span className={"text-blue-500"}>{orderStatus[order.orderStatus]}</span></p>
+                        <p className={"text-sm text-zinc-500"}>{formatDateTime(order.createAt)} - <span className={"text-blue-500"}>{orderStatus[order.orderStatus]} ({order.paymentStatus ? "Đã thanh toán" : "Chưa thanh toán"})</span></p>
                     </div>
                     <div>
                         <Button color={'gray'} onClick={() => setCollapse(!collapse)}>
