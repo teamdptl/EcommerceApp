@@ -33,12 +33,13 @@ const AdminOrder = () => {
     const [showFilter, setShowFilter] = useState(false);
 
     const [listOrder, setListOrder] = useState([]);
-    
+
     const currentDate = new Date();
-    currentDate.setMonth(currentDate.getMonth() - 1)
-    console.log(currentDate)
-    const [endDate, setEndDate] = useState(new Date())
-    const [startDate, setStartDate] = useState(currentDate)
+    currentDate.setDate(currentDate.getDate() + 1);
+    const previousMonth = new Date();
+    previousMonth.setMonth(previousMonth.getMonth() - 1);
+    const [endDate, setEndDate] = useState(currentDate)
+    const [startDate, setStartDate] = useState(previousMonth)
     const [orderStatus, setOrderStatus] = useState(0)
     const [currentOrderSelect, setCurrentOrderSelect] = useState([])
 
@@ -198,11 +199,11 @@ const AdminOrder = () => {
                 {showFilter &&
                     <div className={`flex mb-4 gap-4 mx-4 items-center justify-center`}>
                         <Label value="Từ ngày" />
-                        <Datepicker language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()} value={startDate} onSelectedDateChanged={(value) => setStartDate(value)}/>
+                        <Datepicker language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={currentDate} value={startDate.toLocaleDateString("vi-VN")} onSelectedDateChanged={(value) => setStartDate(value)}/>
                         <Label value="Đến ngày" />
-                        <Datepicker language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()} onSelectedDateChanged={(value) => setEndDate(value)}/>
+                        <Datepicker language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={currentDate} value={endDate.toLocaleDateString("vi-VN")} onSelectedDateChanged={(value) => setEndDate(value)}/>
                         <Label value="Trạng thái" />
-                        <Select id="countries" 
+                        <Select id="countries"
                             value={orderStatus} 
                             onChange={val => setOrderStatus(val.target.value)}
                             required>

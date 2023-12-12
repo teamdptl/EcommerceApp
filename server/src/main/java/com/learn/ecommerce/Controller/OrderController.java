@@ -144,7 +144,7 @@ public class OrderController {
                                             @RequestParam(value = "end", required = false, defaultValue = "") String time_end,
                                             @RequestParam(value = "status" , required = false) Integer status){
         Date start = time_start.equals("") ? Date.valueOf("1970-01-01") : Date.valueOf(time_start);
-        Date end = time_end.equals("") ? Date.valueOf(LocalDate.now()) : Date.valueOf(time_end);
+        Date end = time_end.equals("") ? Date.valueOf("2100-01-01") : Date.valueOf(time_end);
         Integer isAllStatus = 0;
         if(status == null || status == 0){
             status = 0;
