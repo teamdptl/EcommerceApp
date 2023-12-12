@@ -21,8 +21,8 @@ insert into brand(brand_id, is_deleted, name) values
                       (12, 0, "TCL");
 
 # username là duy, pass là 123
-insert into _user(id, is_deleted, avatar, email, fullname, locate, password, role, username) values
-                      (1, 0, null, "duy@gmail.com", "Duy Huynh", "vn", "$2a$10$xuIwJ5FPAot8JfNeJNeKOejQPvgTLRWwbUFE9EXPlCrufG13pMGrO", "ADMIN", "duy");
+# insert into _user(id, is_deleted, avatar, email, fullname, locate, password, role, username) values
+#                       (1, 0, null, "duy@gmail.com", "Duy Huynh", "vn", "$2a$10$xuIwJ5FPAot8JfNeJNeKOejQPvgTLRWwbUFE9EXPlCrufG13pMGrO", "ADMIN", "duy");
 
 # 15 Sản phẩm
 INSERT INTO `product` (`brand_id`, `category_id`, `is_deleted`, `product_id`, `quantity`, `warranty_months`, `old_price`, `price`, `attributes`, `name`, `origin`, `slug_url`, `description`, `thong_so_ki_thuat`) VALUES
@@ -92,32 +92,29 @@ INSERT INTO `media` (`image_id`, `is_external_image`, `is_primary`, `product_id`
                                                                                                    (46, b'1', b'0', 15, 'https://dienmaygiakhang.vn/wp-content/uploads/2022/04/NA-F10S10BRV_0001_Layer-2.jpg'),
                                                                                                    (47, b'1', b'0', 15, 'https://dienmaygiakhang.vn/wp-content/uploads/2022/04/NA-F10S10BRV_0000_Layer-3.jpg');
 
-INSERT INTO `ship_info`(`is_deleted`, `ship_id`, `user_id`, `address`, `full_name`, `phone`) VALUES (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Duy Huỳnh','0569842214'),
-                                                                                                    (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Khánh Huỳnh','068845412'),
-                                                                                                    (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Võ Minh','098543217'),
-                                                                                                    (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Minh Tuấn','0412586234'),
-                                                                                                    (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Duy Huỳnh','0569842214'),
-                                                                                                    (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Khánh Huỳnh','068845412'),
-                                                                                                    (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Võ Minh','098543217'),
-                                                                                                    (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Duy Huỳnh','0569842214'),
-                                                                                                    (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Khánh Huỳnh','068845412'),
-                                                                                                    (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Võ Minh','098543217'),
-                                                                                                    (b'0',null,1,'99, An Dương Vương, p16, q8, tp.HCM','Võ Huỳnh','019537258');
+# INSERT INTO `ship_info`(`is_deleted`, `ship_id`, `user_id`, `address`, `full_name`, `phone`) VALUES (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Duy Huỳnh','0569842214'),
+#                                                                                                     (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Khánh Huỳnh','068845412'),
+#                                                                                                     (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Võ Minh','098543217'),
+#                                                                                                     (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Minh Tuấn','0412586234'),
+#                                                                                                     (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Duy Huỳnh','0569842214'),
+#                                                                                                     (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Khánh Huỳnh','068845412'),
+#                                                                                                     (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Võ Minh','098543217'),
+#                                                                                                     (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Duy Huỳnh','0569842214'),
+#                                                                                                     (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Khánh Huỳnh','068845412'),
+#                                                                                                     (b'0',null,1,'273, An Dương Vương, p3, q5, tp.HCM','Võ Minh','098543217'),
+#                                                                                                     (b'0',null,1,'99, An Dương Vương, p16, q8, tp.HCM','Võ Huỳnh','019537258');
 
-INSERT INTO `orders`(`is_deleted`, `order_id`, `order_status`, `payment_status`, `ship_id`, `user_id`, `create_at`, `total_price`, `payment_method`) VALUES (b'0',null,1,b'0',1,1,CURRENT_TIME,1500000,'tiền mặt'),
-                                                                                                                                                            (b'0',null,1,b'0',3,1,CURRENT_TIME,3990000,'chuyển khoản'),
-                                                                                                                                                            (b'0',null,1,b'1',6,1,CURRENT_TIME,7200000,'tiền mặt'),
-                                                                                                                                                            (b'0',null,1,b'0',4,1,CURRENT_TIME,4990000,'chuyển khoản'),
-                                                                                                                                                            (b'1',null,1,b'1',2,1,CURRENT_TIME,2700000,'tiền mặt'),
-                                                                                                                                                            (b'0',null,1,b'0',1,1,CURRENT_TIME,5490000,'chuyển khoản'),
-                                                                                                                                                            (b'0',null,1,b'0',5,1,CURRENT_TIME,10590000,'tiền mặt'),
-                                                                                                                                                            (b'0',null,1,b'0',7,1,CURRENT_TIME,2700000,'tiền mặt'),
-                                                                                                                                                            (b'0',null,1,b'1',6,1,CURRENT_TIME,3600000,'tiền mặt'),
-                                                                                                                                                            (b'1',null,1,b'0',2,1,CURRENT_TIME,2200000,'chuyển khoản'),
-                                                                                                                                                            (b'0',null,1,b'1',3,1,CURRENT_TIME,5300000,'chuyển khoản'),
-                                                                                                                                                            (b'0',null,1,b'0',1,1,CURRENT_TIME,9799000,'tiền mặt'),
-                                                                                                                                                            (b'0',null,1,b'0',8,1,CURRENT_TIME,1500000,'tiền mặt'),
-                                                                                                                                                            (b'0',null,1,b'0',1,1,CURRENT_TIME,1500000,'chuyển khoản');
-
-
-
+# INSERT INTO `orders`(`is_deleted`, `order_id`, `order_status`, `payment_status`, `ship_id`, `user_id`, `create_at`, `total_price`, `payment_method`) VALUES (b'0',null,1,b'0',1,1,CURRENT_TIME,1500000,'tiền mặt'),
+#                                                                                                                                                             (b'0',null,1,b'0',3,1,CURRENT_TIME,3990000,'chuyển khoản'),
+#                                                                                                                                                             (b'0',null,1,b'1',6,1,CURRENT_TIME,7200000,'tiền mặt'),
+#                                                                                                                                                             (b'0',null,1,b'0',4,1,CURRENT_TIME,4990000,'chuyển khoản'),
+#                                                                                                                                                             (b'1',null,1,b'1',2,1,CURRENT_TIME,2700000,'tiền mặt'),
+#                                                                                                                                                             (b'0',null,1,b'0',1,1,CURRENT_TIME,5490000,'chuyển khoản'),
+#                                                                                                                                                             (b'0',null,1,b'0',5,1,CURRENT_TIME,10590000,'tiền mặt'),
+#                                                                                                                                                             (b'0',null,1,b'0',7,1,CURRENT_TIME,2700000,'tiền mặt'),
+#                                                                                                                                                             (b'0',null,1,b'1',6,1,CURRENT_TIME,3600000,'tiền mặt'),
+#                                                                                                                                                             (b'1',null,1,b'0',2,1,CURRENT_TIME,2200000,'chuyển khoản'),
+#                                                                                                                                                             (b'0',null,1,b'1',3,1,CURRENT_TIME,5300000,'chuyển khoản'),
+#                                                                                                                                                             (b'0',null,1,b'0',1,1,CURRENT_TIME,9799000,'tiền mặt'),
+#                                                                                                                                                             (b'0',null,1,b'0',8,1,CURRENT_TIME,1500000,'tiền mặt'),
+#                                                                                                                                                             (b'0',null,1,b'0',1,1,CURRENT_TIME,1500000,'chuyển khoản');

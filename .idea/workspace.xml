@@ -6,13 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="cb0400e4-d946-4fdc-a5ba-0c7ce144132b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/admin/product/AdminProductSave.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/admin/product/AdminProductSave.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/shop/ProductItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/shop/ProductItem.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/database.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/doc/database.drawio" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Repository/OrderReponsitory.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Repository/OrderReponsitory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Repository/ProductRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/OrderImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/OrderImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/PaymentStatusService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Service/Implementation/PaymentStatusService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminOrder.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminOrder.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/learn/ecommerce/Controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,6 +94,7 @@
       <workItem from="1702300845977" duration="2095000" />
       <workItem from="1702303005566" duration="13743000" />
       <workItem from="1702346790250" duration="4028000" />
+      <workItem from="1702353890735" duration="4236000" />
     </task>
     <servers />
   </component>
