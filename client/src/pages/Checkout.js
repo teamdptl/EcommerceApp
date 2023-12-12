@@ -68,6 +68,7 @@ const Checkout = () => {
 	}
 
 	const placeOrder = async() => {
+		let myShipId = null;
 		if (selectedShipId === null){
 			if (!editShipInfo || !editShipInfo.isValid){
 				setMsg({...msg, error: 1, text: "Vui lòng điền đầy đủ hoặc chọn thông tin giao hàng", show: true});
@@ -78,18 +79,20 @@ const Checkout = () => {
 				alert("Địa chỉ không hợp lệ!");
 				return;
 			}
-			const {error, message} = await createOrder(shipId);
-			setMsg({...msg, error: error, text: message, show: true});
-			if (error === 0){
-				clearCart();
-				navigate('/user?tab=order', {replace: true})
-			}
+			myShipId = shipId;
 		}
 		else {
-			const {error, message} = await createOrder(selectedShipId);
-			setMsg({...msg, error: error, text: message, show: true});
-			if (error === 0){
-				clearCart();
+			myShipId = selectedShipId;
+		}
+
+		const {error, message, code} = await createOrder(myShipId);
+		setMsg({...msg, error: error, text: message, show: true});
+		if (error === 0){
+			clearCart();
+			if (code){
+				navigate(`/payment/${code}`)
+			}
+			else {
 				navigate('/user?tab=order', {replace: true})
 			}
 		}
@@ -123,7 +126,7 @@ const Checkout = () => {
 					<p className={"text-lg mb-3 font-semibold mt-6"}>Phương thức thanh toán</p>
 					<div>
 						<div className="flex items-center gap-2 mb-3">
-							<Radio id="nhanhang" name="paymentMethod" value="Thanh toán khi nhận hàng COD" defaultChecked onChange={e => setPaymentMethod(e.target.value)}/>
+							<Radio id="nhanhang" name="paymentMethod" value="Thanh toán khi nhận hàng" defaultChecked onChange={e => setPaymentMethod(e.target.value)}/>
 							<Label className={"font-normal text-base"} htmlFor="nhanhang">Thanh toán khi nhận hàng (COD)</Label>
 						</div>
 						<div className="flex items-center gap-2">

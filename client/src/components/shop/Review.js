@@ -91,7 +91,7 @@ const Review = ({listReview, setListReview, review}) => {
                                 <Dropdown.Item onClick={() => setShowModal(true)}>Chỉnh sửa</Dropdown.Item>
                                 <Dropdown.Item onClick={() => {deleteReview()}}>Xóa</Dropdown.Item>
                             </Dropdown>
-                            <PopupRating showModal={showModal} setOpen={setShowModal} content={content} setContent={setContent} start={start} setStart={setStart} listReview={listReview} setListReview={setListReview} reviewId={review.reviewId} add={false}></PopupRating>
+                            <PopupRating showModal={showModal} setOpen={setShowModal} content={content} setContent={setContent} start={start} setStart={setStart} listReview={listReview} setListReview={setListReview} reviewId={review.reviewId} setContentConfirm={setContentConfirm} setTypeConfirm={setTypeConfirm} setOpenConfirm={setShowConfirm} add={false}></PopupRating>
                         </div>
                     </div>
                 </div>

@@ -48,10 +48,8 @@ public class OrderController {
     private OrderLineImp orderLineImp;
     @Autowired
     private MediaImp mediaImp;
-
     @Autowired
     private PaymentStatusService paymentStatusService;
-
     @Autowired
     private EmailService emailServiceImp;
 
@@ -63,11 +61,14 @@ public class OrderController {
         Optional<ShipInfo> shipInfo = shipInfoImp.findShipInfoById(request.getShipId());
         if (!shipInfo.isPresent())
             return ResponseEntity.badRequest().body(new ErrorResponse("Thông tin nhận hàng không tồn tại!"));
+        if (!request.getPaymentType().equals(Order.Method_Banking) && !request.getPaymentType().equals(Order.Method_COD))
+            return ResponseEntity.badRequest().body(new ErrorResponse("Phương thức thanh toán không hợp lệ!"));
 
         // Kiểm tra xem paymentMethod có hợp lệ hay không
         Optional<User> optionalUser = auth.getCurrentUser();
         Order order = new Order();
         order.setPaymentMethod(request.getPaymentType());
+        order.setOrderStatus(1);
         order.setCreateAt(new Timestamp(System.currentTimeMillis()));
         order.setShipInfo(shipInfo.get());
         order.setUser(optionalUser.orElse(null));
@@ -75,6 +76,7 @@ public class OrderController {
         try {
 
             Order saved = orderImp.placeOrder(Arrays.asList(request.getItems()), order, coupon);
+
             CompletableFuture.runAsync(() -> {
                 try {
 
@@ -98,22 +100,40 @@ public class OrderController {
 
             });
 
+            if (order.getPaymentMethod().equals(Order.Method_Banking)){
+                PaymentStatus status = paymentStatusService.generatePayment(saved);
+                return ResponseEntity.ok(new OrderCreatedResponse("Vui lòng thực hiện chuyển khoản!", status.getCode()));
+            }
             return ResponseEntity.ok(new SuccessResponse("Tạo đơn hàng thành công"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
 
-    @GetMapping("/payment-info")
-    public ResponseEntity<?> getPaymentInfo(){
-        return paymentStatusService.getPaymentData(paymentStatusService.findPaymentByCode("duy1"));
+    @GetMapping("/payment/{code}")
+    public ResponseEntity<?> getPaymentInfo(@PathVariable String code){
+        PaymentStatus status = paymentStatusService.findPaymentByCode(code);
+        if (status == null)
+            return ResponseEntity.badRequest().build();
+        if (status.getExpiredAt() <= System.currentTimeMillis())
+            return ResponseEntity.badRequest().build();
+        return paymentStatusService.getPaymentData(status);
     }
 
-
     // ROLE: User
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/user-orders")
     public ResponseEntity<?> getUserOrders(){
-        return ResponseEntity.ok("ok");
+        Optional<User> optionalUser = auth.getCurrentUser();
+        if(optionalUser.isEmpty())
+            return ResponseEntity.ok(new ErrorResponse("Đăng nhập để xem đơn hàng của bạn"));
+        List<Order> listOrders = orderImp.getByUser(optionalUser.get());
+        if(!listOrders.isEmpty()){
+            List<OrderResponse> orderResponseList = getDetailListOrder(listOrders);
+            return ResponseEntity.ok(orderResponseList);
+        }
+        return ResponseEntity.ok("Không tìm thấy dữ liệu!");
+
     }
 
 
@@ -139,36 +159,42 @@ public class OrderController {
 
         List<Order> listOrders = orderImp.getFilterOrders(text, start, end, status, isAllStatus);
         if(!listOrders.isEmpty()){
-            List<OrderResponse> listResult = new ArrayList<>();
-            List<OrderLineResponse> listProduct = new ArrayList<>();
-            OrderResponse orderResponse;
-            OrderLineResponse orderLineResponse;
-            MediaResponse mediaResponse;
-            for (Order order : listOrders) {
-                List<OrderLine> listOrderLine = orderLineImp.getAllOrderLines(order.getOrderId());
-                System.out.println("Tìm thấy danh sách đơn hàng!");
-                if(!listOrderLine.isEmpty()){
-                    System.out.println("Tìm thấy danh sách sản phẩm của đơn hàng!");
-                    for (OrderLine orderLine : listOrderLine) {
-                        orderLineResponse = ModelMapperUtils.map(orderLine, OrderLineResponse.class);
-                        Optional<Media> media = mediaImp.getProductPrimaryMedia(orderLine.getProduct().getProductId());
-                        mediaResponse = ModelMapperUtils.map(media.orElse(null), MediaResponse.class);
-                        orderLineResponse.setProductMedia(mediaResponse);
-                        listProduct.add(orderLineResponse);
-
-                    }
-                }else{
-//                    return ResponseEntity.ok(new ErrorResponse("Không tìm thấy dữ liệu!"));
-                }
-                System.out.println(listProduct.size());
-                orderResponse = ModelMapperUtils.map(order, OrderResponse.class);
-                orderResponse.setOrderLineResponse(listProduct.stream().toList());
-                listResult.add(orderResponse);
-                listProduct.clear();
-            }
-            return ResponseEntity.ok(listResult);
+            List<OrderResponse> orderResponseList = getDetailListOrder(listOrders);
+            return ResponseEntity.ok(orderResponseList);
         }
         return ResponseEntity.ok(new ErrorResponse("Không tìm thấy dữ liệu!"));
+   }
+
+   private List<OrderResponse> getDetailListOrder(List<Order> listOrders){
+
+           List<OrderResponse> listResult = new ArrayList<>();
+           List<OrderLineResponse> listProduct = new ArrayList<>();
+           OrderResponse orderResponse;
+           OrderLineResponse orderLineResponse;
+           MediaResponse mediaResponse;
+           for (Order order : listOrders) {
+               List<OrderLine> listOrderLine = orderLineImp.getAllOrderLines(order.getOrderId());
+               System.out.println("Tìm thấy danh sách đơn hàng!");
+               if(!listOrderLine.isEmpty()){
+                   System.out.println("Tìm thấy danh sách sản phẩm của đơn hàng!");
+                   for (OrderLine orderLine : listOrderLine) {
+                       orderLineResponse = ModelMapperUtils.map(orderLine, OrderLineResponse.class);
+                       Optional<Media> media = mediaImp.getProductPrimaryMedia(orderLine.getProduct().getProductId());
+                       mediaResponse = ModelMapperUtils.map(media.orElse(null), MediaResponse.class);
+                       orderLineResponse.setProductMedia(mediaResponse);
+                       listProduct.add(orderLineResponse);
+
+                   }
+               }else{
+//                    return ResponseEntity.ok(new ErrorResponse("Không tìm thấy dữ liệu!"));
+               }
+               System.out.println(listProduct.size());
+               orderResponse = ModelMapperUtils.map(order, OrderResponse.class);
+               orderResponse.setOrderLineResponse(listProduct.stream().toList());
+               listResult.add(orderResponse);
+               listProduct.clear();
+           }
+           return listResult;
    }
 
     @PreAuthorize("hasRole('ADMIN')")

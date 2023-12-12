@@ -32,7 +32,7 @@ const CartItem = ({ item, isOrder = false, isPopup = false }) => {
 
 				<div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
 					<img
-						src={product.imageUrl}
+						src={isOrder ? item.productMedia.imageUrl : product.imageUrl}
 						alt="Ảnh sản phẩm"
 						className="h-full w-full object-cover object-center"
 					/>
@@ -41,11 +41,11 @@ const CartItem = ({ item, isOrder = false, isPopup = false }) => {
 					<div>
 						<div className="flex justify-between text-base font-medium text-gray-1000">
 							<h3 className="w-auto">
-								<a className="text-sm" href={`/product/${product.productId}`}>{product.name}</a>
+								<a className="text-sm" href={`/product/${isOrder ? item.productProductId : product.productId}`}>{isOrder ? item.productName : product.name}</a>
 							</h3>
-							<p className=" h-8 ml-4 flex items-center border-2 rounded-md text-green-400 border-green-400 p-2" >{formatMoney(product.price*pickQuantity)}</p>
+							<p className=" h-8 ml-4 flex items-center border-2 rounded-md text-green-400 border-green-400 p-2" >{formatMoney(isOrder ? item.price : product.price*pickQuantity)}</p>
 						</div>
-						<p className="mt-1 text-sm text-gray-500 mb-2">{formatMoney(product.price)}</p>
+						<p className="mt-1 text-sm text-gray-500 mb-2">{formatMoney(isOrder ? item.productPrice : product.price)}</p>
 					</div>
 					<div className="flex flex-1 items-end justify-between text-sm">
 						{
@@ -66,7 +66,7 @@ const CartItem = ({ item, isOrder = false, isPopup = false }) => {
 						{
 							isOrder &&
 							<>
-								<p className="text-gray-500">Số lượng {buyQuantity}</p>
+								<p className="text-gray-500">Số lượng {item.quantity}</p>
 								<div className="flex">
 									<button
 										type="button"

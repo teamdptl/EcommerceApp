@@ -319,6 +319,10 @@ public class OrderImp implements OrderService {
         }
         return orderReponsitory.getFilterOrders(text, time_start, time_end, status, isAllStatus);
     }
+
+    public List<Order> getByUser(User user){
+        return orderReponsitory.findByUserOrderByCreateAtDesc(user);
+    }
     @Override
     public void save(Order T) {
         orderReponsitory.save(T);

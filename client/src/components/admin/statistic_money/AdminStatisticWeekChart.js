@@ -34,19 +34,19 @@ export const options = {
 
 const AdminStatisticWeekChart = ({weekData}) => {
     const labels = weekData.map(item => {
-        if (item.dateOfWeek === 0)
+        if (item.dayOfWeek === 0)
             return "Thứ 2"
-        if (item.dateOfWeek === 1)
+        if (item.dayOfWeek === 1)
             return "Thứ 3"
-        if (item.dateOfWeek === 2)
+        if (item.dayOfWeek === 2)
             return "Thứ 4"
-        if (item.dateOfWeek === 3)
+        if (item.dayOfWeek === 3)
             return "Thứ 5"
-        if (item.dateOfWeek === 4)
+        if (item.dayOfWeek === 4)
             return "Thứ 6"
-        if (item.dateOfWeek === 5)
+        if (item.dayOfWeek === 5)
             return "Thứ 7"
-        if (item.dateOfWeek === 6)
+        if (item.dayOfWeek === 6)
             return "Chủ nhật"
         return ""
     });

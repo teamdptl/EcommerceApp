@@ -14,6 +14,7 @@ public class OrderLineResponse {
 
     private long price;
     private int quantity;
+    private int productProductId;
     private String productName;
     private String productPrice;
     private MediaResponse productMedia;

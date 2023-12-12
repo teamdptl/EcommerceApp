@@ -1,4 +1,5 @@
 import { Carousel, Button, Rating } from "flowbite-react";
+import SupportService from "../../components/shop/SupportSevice";
 import { useContext, useState } from "react";
 import { RiSubtractFill } from "react-icons/ri"
 import { AiFillHeart, AiOutlineHeart, AiOutlinePlus } from "react-icons/ai";
@@ -6,6 +7,8 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import { AuthContext } from "../../context/AuthContext";
 import baseUrl from "../../config"
 import {useCartContext} from "../../context/CartContext";
+import AdminConfirmModal from "../admin/AdminConfirmModal";
+import { useNavigate } from "react-router-dom";
 const product = {favourite: null}
 
 const getAverageRating = (reviewsData) => {
@@ -26,10 +29,13 @@ const ProductDetail = ({data, listReview}) => {
     const [quantity, setQuantity] = useState(1)
     const [showDisc, setShowDisc] = useState(false)
     const [showWarrantyPolicy, setShowWarrantyPolicy] = useState(false)
+    const [showConfirm, setShowConfirm] = useState(false)
+    const [content, setContent] = useState("")
+    const [type, setType] = useState()
     const {user, setUser, setAutoLogin} = useContext(AuthContext);
     const { addItemToCart } = useCartContext();
+    const navigate = useNavigate();
     let medias = data.medias;
-    // console.log("Product data: ", favourite)
     
     const formatter = new Intl.NumberFormat('VN', {
         style: 'currency',
@@ -53,7 +59,9 @@ const ProductDetail = ({data, listReview}) => {
                     if(data.status === 200){
                         setFavourite(!favourite);
                     }else{
-                        alert("Vui lòng tải lại trang!")
+                        setContent("Vui lòng tải lại trang!")
+                        setType("success");
+                        setShowConfirm(true)
                     }
                 })
                 .catch(err => console.error(err))
@@ -69,14 +77,18 @@ const ProductDetail = ({data, listReview}) => {
                     if(data.status === 200){
                         setFavourite(!favourite);
                     }else{
-                        alert("Vui lòng tải lại trang!")
+                        setContent("Vui lòng tải lại trang!")
+                        setType("success");
+                        setShowConfirm(true)
                     }
                 })
                 .catch(err => console.error(err))
             }
             
         }else{
-            alert('You need to login first!');
+            setContent("You need login first!")
+            setType("warning");
+            setShowConfirm(true)
         }
         
     }
@@ -93,130 +105,147 @@ const ProductDetail = ({data, listReview}) => {
     return (
         <>
             {data === undefined || data === null ? <div class="font-extrabold self-center">Opps! Không thể tải sản phẩm</div> :
-            (<div class="lg:flex">
-                <section class="w-full lg:w-[55%]">
-                    <picture class="relative">
-                    { (medias === undefined || medias.length <= 0) ? <img className="w-full rounded-2xl object-cover" src="https://flowbite.com/docs/images/carousel/carousel-1.svg" alt=""></img>:
-                            <Carousel slide={false}>
-                                {
-                                    medias.map((item) => {
-                                        return (<img className="w-full rounded-2xl object-cover" src={item.imageUrl} alt=""></img>)
-                                    })
-                                }           
-                            </Carousel>
-                    }
-                        
-                    </picture>
-                    
-                </section>
-                <section class="w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10">
-                    <div>
-                        <h2 class="flex justify-between text-2xl sm:text-3xl font-semibold">
-                            <span>{data.name}</span>
-                            <Button color="light" className="rounded-full w-9 h-9 self-center ml-5" onClick={() =>{favouriteClick()}}>
-                                { (favourite) ? (<AiFillHeart color="red" size="20"/>) : (<AiOutlineHeart size='20' />) }
-                            </Button>
-                        </h2>
-                        <div class="flex items-center mt-5 space-x-4 sm:space-x-5">
-                            <div class="">
-                                <div class="flex items-center border-2 border-green-500 rounded-lg py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold">
-                                    <span class="text-green-500 !leading-none">{formatter.format(data.price)}</span>
-                                </div>
-                            </div>
-                            {
-                                data.oldPrice === 0 ? (<div></div>) : 
-                                (<div class="">
-                                    <div class="flex items-center border-2 border-grey-500 rounded-lg py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold">
-                                        <strike class="text-gray-500 !leading-none">{formatter.format(data.oldPrice)}</strike>
-                                    </div>
-                                </div>)
-                            }
+            (<div>
+                <div class="lg:flex">
+                    <section class="w-full lg:w-[55%]">
+                        <picture class="relative">
+                        { (medias === undefined || medias.length <= 0) ? <img className="w-full rounded-2xl object-cover" src="https://flowbite.com/docs/images/carousel/carousel-1.svg" alt=""></img>:
+                                <Carousel slide={false}>
+                                    {
+                                        medias.map((item) => {
+                                            return (<img className="w-full rounded-2xl object-cover" src={item.imageUrl} alt=""></img>)
+                                        })
+                                    }           
+                                </Carousel>
+                        }
                             
-                            <div class="h-7 border-l border-slate-300 dark:border-slate-700"></div>
-                            <div class="flex items-center">
-                                <a href="#reviews" class="flex items-center text-sm font-medium">
-                                    <Rating>
-                                        <Rating.Star></Rating.Star>
-                                        <p className="ml-1 text-sm font-bold text-gray-900 dark:text-white">{getAverageRating(listReview)}</p>
-                                        <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-500 dark:bg-gray-400" />
-                                        <span className="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
-                                            {listReview.length} đánh giá
-                                        </span>
-                                    </Rating>
-                                </a>
-                                <span class="hidden sm:block mx-2.5">·</span>
-                                <div class="hidden sm:flex items-center text-sm">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-3.5 h-3.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"></path>
-                                    </svg>
-                                    <span class="ml-1 leading-none">New in</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-10">
+                        </picture>
+                        
+                    </section>
+                    <section class="w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10">
                         <div>
-                            <div class="flex justify-between font-medium text-sm">
-                                <label for="">
-                                    <span class="ml-1 font-semibold uppercase">Thông số</span>
-                                </label>
-                                <a target="_blank" rel="noopener noreferrer" href="##" class="text-primary-6000 hover:text-primary-500">See discription</a>
-                            </div>
-                            <div class="grid grid-cols-5 sm:grid-cols-7 gap-2 mt-3">
-                                <div class="relative h-10 sm:h-11 rounded-2xl border flex items-center justify-center text-sm sm:text-base uppercase font-semibold select-none overflow-hidden z-0 cursor-pointer border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-200 hover:bg-neutral-50 dark:hover:bg-neutral-700">S</div>
-                                <div class="relative h-10 sm:h-11 rounded-2xl border flex items-center justify-center text-sm sm:text-base uppercase font-semibold select-none overflow-hidden z-0 cursor-pointer border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-200 hover:bg-neutral-50 dark:hover:bg-neutral-700">M</div>
-                                <div class="relative h-10 sm:h-11 rounded-2xl border flex items-center justify-center text-sm sm:text-base uppercase font-semibold select-none overflow-hidden z-0 cursor-pointer border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-200 hover:bg-neutral-50 dark:hover:bg-neutral-700">L</div>
-                                <div class="relative h-10 sm:h-11 rounded-2xl border flex items-center justify-center text-sm sm:text-base uppercase font-semibold select-none overflow-hidden z-0 cursor-pointer border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-200 hover:bg-neutral-50 dark:hover:bg-neutral-700">XL</div>
-                                <div class="relative h-10 sm:h-11 rounded-2xl border flex items-center justify-center text-sm sm:text-base uppercase font-semibold select-none overflow-hidden z-0 text-opacity-20 dark:text-opacity-20 cursor-not-allowed border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-200 hover:bg-neutral-50 dark:hover:bg-neutral-700">2XL</div>
-                                <div class="relative h-10 sm:h-11 rounded-2xl border flex items-center justify-center text-sm sm:text-base uppercase font-semibold select-none overflow-hidden z-0 text-opacity-20 dark:text-opacity-20 cursor-not-allowed border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-200 hover:bg-neutral-50 dark:hover:bg-neutral-700">3XL</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex space-x-3.5 mt-10">
-                        <Button.Group className="flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full">
-                            <div class="nc-NcInputNumber flex items-center justify-between space-x-5 w-full">
-                                <div class="nc-NcInputNumber__content flex items-center justify-between w-[104px] sm:w-28">
-                                    <Button onClick={() => subtractQuantity()} color="grey" className="w-8 h-8 rounded-full flex items-center justify-center border border-neutral-400 dark:border-neutral-500 bg-white dark:bg-neutral-900 focus:outline-none hover:border-neutral-700 dark:hover:border-neutral-400 disabled:hover:border-neutral-400 dark:disabled:hover:border-neutral-500 disabled:opacity-50 disabled:cursor-default">
-                                        <FaMinus/>
-                                    </Button>
-                                    <span class="select-none block flex-1 text-center leading-none text-xl">{quantity}</span>
-                                    <Button onClick={() => addQuantity()} color="grey" className="w-8 h-8 rounded-full flex items-center justify-center border border-neutral-400 dark:border-neutral-500 bg-white dark:bg-neutral-900 focus:outline-none hover:border-neutral-700 dark:hover:border-neutral-400 disabled:hover:border-neutral-400 dark:disabled:hover:border-neutral-500 disabled:opacity-50 disabled:cursor-default">
-                                        <FaPlus />
-                                    </Button>
+                            <h2 class="flex justify-between text-2xl sm:text-3xl font-semibold">
+                                <span>{data.name}</span>
+                                <Button color="light" className="rounded-full w-9 h-9 self-center ml-5" onClick={() =>{favouriteClick()}}>
+                                    { (favourite) ? (<AiFillHeart color="red" size="20"/>) : (<AiOutlineHeart size='20' />) }
+                                </Button>
+                            </h2>
+                            <div class="flex items-center mt-5 space-x-4 sm:space-x-5">
+                                <div class="">
+                                    <div class="flex items-center border-2 border-green-500 rounded-lg py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold">
+                                        <span class="text-green-500 !leading-none">{formatter.format(data.price)}</span>
+                                    </div>
+                                </div>
+                                {
+                                    data.oldPrice === 0 ? (<div></div>) : 
+                                    (<div class="">
+                                        <div class="flex items-center border-2 border-grey-500 rounded-lg py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold">
+                                            <strike class="text-gray-500 !leading-none">{formatter.format(data.oldPrice)}</strike>
+                                        </div>
+                                    </div>)
+                                }
+                                
+                                <div class="h-7 border-l border-slate-300 dark:border-slate-700"></div>
+                                <div class="flex items-center">
+                                    <a href="#reviews" class="flex items-center text-sm font-medium">
+                                        <Rating>
+                                            <Rating.Star></Rating.Star>
+                                            <p className="ml-1 text-sm font-bold text-gray-900 dark:text-white">{getAverageRating(listReview)}</p>
+                                            <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-500 dark:bg-gray-400" />
+                                            <span className="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
+                                                {listReview.length} đánh giá
+                                            </span>
+                                        </Rating>
+                                    </a>
+                                    <span class="hidden sm:block mx-2.5">·</span>
+                                    <div class="hidden sm:flex items-center text-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-3.5 h-3.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"></path>
+                                        </svg>
+                                        <span class="ml-1 leading-none">New in</span>
+                                    </div>
                                 </div>
                             </div>
-                        </Button.Group>
-                        <button class="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
-                                onClick={() => {
-                                    const findPrimaryImage = data.medias.find(item => item.primary) ?? data?.medias[0];
-                                    addItemToCart({...data, imageUrl: findPrimaryImage.imageUrl}, quantity);
-                                }}
-                        >
-                            <svg class="hidden sm:inline-block w-5 h-5 mb-0.5" viewBox="0 0 9 9" fill="none">
-                                <path d="M2.99997 4.125C3.20708 4.125 3.37497 4.29289 3.37497 4.5C3.37497 5.12132 3.87865 5.625 4.49997 5.625C5.12129 5.625 5.62497 5.12132 5.62497 4.5C5.62497 4.29289 5.79286 4.125 5.99997 4.125C6.20708 4.125 6.37497 4.29289 6.37497 4.5C6.37497 5.53553 5.5355 6.375 4.49997 6.375C3.46444 6.375 2.62497 5.53553 2.62497 4.5C2.62497 4.29289 2.79286 4.125 2.99997 4.125Z" fill="currentColor"></path>
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M6.37497 2.625H7.17663C7.76685 2.625 8.25672 3.08113 8.29877 3.66985L8.50924 6.61641C8.58677 7.70179 7.72715 8.625 6.63901 8.625H2.36094C1.2728 8.625 0.413174 7.70179 0.490701 6.61641L0.70117 3.66985C0.743222 3.08113 1.23309 2.625 1.82331 2.625H2.62497L2.62497 2.25C2.62497 1.21447 3.46444 0.375 4.49997 0.375C5.5355 0.375 6.37497 1.21447 6.37497 2.25V2.625ZM3.37497 2.625H5.62497V2.25C5.62497 1.62868 5.12129 1.125 4.49997 1.125C3.87865 1.125 3.37497 1.62868 3.37497 2.25L3.37497 2.625ZM1.82331 3.375C1.62657 3.375 1.46328 3.52704 1.44926 3.72328L1.2388 6.66985C1.19228 7.32107 1.70805 7.875 2.36094 7.875H6.63901C7.29189 7.875 7.80766 7.32107 7.76115 6.66985L7.55068 3.72328C7.53666 3.52704 7.37337 3.375 7.17663 3.375H1.82331Z" fill="currentColor"></path>
-                            </svg>
-                            <span class="ml-3">Thêm giỏ hàng</span>
-                        </button>
-                    </div>
+                        </div>
 
-                    <hr class="mt-10 2xl:!my-10 border-slate-200 dark:border-slate-700"></hr>
+                        <div class="mt-10">
+                            <div>
+                                <div class="flex justify-between font-medium text-sm">
+                                    <label for="">
+                                        <h2>Giới thiệu</h2>
+                                    </label>
+                                    <a rel="noopener noreferrer" href="#description" class="text-primary-6000 hover:text-primary-500">Xem mô tả</a>
+                                </div>
+                                <ul class="py-2 px-4">
+                                    <li class="flex">
+                                        <img src="../../../../sparkles.png" class="w-10 h-7"/>
+                                        <h3 class="font-bold pr-1">Thương hiệu: </h3>
+                                        <p class="flex"> {data.brandName}</p>
+                                    </li>
+                                    <li class="flex">
+                                        <img src="../../../../sparkles.png" class="w-10 h-7"/>
+                                        <h3 class="font-bold pr-1">Bảo hành: </h3>
+                                        <p class="flex"> {data.warrantyMonths} tháng</p>
+                                    </li>
+                                    <li class="flex">
+                                        <img src="../../../../sparkles.png" class="w-10 h-7"/>
+                                        <h3 class="font-bold pr-1">Xuất xứ: </h3>
+                                        <p class="flex"> {data.origin}</p>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
 
-                    <div class="w-full rounded-2xl space-y-2.5 mt-10">
-                        <Button color="gray" className="w-full flex justify-between focus:ring-0" theme={buttonTheme} onClick={() => {setShowDisc(!showDisc)}}>
-                            <span>Mô tả</span>
-                            { showDisc ? <RiSubtractFill/> : <AiOutlinePlus/>}
-                        </Button>
-                        {showDisc ? (<div class="p-4 pt-3 last:pb-0 text-slate-600 text-sm dark:text-slate-300 leading-6" id="headlessui-disclosure-panel-:ra:">{data.description}</div>) : (<div className="hidden"></div>)}
-                        <Button color="gray" className="w-full flex justify-between focus:ring-0" theme={buttonTheme} onClick={() => {setShowWarrantyPolicy(!showWarrantyPolicy)}}>
-                            <span>Chính sách bảo hành</span>
-                            { showWarrantyPolicy ? <RiSubtractFill/> : <AiOutlinePlus/>}
-                        </Button>
-                        {showWarrantyPolicy ? (<div class="p-4 pt-3 last:pb-0 text-slate-600 text-sm dark:text-slate-300 leading-6" id="headlessui-disclosure-panel-:ra:">Fashion is a form of self-expression and autonomy at a particular period and place and in a specific context, of clothing, footwear, lifestyle, accessories, makeup, hairstyle, and body posture.</div>) : (<div className="hidden"></div>)}
-                    </div>
-                </section>
+                        <div class="flex space-x-3.5 mt-10">
+                            <Button.Group className="flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full">
+                                <div class="nc-NcInputNumber flex items-center justify-between space-x-5 w-full">
+                                    <div class="nc-NcInputNumber__content flex items-center justify-between w-[104px] sm:w-28">
+                                        <Button onClick={() => subtractQuantity()} color="grey" className="w-8 h-8 rounded-full flex items-center justify-center border border-neutral-400 dark:border-neutral-500 bg-white dark:bg-neutral-900 focus:outline-none hover:border-neutral-700 dark:hover:border-neutral-400 disabled:hover:border-neutral-400 dark:disabled:hover:border-neutral-500 disabled:opacity-50 disabled:cursor-default">
+                                            <FaMinus/>
+                                        </Button>
+                                        <span class="select-none block flex-1 text-center leading-none text-xl">{quantity}</span>
+                                        <Button onClick={() => addQuantity()} color="grey" className="w-8 h-8 rounded-full flex items-center justify-center border border-neutral-400 dark:border-neutral-500 bg-white dark:bg-neutral-900 focus:outline-none hover:border-neutral-700 dark:hover:border-neutral-400 disabled:hover:border-neutral-400 dark:disabled:hover:border-neutral-500 disabled:opacity-50 disabled:cursor-default">
+                                            <FaPlus />
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Button.Group>
+                            <button class="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                                    onClick={() => {
+                                        const findPrimaryImage = data.medias.find(item => item.primary) ?? data?.medias[0];
+                                        addItemToCart({...data, imageUrl: findPrimaryImage.imageUrl}, quantity);
+                                    }}
+                            >
+                                <svg class="hidden sm:inline-block w-5 h-5 mb-0.5" viewBox="0 0 9 9" fill="none">
+                                    <path d="M2.99997 4.125C3.20708 4.125 3.37497 4.29289 3.37497 4.5C3.37497 5.12132 3.87865 5.625 4.49997 5.625C5.12129 5.625 5.62497 5.12132 5.62497 4.5C5.62497 4.29289 5.79286 4.125 5.99997 4.125C6.20708 4.125 6.37497 4.29289 6.37497 4.5C6.37497 5.53553 5.5355 6.375 4.49997 6.375C3.46444 6.375 2.62497 5.53553 2.62497 4.5C2.62497 4.29289 2.79286 4.125 2.99997 4.125Z" fill="currentColor"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.37497 2.625H7.17663C7.76685 2.625 8.25672 3.08113 8.29877 3.66985L8.50924 6.61641C8.58677 7.70179 7.72715 8.625 6.63901 8.625H2.36094C1.2728 8.625 0.413174 7.70179 0.490701 6.61641L0.70117 3.66985C0.743222 3.08113 1.23309 2.625 1.82331 2.625H2.62497L2.62497 2.25C2.62497 1.21447 3.46444 0.375 4.49997 0.375C5.5355 0.375 6.37497 1.21447 6.37497 2.25V2.625ZM3.37497 2.625H5.62497V2.25C5.62497 1.62868 5.12129 1.125 4.49997 1.125C3.87865 1.125 3.37497 1.62868 3.37497 2.25L3.37497 2.625ZM1.82331 3.375C1.62657 3.375 1.46328 3.52704 1.44926 3.72328L1.2388 6.66985C1.19228 7.32107 1.70805 7.875 2.36094 7.875H6.63901C7.29189 7.875 7.80766 7.32107 7.76115 6.66985L7.55068 3.72328C7.53666 3.52704 7.37337 3.375 7.17663 3.375H1.82331Z" fill="currentColor"></path>
+                                </svg>
+                                <span class="ml-3">Thêm giỏ hàng</span>
+                            </button>
+                        </div>
+
+                        <hr class="mt-10 2xl:!my-10 border-slate-200 dark:border-slate-700"></hr>
+
+                        <SupportService></SupportService>
+                    </section>
+                
+                    <AdminConfirmModal isShow={showConfirm} closeModal={() => setShowConfirm(false)} confirmCallback={() => navigate('/login')} content={content} type={type}></AdminConfirmModal>
+                </div>
+                <hr id="description" class="border-slate-200 dark:border-slate-700 mt-20"></hr>
+
+                <div class="w-full rounded-2xl space-y-2.5 mt-10">
+                    <Button color="gray" className="w-full flex justify-between focus:ring-0" theme={buttonTheme} onClick={() => {setShowDisc(!showDisc)}}>
+                        <span>Mô tả</span>
+                        { showDisc ? <RiSubtractFill/> : <AiOutlinePlus/>}
+                    </Button>
+                    {showDisc ? (<div class="p-4 pt-3 last:pb-0 text-slate-600 text-sm dark:text-slate-300 leading-6" id="headlessui-disclosure-panel-:ra:" dangerouslySetInnerHTML={{__html: data.description}}></div>) : (<div className="hidden"></div>)}
+                    {/* <Button color="gray" className="w-full flex justify-between focus:ring-0" theme={buttonTheme} onClick={() => {setShowWarrantyPolicy(!showWarrantyPolicy)}}>
+                        <span>Chính sách bảo hành</span>
+                        { showWarrantyPolicy ? <RiSubtractFill/> : <AiOutlinePlus/>}
+                    </Button> */}
+                    {showWarrantyPolicy ? (<div class="p-4 pt-3 last:pb-0 text-slate-600 text-sm dark:text-slate-300 leading-6" id="headlessui-disclosure-panel-:ra:" >Fashion is a form of self-expression and autonomy at a particular period and place and in a specific context, of clothing, footwear, lifestyle, accessories, makeup, hairstyle, and body posture.</div>) : (<div className="hidden"></div>)}
+                </div>
             </div>)
             }
         </>

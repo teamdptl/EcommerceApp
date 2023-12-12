@@ -12,6 +12,10 @@ public class PaymentDetailResponse {
     private String paymentQr;
     private Long expiredAt;
     private Integer orderId;
+    private Long money;
+    private String bankName;
+    private String receiveName;
+    private String bankNumber;
     private String code;
     private boolean needPay = false;
     private String message;
