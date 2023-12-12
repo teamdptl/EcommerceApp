@@ -54,10 +54,12 @@ const AdminOrder = () => {
         const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileExtension = ".xlsx";
         let url = '';
+        let endStringDate = endDate;
+        endStringDate.setMonth(endDate.getMonth() + 1)
         let start = getISOStringDate(startDate);
-        let end = getISOStringDate(endDate);
+        let end = getISOStringDate(endStringDate);
         if(isExport){
-            url = baseUrl + '/api/v1/order/all?start=' + start + "&end=" + end + '&status=' + orderStatus;
+            url = baseUrl + '/api/v1/order/all?start=' + start + "&end=" + end;
         }else{url = baseUrl + '/api/v1/order/all'}
         
         console.log(url)
@@ -84,8 +86,10 @@ const AdminOrder = () => {
     }
 
     const filterOrder = (searchText) => {
+        let endStringDate = endDate;
+        endStringDate.setMonth(endDate.getMonth() + 1)
         let start = getISOStringDate(startDate);
-        let end = getISOStringDate(endDate);
+        let end = getISOStringDate(endStringDate);
         let url = baseUrl + '/api/v1/order/all?text=' + searchText + '&start=' + start + "&end=" + end + '&status=' + orderStatus;
         console.log(url)
         createFetch(url)
@@ -198,9 +202,10 @@ const AdminOrder = () => {
                 {showFilter &&
                     <div className={`flex mb-4 gap-4 mx-4 items-center justify-center`}>
                         <Label value="Từ ngày" />
-                        <Datepicker language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()} value={startDate} onSelectedDateChanged={(value) => setStartDate(value)}/>
+                        <Datepicker language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()} value={getISOStringDate(startDate)} onSelectedDateChanged={(value) => {setStartDate(value) 
+                            console.log(value)}}/>
                         <Label value="Đến ngày" />
-                        <Datepicker language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()} onSelectedDateChanged={(value) => setEndDate(value)}/>
+                        <Datepicker language="vi-VN" labelTodayButton="Hôm nay" labelClearButton="Xóa" maxDate={new Date()} value={getISOStringDate(endDate)} onSelectedDateChanged={(value) => setEndDate(value)}/>
                         <Label value="Trạng thái" />
                         <Select id="countries" 
                             value={orderStatus} 
