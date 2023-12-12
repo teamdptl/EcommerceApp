@@ -33,7 +33,7 @@ const ProductItem = ({ product, isEnable = true, isEnableRating = true }) => {
 								{product.rating >= 0 ? (
 									<Rating>
 										{Array(5).fill('').map((value, index) => (index + 1 <= product.rating ? <Rating.Star /> : <Rating.Star filled={false} />))}
-										<p className="ml-2 text-sm font-medium text-gray-900">{product.rating}</p>
+										<p className="ml-2 text-sm font-medium text-gray-900">{product.rating?.toFixed(2)}</p>
 										<p className="ml-2 text-xs font-medium text-gray-900">({product.reviewCount})</p>
 									</Rating>
 								) : (

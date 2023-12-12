@@ -137,7 +137,8 @@ const AdminProductSave = ({show, productId, isEdit, closeForm}) => {
 
         const rawContentState = editorState ? convertToRaw(editorState.getCurrentContent()) : null;
         const markup = rawContentState ? draftToHtml(rawContentState) : "";
-        formData.append("description", markup)
+        let formattedText = markup.replace(/^,\s*/, '');
+        formData.append("description", formattedText)
         formData.append('thongSoKiThuat', 'Không có gì ca');
 
         createFetch(baseUrl + `${isEdit ? `/api/v1/product/edit/${product.productId}` : '/api/v1/product/add'}`, {

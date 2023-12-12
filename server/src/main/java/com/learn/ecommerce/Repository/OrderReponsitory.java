@@ -21,6 +21,6 @@ import org.springframework.stereotype.Repository;
      @Query("SELECT o FROM Order o WHERE o.orderId = :text and o.createAt >= :start and o.createAt <= :end and (o.orderStatus = :status or 1 = :isAllStatus) and o.isDeleted = false")
      List<Order> getFilterOrders(@Param("text") Integer text, @Param("start") Date start, @Param("end") Date end, @Param("status") Integer status, @Param("isAllStatus") Integer isAllStatus);
 
-     List<Order> findByUser(User user);
+     List<Order> findByUserOrderByCreateAtDesc(User user);
 
  }

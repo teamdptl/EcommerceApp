@@ -321,7 +321,7 @@ public class OrderImp implements OrderService {
     }
 
     public List<Order> getByUser(User user){
-        return orderReponsitory.findByUser(user);
+        return orderReponsitory.findByUserOrderByCreateAtDesc(user);
     }
     @Override
     public void save(Order T) {
