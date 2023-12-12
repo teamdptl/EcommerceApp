@@ -9,6 +9,9 @@ import baseUrl from "../../config"
 import {useCartContext} from "../../context/CartContext";
 import AdminConfirmModal from "../admin/AdminConfirmModal";
 import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+
 const product = {favourite: null}
 
 const getAverageRating = (reviewsData) => {
@@ -110,13 +113,26 @@ const ProductDetail = ({data, listReview}) => {
                     <section class="w-full lg:w-[55%]">
                         <picture class="relative">
                         { (medias === undefined || medias.length <= 0) ? <img className="w-full rounded-2xl object-cover" src="https://flowbite.com/docs/images/carousel/carousel-1.svg" alt=""></img>:
-                                <Carousel slide={false}>
-                                    {
-                                        medias.map((item) => {
-                                            return (<img className="w-full rounded-2xl object-cover" src={item.imageUrl} alt=""></img>)
-                                        })
-                                    }           
-                                </Carousel>
+                                <Swiper
+                                height={100}
+                                spaceBetween={0}
+                                slidesPerView={1}
+                                navigation
+                                autoplay={{deplay:1000}}
+                                modules={[Navigation, Pagination, Autoplay]}
+                                pagination={{ clickable: true }}
+                                onSlideChange={() => console.log("slide change")}
+                                onSwiper={(swiper) => console.log(swiper)}
+                                className="items-center"
+                            >
+                                {
+                                    medias.map((item) => {
+                                        return (<SwiperSlide className="h-full self-center"><img className="w-full rounded-2xl object-cover" src={item.imageUrl} alt=""></img></SwiperSlide>)
+                                    })
+                                }      
+
+                            </Swiper>
+
                         }
                             
                         </picture>
@@ -157,13 +173,6 @@ const ProductDetail = ({data, listReview}) => {
                                             </span>
                                         </Rating>
                                     </a>
-                                    <span class="hidden sm:block mx-2.5">·</span>
-                                    <div class="hidden sm:flex items-center text-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-3.5 h-3.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"></path>
-                                        </svg>
-                                        <span class="ml-1 leading-none">New in</span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -348,6 +357,37 @@ const buttonTheme = {
           "xl": "text-base px-6 py-3"
         }
       
+  }
+
+  const carouselTheme = {
+    "root": {
+      "base": "relative h-full w-full",
+      "leftControl": "absolute top-0 left-0 flex h-full items-center justify-center px-4 focus:outline-none",
+      "rightControl": "absolute top-0 right-0 flex h-full items-center justify-center px-4 focus:outline-none"
+    },
+    "indicators": {
+      "active": {
+        "off": "bg-white/50 hover:bg-white dark:bg-gray-800/50 dark:hover:bg-gray-800",
+        "on": "bg-white dark:bg-gray-800"
+      },
+      "base": "h-3 w-3 rounded-full",
+      "wrapper": "absolute bottom-5 left-1/2 flex -translate-x-1/2 space-x-3"
+    },
+    "item": {
+      "base": "absolute top-1/2 left-1/2 block w-full -translate-x-1/2 -translate-y-1/2",
+      "wrapper": {
+        "off": "w-full flex-shrink-0 transform cursor-default snap-center",
+        "on": "w-full flex-shrink-0 transform cursor-grab snap-center"
+      }
+    },
+    "control": {
+      "base": "inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/30 group-hover:bg-white/50 group-focus:outline-none group-focus:ring-4 group-focus:ring-white dark:bg-gray-800/30 dark:group-hover:bg-gray-800/60 dark:group-focus:ring-gray-800/70 sm:h-10 sm:w-10",
+      "icon": "h-5 w-5 text-white dark:text-gray-800 sm:h-6 sm:w-6"
+    },
+    "scrollContainer": {
+      "base": "flex h-full snap-mandatory overflow-y-hidden overflow-x-scroll scroll-smooth rounded-lg",
+      "snap": "snap-x"
+    }
   }
 
 export default ProductDetail

@@ -27,6 +27,7 @@ public class EcommerceApplication {
 
 	@Autowired
 	private UserRepository repo;
+
 	public static void main(String[] args) {
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
